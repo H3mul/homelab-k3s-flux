@@ -13,7 +13,7 @@
           name: bitnami
           namespace: flux-system
     interval: 15m
-    timeout: 5m
+    timeout: 15m
     releaseName: external-dns
     valuesFrom:
     - kind: ConfigMap
