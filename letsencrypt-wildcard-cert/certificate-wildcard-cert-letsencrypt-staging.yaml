@@ -6,6 +6,10 @@ metadata:
 spec:
   # secretName doesn't have to match the certificate name, but it may as well, for simplicity!
   secretName: letsencrypt-wildcard-cert-hemul.net-staging
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "podinfo"
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer
