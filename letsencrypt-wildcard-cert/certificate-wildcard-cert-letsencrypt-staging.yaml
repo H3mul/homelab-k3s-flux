@@ -9,6 +9,8 @@ spec:
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "podinfo"
       reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "podinfo"
   issuerRef:
     name: letsencrypt-staging
