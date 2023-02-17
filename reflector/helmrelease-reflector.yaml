@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: reflector
-      version: 0.1.x
+      version: 6.1.x
       sourceRef:
         kind: HelmRepository
         name: emberstack
