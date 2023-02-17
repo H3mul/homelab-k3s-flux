@@ -17,4 +17,4 @@ spec:
           email: phil.d324@gmail.com
           apiTokenSecretRef:
             name: cloudflare-api-token
-            key: cloudflare-api-token
+            key: cloudflare_api_token
