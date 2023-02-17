@@ -1,11 +1,11 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: letsencrypt-wildcard-cert-hemul.net-staging
+  name: letsencrypt-wildcard-cert-staging
   namespace: letsencrypt-wildcard-cert
 spec:
   # secretName doesn't have to match the certificate name, but it may as well, for simplicity!
-  secretName: letsencrypt-wildcard-cert-hemul.net-staging
+  secretName: letsencrypt-wildcard-cert-staging
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
