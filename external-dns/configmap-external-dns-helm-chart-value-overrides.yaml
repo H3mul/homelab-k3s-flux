@@ -113,7 +113,7 @@ data:
     sources:
       - crd
       # - service
-      # - ingress
+      - ingress
       # - contour-httpproxy
     ## @param provider DNS provider where the DNS records will be created.
     ## Available providers are:
