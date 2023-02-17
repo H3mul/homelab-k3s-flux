@@ -111,7 +111,6 @@ data:
       enabled: true
       className: ""
       annotations:
-        cert-manager.io/cluster-issuer: "letsencrypt-staging"
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
       hosts:
