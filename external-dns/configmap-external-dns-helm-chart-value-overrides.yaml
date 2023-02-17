@@ -789,7 +789,7 @@ data:
     crd:
       ## @param crd.create Install and use the integrated DNSEndpoint CRD
       ##
-      create: false
+      create: true
       ## @param crd.apiversion Sets the API version for the CRD to watch
       ##
       apiversion: ""
