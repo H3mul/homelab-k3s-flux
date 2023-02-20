@@ -396,7 +396,7 @@ data:
     #      ## The path to the private key. When using this option, setting the cert option is required.
     #      key: path/to/key.key
     #      ## If set to true, the TLS connection accepts any certificate presented by the server regardless of the hostnames it covers.
-    #      insecureSkipVerify: true
+         insecureSkipVerify: true
     #    ## This instructs the reporter to send metrics to the OpenTelemetry Collector using gRPC.
     #    grpc: true
 
