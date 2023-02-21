@@ -239,7 +239,7 @@ data:
         # format: json
         # By default, the level is set to ERROR.
         # Alternative logging levels are DEBUG, PANIC, FATAL, ERROR, WARN, and INFO.
-        level: ERROR
+        level: DEBUG
       access:
         # To enable access logs
         enabled: false
@@ -396,7 +396,7 @@ data:
     #      ## The path to the private key. When using this option, setting the cert option is required.
     #      key: path/to/key.key
     #      ## If set to true, the TLS connection accepts any certificate presented by the server regardless of the hostnames it covers.
-         insecureSkipVerify: true
+    #      insecureSkipVerify: true
     #    ## This instructs the reporter to send metrics to the OpenTelemetry Collector using gRPC.
     #    grpc: true
 
@@ -451,7 +451,7 @@ data:
       #          summary: "Traefik Down"
       #          description: "{{ $labels.pod }} on {{ $labels.nodename }} is down"
 
-    tracing: {}
+    tracing:
       # instana:
       #   localAgentHost: 127.0.0.1
       #   localAgentPort: 42699
@@ -502,9 +502,10 @@ data:
     # Additional arguments to be passed at Traefik's binary
     # All available options available on https://docs.traefik.io/reference/static-configuration/cli/
     ## Use curly braces to pass values: `helm install --set="additionalArguments={--providers.kubernetesingress.ingressclass=traefik-internal,--log.level=DEBUG}"`
-    additionalArguments: []
+    additionalArguments:
     #  - "--providers.kubernetesingress.ingressclass=traefik-internal"
     #  - "--log.level=DEBUG"
+      - "--serverstransport.insecureskipverify=true"
 
     # Environment variables to be passed to Traefik's binary
     env: []
