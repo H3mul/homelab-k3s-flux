@@ -440,7 +440,7 @@ data:
               - ceph.hemul.net
         ## Note: Only one of ingress class annotation or the `ingressClassName:` can be used at a time
         ## to set the ingress class
-        ingressClassName: null
+        ingressClassName: traefik
 
     # -- A list of CephBlockPool configurations to deploy
     # @default -- See [below](#ceph-block-pools)

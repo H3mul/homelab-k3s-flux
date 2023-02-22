@@ -196,7 +196,7 @@ data:
       #   nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 
       ## Kubernetes Dashboard Ingress Class
-      # className: "example-lb"
+      className: traefik
 
       ## Kubernetes Dashboard Ingress paths
       ## Both `/` and `/*` are required to work on gce ingress.
