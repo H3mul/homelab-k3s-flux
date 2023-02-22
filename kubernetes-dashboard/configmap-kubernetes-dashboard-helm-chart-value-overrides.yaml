@@ -30,7 +30,7 @@ data:
     image:
       ## Repository for container
       repository: kubernetesui/dashboard
-      tag: ""  # If not defined, uses appVersion of Chart.yaml
+      tag: v2.7.0
       pullPolicy: IfNotPresent
       pullSecrets: []
 
@@ -135,7 +135,13 @@ data:
     # priorityClassName: ""
 
     ## Pod resource requests & limits
-    resources: {}
+    resources:
+      requests:
+        cpu: 0
+        memory: 200Mi
+      limits:
+        cpu: 0 
+        memory: 200Mi
 
     ## Serve application over HTTP without TLS
     ##
@@ -171,7 +177,7 @@ data:
     ingress:
       ## If true, Kubernetes Dashboard Ingress will be created.
       ##
-      enabled: false
+      enabled: true
 
       ## Kubernetes Dashboard Ingress labels
       # labels:
@@ -194,8 +200,8 @@ data:
 
       ## Kubernetes Dashboard Ingress paths
       ## Both `/` and `/*` are required to work on gce ingress.
-      paths:
-        - /
+      # paths:
+      #   - /
       #  - /*
 
       ## Custom Kubernetes Dashboard Ingress paths. Will override default paths.

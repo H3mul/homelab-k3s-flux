@@ -14,7 +14,7 @@ spec:
         namespace: flux-system
   interval: 15m
   timeout: 5m
-  releaseName: reflector
+  releaseName: kubernetes-dashboard
   valuesFrom:
   - kind: ConfigMap
     name: kubernetes-dashboard-helm-chart-value-overrides
