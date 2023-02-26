@@ -23,8 +23,9 @@ data:
         type: LoadBalancer
         externalTrafficPolicy: Local
         ports:
-          # http:
-          #   port: 139
+          http:
+            enabled: false
+            port: 139
           smb:
             enabled: true
             port: 445
