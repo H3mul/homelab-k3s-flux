@@ -20,6 +20,8 @@ data:
 
     service:
       main:
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: share.hemul.net
         type: LoadBalancer
         externalTrafficPolicy: Local
         ports:
