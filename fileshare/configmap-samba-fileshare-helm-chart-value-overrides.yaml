@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: samba-fileshare-helm-chart-value-overrides
+  namespace: media
+data:
+  values.yaml: |-
+    image:
+      # https://hub.docker.com/r/dperson/samba
+      repository: docker.io/dperson/samba
+      tag: latest
+    env:
+      TZ: "America/Vancouver"
+      # PERMISSIONS: true
+      SHARE: "Share;/share;yes;no;no"
+    envFrom:
+      - secretRef:
+          name: samba-fileshare-credentials
+
+    service:
+      main:
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        ports:
+          # http:
+          #   port: 139
+          smb:
+            enabled: true
+            port: 445
+    persistence:
+      data:
+        enabled: true
+        mountPath: /shared
+        existingClaim: fileshare
