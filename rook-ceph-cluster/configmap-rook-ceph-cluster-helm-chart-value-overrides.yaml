@@ -508,7 +508,7 @@ data:
     # -- A list of CephFileSystem configurations to deploy
     # @default -- See [below](#ceph-file-systems)
     cephFileSystems:
-      - name: ceph-storage
+      - name: ceph-filesystem
         # see https://github.com/rook/rook/blob/master/Documentation/CRDs/Shared-Filesystem/ceph-filesystem-crd.md#filesystem-settings for available configuration
         spec:
           metadataPool:
@@ -535,7 +535,7 @@ data:
         storageClass:
           enabled: true
           isDefault: false
-          name: ceph-storage
+          name: ceph-filesystem
           # (Optional) specify a data pool to use, must be the name of one of the data pools above, 'data0' by default
           pool: cephfs.storage.data
           reclaimPolicy: Delete
