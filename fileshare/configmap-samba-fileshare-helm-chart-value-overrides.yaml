@@ -11,9 +11,11 @@ data:
       repository: docker.io/dperson/samba
       tag: latest
     env:
-      TZ: "America/Vancouver"
+      TZ: "${TIMEZONE}"
       PERMISSIONS: true
       SHARE: "Share;/share;yes;no;no"
+      USERID: "${FILESHARE_USER_ID}"
+      GROUPID: "${FILESHARE_GROUP_ID}"
     envFrom:
       - secretRef:
           name: samba-fileshare-credentials

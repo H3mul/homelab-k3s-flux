@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-settings
+  namespace: flux-system
+data:
+  TIMEZONE: America/Vancouver
+  FILESHARE_USER_ID: "100"
+  FILESHARE_GROUP_ID: "101"

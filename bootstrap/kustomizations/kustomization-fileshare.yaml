@@ -17,3 +17,10 @@ spec:
       kind: Deployment
       name: samba-fileshare
       namespace: media
+
+  dependsOn:
+    - name: cluster-configmaps
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
