@@ -1,0 +1,22 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: vpn-gateway
+  namespace: vpn-gateway
+
+spec:
+  chart:
+    spec:
+      chart: pod-gateway
+      version: 6.4.x
+      sourceRef:
+        kind: HelmRepository
+        name: angelnu-helm-charts
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: vpn-gateway
+  valuesFrom:
+  - kind: ConfigMap
+    name: vpn-gateway-helm-chart-value-overrides
+    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
