@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: qbittorrent-download
+  namespace: vpn
+spec:
+  storageClassName: qbittorrent-download-storageclass
+  capacity:
+    storage: "500Gi"
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  csi:
+    driver: rook-ceph.cephfs.csi.ceph.com
+    volumeAttributes:
+      # Required options from storageclass parameters need to be added in volumeAttributes
+      "clusterID": "rook-ceph"
+      # (required) CephFS filesystem name into which the volume shall be created
+      "fsName": "ceph-filesystem"
+      "staticVolume": "true"
+      "rootPath": /share/Torrent
+    # volumeHandle can be anything, need not to be same
+    # as PV name or volume name. keeping same for brevity
+    volumeHandle: qbittorrent-download
+    nodeStageSecretRef:
+      name: rook-csi-cephfs-node-user
+      namespace: rook-ceph
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem

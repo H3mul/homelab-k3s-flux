@@ -20,6 +20,7 @@ spec:
 
   dependsOn:
     - name: cluster-configmaps
+    - name: rook-ceph-cluster--rook-ceph
   postBuild:
     substituteFrom:
       - kind: ConfigMap

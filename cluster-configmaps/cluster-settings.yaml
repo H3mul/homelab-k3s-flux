@@ -7,3 +7,6 @@ data:
   TIMEZONE: America/Vancouver
   FILESHARE_USER_ID: "100"
   FILESHARE_GROUP_ID: "101"
+  CLUSTER_DOMAIN: "hemul.net"
+
+  BITTORRENT_PORT: "18289"

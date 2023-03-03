@@ -50,7 +50,8 @@ data:
       #
       # This is needed, for example, in case your CNI does
       # not add a non-default rule for the K8S addresses (Flannel does).
-      NOT_ROUTED_TO_GATEWAY_CIDRS: ""
+      # NOT_ROUTED_TO_GATEWAY_CIDRS: ""
+      NOT_ROUTED_TO_GATEWAY_CIDRS: "10.0.0.0/8 192.168.0.0/16"
 
       # -- Vxlan ID to use
       VXLAN_ID: 42
@@ -79,9 +80,9 @@ data:
       IP: 10
       ports:
       - type: udp
-        port: 18289
+        port: "${BITTORRENT_PORT}"
       - type: tcp
-        port: 18289
+        port: "${BITTORRENT_PORT}"
 
     addons:
       vpn:

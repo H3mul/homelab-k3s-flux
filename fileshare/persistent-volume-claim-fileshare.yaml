@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fileshare
+  namespace: media
+spec:
+  resources:
+    requests:
+      storage: "500Gi"
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  storageClassName: fileshare-storageclass
