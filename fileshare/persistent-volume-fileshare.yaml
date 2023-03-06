@@ -8,7 +8,8 @@ spec:
   capacity:
     storage: "500Gi"
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
+  - ReadOnlyMany
   csi:
     driver: rook-ceph.cephfs.csi.ceph.com
     volumeAttributes:
@@ -17,9 +18,7 @@ spec:
       # (required) CephFS filesystem name into which the volume shall be created
       "fsName": "ceph-filesystem"
       "staticVolume": "true"
-      "subvolumeName": fileshare
-      "subvolumePath": /share
-      "rootPath": /share
+      "rootPath": /volumes/static-storage/fileshare/share
     # volumeHandle can be anything, need not to be same
     # as PV name or volume name. keeping same for brevity
     volumeHandle: fileshare
