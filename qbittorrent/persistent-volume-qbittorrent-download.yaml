@@ -18,7 +18,7 @@ spec:
       # (required) CephFS filesystem name into which the volume shall be created
       "fsName": "ceph-filesystem"
       "staticVolume": "true"
-      "rootPath": /share/Torrent
+      "rootPath": /volumes/static-storage/fileshare/share/Torrent
     # volumeHandle can be anything, need not to be same
     # as PV name or volume name. keeping same for brevity
     volumeHandle: qbittorrent-download
