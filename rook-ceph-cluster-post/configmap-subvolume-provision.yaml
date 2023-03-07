@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: subvolume-provision-script
+  namespace: rook-ceph
+  annotations:
+    # Avoid variable substitution of shell variables bellow
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+data:
+  subvolume-provision.sh: |
+    #!/bin/bash
+
+    set -Eeuo pipefail
+    trap cleanup SIGINT SIGTERM ERR EXIT
+
+    die() {
+      local msg=$1
+      local code=${2-1} # default exit status 1
+      msg "$msg"
+      exit "$code"
+    }
+
+    msg() {
+      echo >&2 -e "[+] ${1-}"
+    }
+
+    [ -z "${ROOK_CEPH_FS_NAME}" ] && die "'ROOK_CEPH_FS_NAME' variable is required to be set"
+    [ -z "${ROOK_CEPH_SUBVOLUMEGROUP_NAME}" ] && die "'ROOK_CEPH_SUBVOLUMEGROUP_NAME' variable is required to be set for provisioning"
+    [ -z "${ROOK_CEPH_SUBVOLUME_NAME}" ] && die "'ROOK_CEPH_SUBVOLUME_NAME' variable is required to be set for provisioning"
+    # [ -z "${ROOK_CEPH_SUBVOLUME_SIZE}" ] && die "'ROOK_CEPH_SUBVOLUME_SIZE' variable is required to be set for provisioning"
+    [ -z "${ROOK_CEPH_SUBVOLUME_DIRS}" ] && die "'ROOK_CEPH_SUBVOLUME_DIRS' variable is required to be set for provisioning"
+    [ -z "${ROOK_CEPH_SUBVOLUME_USER_ID}" ] && die "'ROOK_CEPH_SUBVOLUME_USER_ID' variable is required to be set for provisioning"
+    [ -z "${ROOK_CEPH_SUBVOLUME_GROUP_ID}" ] && die "'ROOK_CEPH_SUBVOLUME_GROUP_ID' variable is required to be set for provisioning"
+
+    [ -z "${VERBOSE}" ] || set -x
+
+    mount_dir=/mnt
+
+    cleanup() {
+      trap - SIGINT SIGTERM ERR EXIT
+      msg "Cleaning up ..."
+      umount ${mount_dir}
+    }
+
+    msg "Creating subvolumegroup ${ROOK_CEPH_SUBVOLUMEGROUP_NAME} if it doesnt exist..."
+    ceph fs subvolumegroup info ${ROOK_CEPH_FS_NAME} ${ROOK_CEPH_SUBVOLUMEGROUP_NAME} > /dev/null || \
+      ceph fs subvolumegroup create ${ROOK_CEPH_FS_NAME} ${ROOK_CEPH_SUBVOLUMEGROUP_NAME}
+
+    msg "subvolumegroup ${ROOK_CEPH_SUBVOLUMEGROUP_NAME} info:"
+    ceph fs subvolumegroup ls ${ROOK_CEPH_FS_NAME}
+
+    msg "Creating subvolumegroup ${ROOK_CEPH_SUBVOLUME_NAME} if it doesnt exist..."
+    ceph fs subvolume info ${ROOK_CEPH_FS_NAME} ${ROOK_CEPH_SUBVOLUME_NAME} ${ROOK_CEPH_SUBVOLUMEGROUP_NAME} > /dev/null || \
+      ceph fs subvolume create ${ROOK_CEPH_FS_NAME} ${ROOK_CEPH_SUBVOLUME_NAME} ${ROOK_CEPH_SUBVOLUMEGROUP_NAME}
+      # --size=${ROOK_CEPH_SUBVOLUME_SIZE}
+
+    msg "subvolume ${ROOK_CEPH_SUBVOLUME_NAME} info:"
+    ceph fs subvolume info ${ROOK_CEPH_FS_NAME} ${ROOK_CEPH_SUBVOLUME_NAME} ${ROOK_CEPH_SUBVOLUMEGROUP_NAME}
+
+    # Note: always already has a leading slash
+    static_volume_path=/volumes/${ROOK_CEPH_SUBVOLUMEGROUP_NAME}/${ROOK_CEPH_SUBVOLUME_NAME}
+
+    # This is the actual path, including the uuid-dir created with a new subvolume.
+    # eg: /volumes/static-storage/fileshare/922b15ff-8c3d-4a4e-bf9b-f95952bfd745
+    # We ignore it so we can use static paths and create our dir structure alongside.
+    # static_volume_path=$(ceph fs subvolume getpath ${ROOK_CEPH_FS_NAME} ${ROOK_CEPH_SUBVOLUME_NAME} ${ROOK_CEPH_SUBVOLUMEGROUP_NAME})
+
+    # Detect the mon endpoints and the user secret for the connection
+    mon_endpoints=$(grep mon_host /etc/ceph/ceph.conf | awk '{print $3}')
+    my_secret=$(grep key /etc/ceph/keyring | awk '{print $3}')
+
+    # Create the directory
+    mkdir -p ${mount_dir}
+
+    msg "Mounting ceph filesystem ${ROOK_CEPH_FS_NAME}..."
+    mount -t ceph -o mds_namespace=${ROOK_CEPH_FS_NAME},name=admin,secret=${my_secret} ${mon_endpoints}:/ ${mount_dir}
+
+    msg "Printing current subvolume dir structure:"
+    find ${mount_dir}${static_volume_path} -type d | xargs ls -lad
+
+    # Need to store cmd in variable first - bash variable expansion happens after brace expansion
+    #   when both are used in a single command:
+    # https://www.gnu.org/software/bash/manual/html_node/Shell-Expansions.html
+    # We add a comma at the end of ROOK_CEPH_SUBVOLUME_DIRS so it works even if there is only 1 dir in the variable
+    dirs_brace_expansion="${mount_dir}${static_volume_path}/{${ROOK_CEPH_SUBVOLUME_DIRS},}"
+
+    # Create dirs from variable
+    msg "Creating subvolume dirs if they don't exist: ${ROOK_CEPH_SUBVOLUME_DIRS} ..."
+    /bin/bash -c "mkdir -p ${dirs_brace_expansion}"
+
+    msg "Setting the ownership of new dirs to ${ROOK_CEPH_SUBVOLUME_USER_ID}:${ROOK_CEPH_SUBVOLUME_GROUP_ID}..."
+    /bin/bash -c "chown -Rv ${ROOK_CEPH_SUBVOLUME_USER_ID}:${ROOK_CEPH_SUBVOLUME_GROUP_ID} ${dirs_brace_expansion}"
+
+    msg "Printing the subvolume dir structure after dir creation:"
+    find ${mount_dir}${static_volume_path} -type d | xargs ls -lad
