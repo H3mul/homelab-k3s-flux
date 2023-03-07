@@ -6,8 +6,6 @@ metadata:
   namespace: vpn
 data:
   values.yaml: |-
-    controller:
-      type: statefulset
     image:
       repository: ghcr.io/onedr0p/qbittorrent
       tag: 4.5.2
@@ -47,14 +45,12 @@ data:
           hosts:
           - *host
 
-    volumeClaimTemplates:
-      - name: config
-        mountPath: /config
-        accessMode: ReadWriteOnce
-        size: 200Mi
-        storageClass: ceph-block
-
     persistence:
+      config:
+        enabled: true
+        mountPath: /config
+        existingClaim: qbittorrent-config
+
       downloads:
         enabled: true
         mountPath: /downloads
