@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: volsync-helm-chart-value-overrides
+  namespace: volsync-system
+data:
+  values.yaml: |-
+    # Pasted from:
+    # https://github.com/backube/volsync/blob/757a70065d1683206f827cda7bdbf385e20d989c/helm/volsync/values.yaml
+
+    # Default values for volsync.
+    replicaCount: 1
+
+    image:
+      repository: quay.io/backube/volsync
+      pullPolicy: IfNotPresent
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: ""
+      # Directly specifies the SHA hash of the container image to deploy
+      image: ""
+    rclone:
+      repository: quay.io/backube/volsync-mover-rclone
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: ""
+      image: ""
+    restic:
+      repository: quay.io/backube/volsync-mover-restic
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: ""
+      image: ""
+    rsync:
+      repository: quay.io/backube/volsync-mover-rsync
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: ""
+      image: ""
+    syncthing:
+      repository: quay.io/backube/volsync-mover-syncthing
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: ""
+      image: ""
+
+    manageCRDs: true
+
+    metrics:
+      # Disable auth checks when scraping metrics (allow anyone to scrape)
+      disableAuth: false
+
+    imagePullSecrets: []
+    nameOverride: ""
+    fullnameOverride: ""
+
+    serviceAccount:
+      # Specifies whether a service account should be created
+      create: true
+      # Annotations to add to the service account
+      annotations: {}
+      # The name of the service account to use.
+      # If not set and create is true, a name is generated using the fullname template
+      name: ""
+
+    podAnnotations: {}
+
+    podSecurityContext:
+      # fsGroup: 2000
+      runAsNonRoot: true
+      # seccompProfile:
+      #   type: RuntimeDefault
+
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      readOnlyRootFilesystem: true
+
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 300Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+
+    nodeSelector: {}
+
+    tolerations: []
+
+    affinity: {}
