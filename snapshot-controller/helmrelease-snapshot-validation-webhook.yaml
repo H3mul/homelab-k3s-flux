@@ -1,0 +1,22 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: snapshot-validation-webhook
+  namespace: kube-system
+spec:
+  chart:
+    spec:
+      chart: snapshot-validation-webhook
+      version: 1.7.x
+      sourceRef:
+        kind: HelmRepository
+        name: piraeus
+        namespace: flux-system
+  dependsOn:
+  - name: snapshot-controller
+  interval: 15m
+  timeout: 5m
+  valuesFrom:
+  - kind: ConfigMap
+    name: snapshot-validation-webhook-helm-chart-value-overrides
+    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
