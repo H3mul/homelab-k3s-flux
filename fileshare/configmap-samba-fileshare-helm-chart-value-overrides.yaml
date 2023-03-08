@@ -23,7 +23,7 @@ data:
     service:
       main:
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: share.hemul.net
+          external-dns.alpha.kubernetes.io/hostname: share.${CLUSTER_DOMAIN}
         type: LoadBalancer
         externalTrafficPolicy: Local
         ports:
