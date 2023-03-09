@@ -23,6 +23,10 @@ spec:
           value: volsync
         - name: BUCKET_NAMES
           value: volsync
+        - name: ACCESS_KEY
+          value: ${ACCESS_KEY}
+        - name: SECRET_KEY
+          value: ${SECRET_KEY}
 
         - name: VERBOSE
           value: "true"
@@ -31,9 +35,6 @@ spec:
           - secretRef:
               # MINIO_ROOT_USER, MINIO_ROOT_PASSWORD
               name: minio-server-credentials
-          - secretRef:
-              # ACCESS_KEY, SECRET_KEY
-              name: volsync-minio-s3-credentials
 
         volumeMounts:
         - name: minio-provision-script
