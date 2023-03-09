@@ -17,6 +17,11 @@ spec:
     kind: GitRepository
     name: flux-system
   validation: server
+  healthChecks:
+    - apiVersion: batch/v1
+      kind: Job
+      name: provision-static-subvolume-paths-fileshare
+      namespace: rook-ceph
   postBuild:
     substituteFrom:
       - kind: ConfigMap
