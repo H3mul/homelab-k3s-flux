@@ -4,6 +4,8 @@ metadata:
   name: provision-static-subvolume-paths-fileshare
   namespace: rook-ceph
 spec:
+  # Destroy job after completion - otherwise an existing job conflicts with reconcile
+  ttlSecondsAfterFinished: 60
   template:
     spec:
       restartPolicy: Never
