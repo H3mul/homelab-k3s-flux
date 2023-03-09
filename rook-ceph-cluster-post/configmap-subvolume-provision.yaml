@@ -75,9 +75,6 @@ data:
     msg "Mounting ceph filesystem ${ROOK_CEPH_FS_NAME}..."
     mount -t ceph -o mds_namespace=${ROOK_CEPH_FS_NAME},name=admin,secret=${my_secret} ${mon_endpoints}:/ ${mount_dir}
 
-    msg "Printing current subvolume dir structure:"
-    find ${mount_dir}${static_volume_path} -type d | xargs ls -lad
-
     # Need to store cmd in variable first - bash variable expansion happens after brace expansion
     #   when both are used in a single command:
     # https://www.gnu.org/software/bash/manual/html_node/Shell-Expansions.html
@@ -89,7 +86,4 @@ data:
     /bin/bash -c "mkdir -p ${dirs_brace_expansion}"
 
     msg "Setting the ownership of new dirs to ${ROOK_CEPH_SUBVOLUME_USER_ID}:${ROOK_CEPH_SUBVOLUME_GROUP_ID}..."
-    /bin/bash -c "chown -Rv ${ROOK_CEPH_SUBVOLUME_USER_ID}:${ROOK_CEPH_SUBVOLUME_GROUP_ID} ${dirs_brace_expansion}"
-
-    msg "Printing the subvolume dir structure after dir creation:"
-    find ${mount_dir}${static_volume_path} -type d | xargs ls -lad
+    /bin/bash -c "chown -Rv ${ROOK_CEPH_SUBVOLUME_USER_ID}:${ROOK_CEPH_SUBVOLUME_GROUP_ID} ${dirs_brace_expansion}" > /dev/null
