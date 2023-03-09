@@ -1,1 +1,4 @@
 .vscode
+/test
+secret-*.yaml
+!/qbittorrent/secret-qbittorrent-config-restic.yaml
