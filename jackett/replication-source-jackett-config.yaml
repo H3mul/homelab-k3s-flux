@@ -1,14 +1,14 @@
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: qbittorrent-config
-  namespace: vpn
+  name: jackett-config
+  namespace: jackett
 spec:
-  sourcePVC: qbittorrent-config
+  sourcePVC: jackett-config
   trigger:
     schedule: ${VOLSYNC_MINIO_BACKUP_SCHEDULE}
   restic:
-    repository: qbittorrent-config-restic
+    repository: jackett-config-restic
 
     copyMethod: Snapshot
     volumeSnapshotClassName: ceph-block

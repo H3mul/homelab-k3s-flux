@@ -10,4 +10,6 @@ data:
   CLUSTER_DOMAIN: "hemul.net"
 
   VOLSYNC_MINIO_BUCKET: s3:https://s3.hemul.net/volsync
+  VOLSYNC_MINIO_BACKUP_SCHEDULE: "0 0 * * *"
+
   BITTORRENT_PORT: "18289"

@@ -1,0 +1,21 @@
+  apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  kind: HelmRelease
+  metadata:
+    name: jackett
+    namespace: jackett
+  spec:
+    chart:
+      spec:
+        chart: app-template
+        version: 1.3.x
+        sourceRef:
+          kind: HelmRepository
+          name: bjw-s
+          namespace: flux-system
+    interval: 15m
+    timeout: 5m
+    releaseName: jackett
+    valuesFrom:
+    - kind: ConfigMap
+      name: jackett-helm-chart-value-overrides
+      valuesKey: values.yaml # This is the default, but best to be explicit for clarity
