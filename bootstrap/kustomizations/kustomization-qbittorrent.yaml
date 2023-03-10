@@ -20,7 +20,6 @@ spec:
 
   dependsOn:
     - name: cluster-configmaps
-    - name: rook-ceph-cluster--rook-ceph-post # need to wait for static path provisioning
   postBuild:
     substituteFrom:
       - kind: ConfigMap
