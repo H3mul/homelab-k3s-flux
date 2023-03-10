@@ -20,6 +20,8 @@ spec:
 
   dependsOn:
     - name: cluster-configmaps
+    - name: sealed-secrets
+    - name: volsync--volsync-system
   postBuild:
     substituteFrom:
       - kind: ConfigMap
