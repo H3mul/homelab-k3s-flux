@@ -10,8 +10,9 @@ spec:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
       reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
-      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "podinfo,rook-ceph"
-      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "podinfo,rook-ceph"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces:
+        &namespaces "podinfo,rook-ceph,minio,theme-park"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: *namespaces
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
