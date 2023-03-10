@@ -1,14 +1,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
 metadata:
-  name: config--metallb-system
+  name: blocky
   namespace: flux-system
 spec:
   interval: 15m
-  dependsOn:
-  - name: metallb--metallb-system
-  - name: cluster-configmaps
-  path: ./metallb-config
+  path: ./blocky
   prune: true # remove any elements later removed from the above path
   timeout: 2m # if not set, this defaults to interval duration, which is 1h
   sourceRef:
@@ -18,10 +15,12 @@ spec:
   healthChecks:
     - apiVersion: apps/v1
       kind: Deployment
-      name: metallb-controller
-      namespace: metallb-system
+      name: blocky
+      namespace: blocky
+
+  dependsOn:
+    - name: cluster-configmaps
   postBuild:
     substituteFrom:
       - kind: ConfigMap
         name: cluster-settings
-
