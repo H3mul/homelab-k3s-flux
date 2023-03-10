@@ -8,7 +8,7 @@ data:
   values.yaml: |-
     image:
       # https://hub.docker.com/r/dperson/samba
-      repository: docker.io/dperson/samba
+      repository: upagge/samba
       tag: latest
     env:
       TZ: "${TIMEZONE}"
