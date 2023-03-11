@@ -1,0 +1,1 @@
+/bootstrap/helmrepositories/helmrepository-${name}.yaml

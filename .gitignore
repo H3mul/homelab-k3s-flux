@@ -1,4 +1,5 @@
-.vscode
-/test
+/.vscode
+/.test
+/.task
 secret-*.yaml
 !*secret-*-config-restic.yaml

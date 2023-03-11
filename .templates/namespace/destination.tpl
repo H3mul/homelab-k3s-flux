@@ -1,0 +1,1 @@
+/bootstrap/namespaces/namespace-${name}.yaml
