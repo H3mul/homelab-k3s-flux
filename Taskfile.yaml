@@ -3,61 +3,12 @@ version: "3"
 vars:
   PROJECT_DIR:
     sh: "git rev-parse --show-toplevel"
-  TEMPLATE_ROOT_DIR: "{{.PROJECT_DIR}}/.templates"
+
+includes:
+  templates: .taskfiles/templates.yaml
 
 tasks:
   default:
+    silent: true
     cmds:
       - go-task -l
-
-  template-all:
-    cmds:
-      - task: template
-        vars:
-          template: helmrelease
-      - task: template
-        vars:
-          template: helm-chart-values
-      - task: template
-        vars:
-          template: kustomization
-      - task: template
-        vars:
-          template: namespace
-      - task: template
-        vars:
-          template: helmrepository
-  
-  template:
-    desc: Render a template from the .templates dir 
-    silent: true
-    vars:
-      template_dir: "{{.TEMPLATE_ROOT_DIR}}/{{.template}}"
-      src: "{{.template_dir}}/template.yaml.tpl"
-      dst_rel:
-        sh: name={{.name}} envsubst < {{.template_dir}}/destination.tpl
-      dst: "{{.PROJECT_DIR}}{{.dst_rel}}"
-    preconditions:
-      - sh: "[ '{{.name}}' != '<no value>' ]"
-        msg: "Variable .name is not set"
-      - sh: "[ '{{.namespace}}' != '<no value>' ]"
-        msg: "Variable .namespace is not set"
-      - sh: "[ '{{.template}}' != '<no value>' ]"
-        msg: "Variable .template is not set"
-    sources:
-      - "{{.src}}"
-    generates:
-      - "{{.dst}}"
-    cmds:
-      - echo "Creating {{.dst_rel}}..."
-      - mkdir -p $(dirname {{.dst}})
-      - namespace={{.namespace}} name={{.name}} envsubst < {{.src}} > {{.dst}}
-
-  k-secret:
-    preconditions:
-      - sh: "[ '{{.name}}' != '<no value>' ]"
-        msg: "Variable .name is not set"
-      - sh: "[ '{{.namespace}}' != '<no value>' ]"
-        msg: "Variable .namespace is not set"
-    cmds:
-      - kubectl -n {{.namespace}} create secret generic {{.name}} --from-literal=key=value --dry-run=client -o yaml
