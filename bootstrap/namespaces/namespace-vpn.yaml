@@ -5,3 +5,4 @@ metadata:
   labels:
     # This namespace is routed via vpn-gateway
     routed-gateway: "true"
+    volsync.backube/privileged-movers: "true"
