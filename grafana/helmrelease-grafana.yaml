@@ -1,0 +1,21 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  chart:
+    spec:
+      chart: grafana
+      version: 6.52.x
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: grafana
+  valuesFrom:
+  - kind: ConfigMap
+    name: grafana-helm-chart-value-overrides
+    valuesKey: values.yaml # This is the default, but best to be explicit for clarity

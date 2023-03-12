@@ -12,3 +12,18 @@ tasks:
     silent: true
     cmds:
       - go-task -l
+
+  k-seal:
+    desc: kubeseal a secret yaml file
+    preconditions:
+      - sh: "test '{{.file}}' != '<no value>'"
+        msg: "Variable .file is not set"
+      - sh: "test -f {{.file}}"
+        msg: "File {{.file}} does not exist"
+    vars:
+      filename:
+        sh: basename {{.file}}
+      dir:
+        sh: dirname {{.file}}
+    cmds:
+      - kubeseal --cert sealed-secrets.pem < {{.file}} > {{.dir}}/sealed-{{.filename}} -o yaml

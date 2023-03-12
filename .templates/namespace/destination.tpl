@@ -1,1 +1,1 @@
-/bootstrap/namespaces/namespace-${name}.yaml
+/bootstrap/namespaces/namespace-${namespace}.yaml
