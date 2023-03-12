@@ -21,3 +21,8 @@ spec:
       weekly: 4
       monthly: 6
       within: 3d
+
+    moverSecurityContext:
+      runAsUser: ${FILESHARE_USER_ID}
+      runAsGroup:  ${FILESHARE_GROUP_ID}
+      fsGroup: ${FILESHARE_GROUP_ID}
