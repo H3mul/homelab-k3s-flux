@@ -3013,13 +3013,6 @@ data:
         ## port to 2379 and allow etcd scraping provided it is running on all Kubernetes master nodes
         ##
         additionalScrapeConfigs: {}
-          # - job_name: minio
-          #   scrape_interval: 1m
-          #   scrape_timeout: 10s
-          #   metrics_path: /minio/v2/metrics/cluster
-          #   honor_timestamps: true
-          #   static_configs:
-          #     - targets: ["minio.hemul.net"]
         # - job_name: kube-etcd
         #   kubernetes_sd_configs:
         #     - role: node
