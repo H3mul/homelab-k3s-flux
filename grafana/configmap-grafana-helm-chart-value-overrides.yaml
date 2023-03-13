@@ -676,6 +676,13 @@ data:
           gnetId: 13502
           revision: 21
           datasource: Prometheus
+        # Ref: https://grafana.com/grafana/dashboards/13768-blocky/
+        blocky:
+          gnetId: 13768
+          revision: 3
+          datasource:
+            - name: DS_PROMETHEUS
+              value: Prometheus
         # Ref: https://grafana.com/grafana/dashboards/1860-node-exporter-full/
         node-exporter-full:
           gnetId: 1860
@@ -776,6 +783,8 @@ data:
         check_for_updates: true
       log:
         mode: console
+      panels:
+        disable_sanitize_html: true
       grafana_net:
         url: https://grafana.net
       server:
