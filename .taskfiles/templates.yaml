@@ -41,7 +41,7 @@ tasks:
       template_dir: "{{.TEMPLATE_ROOT_DIR}}/{{.template}}"
       src: "{{.template_dir}}/{{.TEMPLATE_BODY_FILENAME}}"
       dst_rel:
-        sh: name={{.name}} envsubst < {{.template_dir}}/{{.TEMPLATE_DESTINATION_FILENAME}}
+        sh: namespace={{.namespace}} name={{.name}} envsubst < {{.template_dir}}/{{.TEMPLATE_DESTINATION_FILENAME}}
       dst: "{{.PROJECT_DIR}}{{.dst_rel}}"
     preconditions:
       - sh: "[ '{{.name}}' != '<no value>' ]"
