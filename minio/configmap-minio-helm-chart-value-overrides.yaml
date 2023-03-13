@@ -27,6 +27,8 @@ data:
     service:
       main:
         enabled: true
+        labels:
+          job: minio-job
         ports:
           http:
             port: &console-port 9001

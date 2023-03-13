@@ -675,7 +675,9 @@ data:
         minio:
           gnetId: 13502
           revision: 21
-          datasource: Prometheus
+          datasource:
+            - name: DS_PROMETHEUS
+              value: Prometheus
         # Ref: https://grafana.com/grafana/dashboards/13768-blocky/
         blocky:
           gnetId: 13768
