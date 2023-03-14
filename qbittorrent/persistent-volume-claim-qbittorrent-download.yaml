@@ -2,12 +2,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: qbittorrent-download
-  namespace: vpn
+  namespace: media
 spec:
   resources:
     requests:
       storage: "500Gi"
   accessModes:
-  - ReadWriteOnce
-  - ReadOnlyMany
-  storageClassName: qbittorrent-download-storageclass
+  - ReadWriteMany
+  storageClassName: ceph-filesystem

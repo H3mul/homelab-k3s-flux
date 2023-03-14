@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: qbittorrent-helm-chart-value-overrides
-  namespace: vpn
+  namespace: media
 data:
   values.yaml: |-
     podAnnotations:
@@ -55,6 +55,10 @@ data:
         - secretName: letsencrypt-wildcard-cert-prod
           hosts:
           - *host
+
+    secrets:
+      qbittorrent-config-restic:
+        enabled: true
 
     persistence:
       config:
