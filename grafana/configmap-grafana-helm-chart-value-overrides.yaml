@@ -672,6 +672,11 @@ data:
 
     dashboards:
       default:
+        qbittorrent:
+          # Ref: https://grafana.com/grafana/dashboards/15116-qbittorrent-dashboard/
+          gnetId: 15116
+          revision: 4
+          datasource: Prometheus
         minio:
           # Ref: https://grafana.com/grafana/dashboards/13502-minio-dashboard/
           gnetId: 13502
