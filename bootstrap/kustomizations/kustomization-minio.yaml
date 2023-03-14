@@ -4,8 +4,6 @@ metadata:
   name: minio
   namespace: flux-system
 spec:
-  dependsOn:
-  - name: cluster-configmaps
   path: ./minio
   prune: true # remove any elements later removed from the above path
   interval: 15m

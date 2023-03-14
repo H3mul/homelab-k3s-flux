@@ -6,7 +6,6 @@ metadata:
 spec:
   dependsOn:
   - name: minio
-  - name: cluster-configmaps
   path: ./minio-post
   prune: true # remove any elements later removed from the above path
   interval: 15m

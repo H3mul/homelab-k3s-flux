@@ -17,9 +17,6 @@ spec:
       kind: Deployment
       name: ${name}
       namespace: ${namespace}
-
-  dependsOn:
-    - name: cluster-configmaps
   postBuild:
     substituteFrom:
       - kind: ConfigMap

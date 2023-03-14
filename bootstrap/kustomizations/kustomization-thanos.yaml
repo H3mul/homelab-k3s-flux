@@ -25,9 +25,6 @@ spec:
       kind: Deployment
       name: thanos-compactor
       namespace: monitoring
-
-  dependsOn:
-    - name: cluster-configmaps
   postBuild:
     substituteFrom:
       - kind: ConfigMap

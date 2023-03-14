@@ -17,8 +17,6 @@ spec:
       kind: Deployment
       name: theme-park
       namespace: theme-park
-  dependsOn:
-    - name: cluster-configmaps
   postBuild:
     substituteFrom:
       - kind: ConfigMap

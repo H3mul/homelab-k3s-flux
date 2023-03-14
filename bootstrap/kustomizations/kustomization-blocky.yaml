@@ -17,9 +17,6 @@ spec:
       kind: Deployment
       name: blocky
       namespace: blocky
-
-  dependsOn:
-    - name: cluster-configmaps
   postBuild:
     substituteFrom:
       - kind: ConfigMap

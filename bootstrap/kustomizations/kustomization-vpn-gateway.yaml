@@ -17,9 +17,6 @@ spec:
       kind: Deployment
       name: vpn-gateway-pod-gateway
       namespace: vpn-gateway
-
-  dependsOn:
-    - name: cluster-configmaps
   postBuild:
     substituteFrom:
       - kind: ConfigMap
