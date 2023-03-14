@@ -1,21 +1,41 @@
-  apiVersion: helm.toolkit.fluxcd.io/v2beta1
-  kind: HelmRelease
-  metadata:
-    name: jackett
-    namespace: jackett
-  spec:
-    chart:
-      spec:
-        chart: app-template
-        version: 1.3.x
-        sourceRef:
-          kind: HelmRepository
-          name: bjw-s
-          namespace: flux-system
-    interval: 15m
-    timeout: 5m
-    releaseName: jackett
-    valuesFrom:
-    - kind: ConfigMap
-      name: jackett-helm-chart-value-overrides
-      valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: jackett
+  namespace: jackett
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 1.3.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: jackett
+  valuesFrom:
+  - kind: ConfigMap
+    name: jackett-helm-chart-value-overrides
+    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+
+  - targetPath: secrets.jackett-config-restic.stringData.RESTIC_REPOSITORY
+    kind: ConfigMap
+    name: volsync-jackett-config-bucket
+    valuesKey: BUCKET_NAME
+
+  - targetPath: secrets.jackett-config-restic.stringData.RESTIC_PASSWORD
+    kind: Secret
+    name: restic-password
+    valuesKey: RESTIC_PASSWORD
+
+  - targetPath: secrets.jackett-config-restic.stringData.AWS_ACCESS_KEY_ID
+    kind: Secret
+    name: volsync-jackett-config-bucket
+    valuesKey: AWS_ACCESS_KEY_ID
+
+  - targetPath: secrets.jackett-config-restic.stringData.AWS_SECRET_ACCESS_KEY
+    kind: Secret
+    name: volsync-jackett-config-bucket
+    valuesKey: AWS_SECRET_ACCESS_KEY
