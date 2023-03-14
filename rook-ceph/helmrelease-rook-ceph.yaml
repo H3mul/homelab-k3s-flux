@@ -8,7 +8,7 @@ spec:
     spec:
       chart: rook-ceph
       # Update the image tag in values as well - default doesn't work
-      version: 1.10.x
+      version: 1.11.x
       sourceRef:
         kind: HelmRepository
         name: rook-release
