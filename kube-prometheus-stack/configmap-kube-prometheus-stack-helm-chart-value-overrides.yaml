@@ -2881,7 +2881,7 @@ data:
 
         ## How long to retain metrics
         ##
-        retention: 2d
+        retention: 24h
 
         ## Maximum size of metrics
         ##
