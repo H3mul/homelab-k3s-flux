@@ -8,6 +8,5 @@ spec:
     requests:
       storage: "500Gi"
   accessModes:
-  - ReadWriteOnce
-  - ReadOnlyMany
-  storageClassName: fileshare-storageclass
+  - ReadWriteMany
+  storageClassName: ceph-filesystem
