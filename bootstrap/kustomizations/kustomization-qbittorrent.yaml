@@ -17,10 +17,6 @@ spec:
       kind: Deployment
       name: qbittorrent
       namespace: media
-
-  dependsOn:
-    - name: cluster-configmaps
-    - name: volsync--volsync-system
   postBuild:
     substituteFrom:
       - kind: ConfigMap

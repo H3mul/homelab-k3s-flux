@@ -15,7 +15,15 @@ spec:
   healthChecks:
     - apiVersion: apps/v1
       kind: Deployment
-      name: thanos
+      name: thanos-query
+      namespace: monitoring
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: thanos-query-frontend
+      namespace: monitoring
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: thanos-compactor
       namespace: monitoring
 
   dependsOn:
