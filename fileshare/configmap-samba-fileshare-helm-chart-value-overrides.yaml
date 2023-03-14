@@ -38,3 +38,7 @@ data:
         enabled: true
         mountPath: /share
         existingClaim: fileshare
+      torrent-download:
+        enabled: true
+        mountPath: /share/Torrent
+        existingClaim: qbittorrent-download
