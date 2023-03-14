@@ -592,9 +592,9 @@ data:
               size: 1
           dataPool:
             # failureDomain: host
-            # erasureCoded:
-            #   dataChunks: 2
-            #   codingChunks: 1
+            erasureCoded:
+              dataChunks: 2
+              codingChunks: 1
           preservePoolsOnDelete: true
           gateway:
             port: 80
@@ -608,13 +608,15 @@ data:
             # securePort: 443
             # sslCertificateRef:
             instances: 1
-            priorityClassName: system-cluster-critical
+          healthCheck:
+            bucket:
+              interval: 60s
         storageClass:
           enabled: true
           name: ceph-bucket
           reclaimPolicy: Delete
           volumeBindingMode: "Immediate"
           # see https://github.com/rook/rook/blob/master/Documentation/ceph-object-bucket-claim.md#storageclass for available configuration
-          # parameters:
-          #   # note: objectStoreNamespace and objectStoreName are configured by the chart
-          #   region: us-west-1
+          parameters:
+            # note: objectStoreNamespace and objectStoreName are configured by the chart
+            region: us-west-1
