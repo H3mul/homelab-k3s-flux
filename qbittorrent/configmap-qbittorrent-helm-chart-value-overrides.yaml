@@ -24,6 +24,9 @@ data:
         ports:
           http:
             port: 8080
+          metrics:
+            enabled: true
+            port: &metricsport 17871
       bittorrent:
         enabled: true
         type: ClusterIP
@@ -55,6 +58,24 @@ data:
         - secretName: letsencrypt-wildcard-cert-prod
           hosts:
           - *host
+
+    sidecars:
+      exporter:
+        image: caseyscarborough/qbittorrent-exporter:v1.3.2
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: QBITTORRENT_BASE_URL
+            value: http://localhost:8080
+
+    serviceMonitor:
+      main:
+        enabled: true
+        endpoints:
+        - port: metrics
+          scheme: http
+          path: /metrics
+          interval: 30s
+          scrapeTimeout: 10s
 
     secrets:
       qbittorrent-config-restic:
