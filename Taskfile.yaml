@@ -27,3 +27,14 @@ tasks:
         sh: dirname {{.file}}
     cmds:
       - kubeseal --cert sealed-secrets.pem < {{.file}} > {{.dir}}/sealed-{{.filename}} -o yaml
+
+
+  k-events:
+    desc: Watch kubernetes events in namespace
+    vars:
+      namespace: "{{.ns}}"
+    preconditions:
+      - sh: "[ '{{.namespace}}' != '<no value>' ]"
+        msg: "Variable .namespace is not set"
+    cmds:
+      - watch "kubectl -n {{.namespace}} get events --sort-by='{.lastTimestamp}' | tail -n 15"
