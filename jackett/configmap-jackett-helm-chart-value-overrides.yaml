@@ -42,10 +42,6 @@ data:
           hosts:
           - *host
 
-    # secrets:
-    #   config-restic:
-    #     enabled: true
-
     persistence:
       config:
         enabled: true
