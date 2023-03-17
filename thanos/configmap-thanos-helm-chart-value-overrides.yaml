@@ -1275,7 +1275,7 @@ data:
     bucketweb:
       ## @param bucketweb.enabled Enable/disable Thanos Bucket Web component
       ##
-      enabled: false
+      enabled: true
       ## @param bucketweb.logLevel Thanos Bucket Web log level
       ##
       logLevel: info
@@ -1583,7 +1583,7 @@ data:
       ingress:
         ## @param bucketweb.ingress.enabled Enable ingress controller resource
         ##
-        enabled: false
+        enabled: true
         ## @param bucketweb.ingress.hostname Default host for the ingress resource
         ##
         hostname: &host thanos-bucketweb.${CLUSTER_DOMAIN}
@@ -2117,7 +2117,7 @@ data:
     storegateway:
       ## @param storegateway.enabled Enable/disable Thanos Store Gateway component
       ##
-      enabled: false
+      enabled: true
       ## @param storegateway.logLevel Thanos Store Gateway log level
       ##
       logLevel: info
