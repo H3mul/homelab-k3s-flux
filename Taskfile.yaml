@@ -38,3 +38,21 @@ tasks:
         msg: "Variable .namespace is not set"
     cmds:
       - watch "kubectl -n {{.namespace}} get events --sort-by='{.lastTimestamp}' | tail -n 15"
+
+  k-init-pg:
+    desc: Manually initialize postgres-cluster using onedr0p/postgres-initdb
+    vars:
+      POSTGRES_SUPER_USER:
+        sh: kubectl -n cloudnative-pg get secret postgres-cluster-superuser -o go-template="{{ "{{" }}.data.username | base64decode{{ "}}" }}"
+      POSTGRES_SUPER_PASS:
+        sh: kubectl -n cloudnative-pg get secret postgres-cluster-superuser -o go-template="{{ "{{" }}.data.password | base64decode{{ "}}" }}"
+    cmds:
+      - |
+        docker run --rm \
+          -e POSTGRES_SUPER_USER="{{.POSTGRES_SUPER_USER}}" \
+          -e POSTGRES_SUPER_PASS="{{.POSTGRES_SUPER_PASS}}" \
+          -e POSTGRES_HOST="{{.pghost}}" \
+          -e POSTGRES_DB="{{.dbname}}" \
+          -e POSTGRES_USER="{{.dbuser}}" \
+          -e POSTGRES_PASS="{{.dbpass}}" \
+          ghcr.io/onedr0p/postgres-initdb:14.7
