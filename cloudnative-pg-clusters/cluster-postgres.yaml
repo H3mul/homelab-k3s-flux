@@ -15,7 +15,8 @@ spec:
   monitoring:
     enablePodMonitor: true
 
-  enableSuperuserAccess: true
+  superuserSecret:
+    name: postgres-cluster-superuser
 
   backup:
     retentionPolicy: 30d
