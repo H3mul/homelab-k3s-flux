@@ -1,0 +1,33 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: gitea
+  namespace: gitea
+spec:
+  chart:
+    spec:
+      chart: gitea
+      version: 7.0.x
+      sourceRef:
+        kind: HelmRepository
+        name: gitea-charts
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: gitea
+  valuesFrom:
+  - kind: ConfigMap
+    name: gitea-helm-chart-value-overrides
+    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  - kind: Secret
+    name: gitea-postgres-credentials
+    valuesKey: POSTGRES_DB
+    targetPath: gitea.config.database.NAME
+  - kind: Secret
+    name: gitea-postgres-credentials
+    valuesKey: POSTGRES_USER
+    targetPath: gitea.config.database.USER
+  - kind: Secret
+    name: gitea-postgres-credentials
+    valuesKey: POSTGRES_PASS
+    targetPath: gitea.config.database.PASSWD
