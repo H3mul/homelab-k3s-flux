@@ -712,6 +712,12 @@ data:
           revision: 16
           datasource: Prometheus
 
+        gitea:
+          # Ref: https://grafana.com/grafana/dashboards/13192-gitea/
+          gnetId: 13192
+          revision: 1
+          datasource: Prometheus
+
         flux-cluster:
           url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/cluster.json
           datasource: Prometheus
