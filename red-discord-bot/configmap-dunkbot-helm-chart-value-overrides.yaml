@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: dunkbot-helm-chart-value-overrides
+  namespace: red-discord-bot
+data:
+  values.yaml: |-
+    image:
+      repository: phasecorex/red-discordbot
+      tag: full
+      pullPolicy: Always
+
+    service:
+      main:
+        enabled: false
+
+    env:
+      TZ: ${TIMEZONE}
+      PREFIX: "!"
+
+    envFrom:
+      - secretRef:
+          name: dunkbot-discord-token
+
+    persistence:
+      data:
+        enabled: true
+        mountPath: /data
+        existingClaim: dunkbot-data
