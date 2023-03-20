@@ -718,6 +718,14 @@ data:
           revision: 1
           datasource: Prometheus
 
+        speedtest-exporter:
+          # Ref: https://grafana.com/grafana/dashboards/13665-speedtest-exporter-dashboard/
+          gnetId: 13665
+          revision: 4
+          datasource:
+            - name: DS_PROMETHEUS
+              value: Prometheus
+
         flux-cluster:
           url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/cluster.json
           datasource: Prometheus
