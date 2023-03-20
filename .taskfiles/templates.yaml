@@ -60,6 +60,7 @@ tasks:
       - namespace={{.namespace}} name={{.name}} envsubst < {{.src}} > {{.dst}}
 
   k-secret:
+    desc: generate an empty kubernetes secret
     preconditions:
       - sh: "[ '{{.name}}' != '<no value>' ]"
         msg: "Variable .name is not set"
