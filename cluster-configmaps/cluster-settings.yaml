@@ -9,8 +9,7 @@ data:
   FILESHARE_GROUP_ID: "101"
   CLUSTER_DOMAIN: "hemul.net"
 
-  VOLSYNC_MINIO_BUCKET: s3:https://s3.hemul.net/volsync
-  VOLSYNC_MINIO_BACKUP_SCHEDULE: "0 0 * * *"
+  VOLSYNC_LOCAL_BACKUP_SCHEDULE: "0 0 * * *"
 
   ROUTER_IP: 10.1.1.1
   BLOCKY_IP: 10.1.2.5

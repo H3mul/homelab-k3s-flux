@@ -1,21 +1,21 @@
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: jackett-config
-  namespace: jackett
+  name: gitea-data
+  namespace: gitea
 spec:
-  sourcePVC: jackett-config
+  sourcePVC: data-gitea-0
   trigger:
     schedule: ${VOLSYNC_LOCAL_BACKUP_SCHEDULE}
   restic:
-    repository: jackett-config-restic
+    repository: gitea-data-restic
 
     copyMethod: Snapshot
     volumeSnapshotClassName: ceph-block
     storageClassName: ceph-block
 
     pruneIntervalDays: 10
-    cacheCapacity: 200Mi
+    cacheCapacity: 10Gi
     retain:
       daily: 7
       weekly: 4
@@ -23,6 +23,6 @@ spec:
       within: 3d
 
     moverSecurityContext:
-      runAsUser: 911
-      runAsGroup: 911
-      fsGroup: 911
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000

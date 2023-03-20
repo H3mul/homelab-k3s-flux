@@ -1,14 +1,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: jackett-config-restic
-  namespace: jackett
+  name: gitea-data-restic
+  namespace: gitea
 
 spec:
   interval: 5m
   wait: true
   prune: true
-  path: ./jackett-volsync
+  path: ./gitea-volsync
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -19,6 +19,6 @@ spec:
       - kind: Secret
         name: restic-password
       - kind: ConfigMap
-        name: volsync-jackett-config-bucket
+        name: volsync-gitea-data-bucket
       - kind: Secret
-        name: volsync-jackett-config-bucket
+        name: volsync-gitea-data-bucket

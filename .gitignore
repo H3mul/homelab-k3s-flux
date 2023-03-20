@@ -2,4 +2,4 @@
 /.test
 /.task
 secret-*.yaml
-!*secret-*-config-restic.yaml
+!*secret-*-restic.yaml
