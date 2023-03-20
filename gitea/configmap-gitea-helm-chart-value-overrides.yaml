@@ -361,7 +361,7 @@ data:
 
         database:
           DB_TYPE: postgres
-          HOST: postgres-cluster.cloudnative-pg.svc.cluster.local:5432
+          HOST: postgres-cluster-rw.cloudnative-pg.svc.cluster.local:5432
 
       ## @param gitea.additionalConfigSources Additional configuration from secret or configmap
       additionalConfigSources: []
