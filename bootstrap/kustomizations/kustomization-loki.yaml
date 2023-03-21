@@ -14,8 +14,12 @@ spec:
   validation: server
   healthChecks:
     - apiVersion: apps/v1
-      kind: Deployment
-      name: loki
+      kind: StatefulSet
+      name: loki-read
+      namespace: monitoring
+    - apiVersion: apps/v1
+      kind: StatefulSet
+      name: loki-write
       namespace: monitoring
   postBuild:
     substituteFrom:
