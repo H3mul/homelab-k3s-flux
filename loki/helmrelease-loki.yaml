@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: loki
+  namespace: monitoring
+spec:
+  chart:
+    spec:
+      chart: loki
+      version: 4.8.x
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: loki
+  valuesFrom:
+  - kind: ConfigMap
+    name: loki-helm-chart-value-overrides
+    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+
+  - targetPath: loki.structuredConfig.common.storage.s3.bucketnames
+    kind: ConfigMap
+    name: loki-bucket
+    valuesKey: BUCKET_NAME
+  - targetPath: loki.structuredConfig.common.storage.s3.endpoint
+    kind: ConfigMap
+    name: loki-bucket
+    valuesKey: BUCKET_HOST
+  - targetPath: loki.structuredConfig.common.storage.s3.access_key_id
+    kind: Secret
+    name: loki-bucket
+    valuesKey: AWS_ACCESS_KEY_ID
+  - targetPath: loki.structuredConfig.common.storage.s3.secret_access_key
+    kind: Secret
+    name: loki-bucket
+    valuesKey: AWS_SECRET_ACCESS_KEY
