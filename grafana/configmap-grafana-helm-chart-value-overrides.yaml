@@ -549,7 +549,8 @@ data:
         datasources:
         - name: Prometheus
           type: prometheus
-          url: http://thanos-query.monitoring.svc.cluster.local:9090
+          # url: http://thanos-query.monitoring.svc.cluster.local:9090
+          url: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
           access: proxy
           isDefault: true
 

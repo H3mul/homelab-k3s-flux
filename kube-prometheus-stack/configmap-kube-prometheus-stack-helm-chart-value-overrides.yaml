@@ -2266,7 +2266,7 @@ data:
       # Thanos sidecar on prometheus nodes
       # (Please remember to change ${kube-prometheus-stack.fullname} and ${namespace}. Not just copy and paste!)
       thanosService:
-        enabled: true
+        enabled: false
         annotations: {}
         labels: {}
 
@@ -2300,7 +2300,7 @@ data:
       # ServiceMonitor to scrape Sidecar metrics
       # Needs thanosService to be enabled as well
       thanosServiceMonitor:
-        enabled: true
+        enabled: false
         interval: ""
 
         ## scheme: HTTP scheme to use for scraping. Can be used with `tlsConfig` for example if using istio mTLS.
@@ -2492,7 +2492,7 @@ data:
       #     someoneelse:$apr1$DMZX2Z4q$6SbQIfyuLQd.xmo/P0m2c.
 
       ingress:
-        enabled: false
+        enabled: true
 
         # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
         # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
@@ -2881,11 +2881,11 @@ data:
 
         ## How long to retain metrics
         ##
-        retention: 24h
+        retention: 30d
 
         ## Maximum size of metrics
         ##
-        retentionSize: 6GB 
+        retentionSize: 10GB 
 
         ## Enable compression of the write-ahead log using Snappy.
         ##
@@ -3137,11 +3137,11 @@ data:
         ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#thanosspec
         ##
 
-        thanos:
-          image: quay.io/thanos/thanos:v0.30.2
-          objectStorageConfig:
-            name: thanos-objstore-secret
-            key: objstore.yml
+        # thanos:
+          # image: quay.io/thanos/thanos:v0.30.2
+          # objectStorageConfig:
+          #   name: thanos-objstore-secret
+          #   key: objstore.yml
 
           # secretProviderClass:
           #   provider: gcp
