@@ -12,6 +12,7 @@ data:
 
     service:
       main:
+        enabled: true
         ports:
           http:
             enabled: false
