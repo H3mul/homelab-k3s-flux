@@ -68,6 +68,7 @@ data:
       #   type: RuntimeDefault
 
     securityContext:
+      runAsUser: 1000
       allowPrivilegeEscalation: false
       capabilities:
         drop:
