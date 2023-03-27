@@ -26,3 +26,34 @@ spec:
       runAsUser: 1000
       runAsGroup: 1000
       fsGroup: 1000
+      
+---
+
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: b2-gitea-data
+  namespace: gitea
+spec:
+  sourcePVC: data-gitea-0
+  trigger:
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+  restic:
+    repository: b2-gitea-data-restic
+
+    copyMethod: Snapshot
+    volumeSnapshotClassName: ceph-block
+    storageClassName: ceph-block
+
+    pruneIntervalDays: 10
+    cacheCapacity: 10Gi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 6
+      within: 3d
+
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000

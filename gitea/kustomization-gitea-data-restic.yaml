@@ -22,3 +22,8 @@ spec:
         name: volsync-gitea-data-bucket
       - kind: Secret
         name: volsync-gitea-data-bucket
+      - kind: Secret
+        name: b2-volsync-bucket-credentials
+    substitute:
+      B2_VOLSYNC_BUCKET: ${B2_VOLSYNC_BUCKET}
+
