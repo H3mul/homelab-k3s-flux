@@ -22,3 +22,7 @@ spec:
         name: volsync-dunkbot-data-bucket
       - kind: Secret
         name: volsync-dunkbot-data-bucket
+      - kind: Secret
+        name: b2-dunkbot-data-restic
+    substitute:
+      B2_VOLSYNC_BUCKET: ${B2_VOLSYNC_BUCKET}
