@@ -6,7 +6,7 @@ metadata:
 spec:
   sourcePVC: dunkbot-data
   trigger:
-    schedule: ${VOLSYNC_LOCAL_BACKUP_SCHEDULE}
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
   restic:
     repository: dunkbot-data-restic
 

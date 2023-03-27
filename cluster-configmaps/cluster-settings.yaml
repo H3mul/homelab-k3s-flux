@@ -9,7 +9,9 @@ data:
   FILESHARE_GROUP_ID: "101"
   CLUSTER_DOMAIN: "hemul.net"
 
-  VOLSYNC_LOCAL_BACKUP_SCHEDULE: "0 0 * * *"
+  VOLSYNC_BACKUP_SCHEDULE: "0 0 * * *"
+
+  B2_VOLSYNC_BUCKET: k8s-volsync-backup
 
   ROUTER_IP: 10.1.1.1
   BLOCKY_IP: 10.1.2.5

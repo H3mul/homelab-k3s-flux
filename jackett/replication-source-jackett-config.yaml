@@ -6,7 +6,7 @@ metadata:
 spec:
   sourcePVC: jackett-config
   trigger:
-    schedule: ${VOLSYNC_LOCAL_BACKUP_SCHEDULE}
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
   restic:
     repository: jackett-config-restic
 

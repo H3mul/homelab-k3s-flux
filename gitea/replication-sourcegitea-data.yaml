@@ -6,7 +6,7 @@ metadata:
 spec:
   sourcePVC: data-gitea-0
   trigger:
-    schedule: ${VOLSYNC_LOCAL_BACKUP_SCHEDULE}
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
   restic:
     repository: gitea-data-restic
 

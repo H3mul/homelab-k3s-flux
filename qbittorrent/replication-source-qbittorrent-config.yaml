@@ -1,14 +1,14 @@
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: qbittorrent-config
+  name: b2-qbittorrent-config
   namespace: media
-spec:
+spec: &replicationSpec
   sourcePVC: qbittorrent-config
   trigger:
-    schedule: ${VOLSYNC_LOCAL_BACKUP_SCHEDULE}
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
   restic:
-    repository: qbittorrent-config-restic
+    repository: b2-qbittorrent-config-restic
 
     copyMethod: Snapshot
     volumeSnapshotClassName: ceph-block
@@ -26,3 +26,15 @@ spec:
       runAsUser: ${FILESHARE_USER_ID}
       runAsGroup:  ${FILESHARE_GROUP_ID}
       fsGroup: ${FILESHARE_GROUP_ID}
+
+---
+
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: qbittorrent-config
+  namespace: media
+spec:
+  <<: *replicationSpec
+  restic:
+    repository: qbittorrent-config-restic
