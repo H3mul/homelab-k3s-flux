@@ -4,8 +4,6 @@ metadata:
   creationTimestamp: null
   name: kube-prometheus-stack-helm-chart-value-overrides
   namespace: monitoring
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
 data:
   values.yaml: |-
     # Pasted from:
@@ -252,23 +250,6 @@ data:
       ##
       templateFiles: {}
       #
-      ## An example template:
-      #   template_1.tmpl: |-
-      #       {{ define "cluster" }}{{ .ExternalURL | reReplaceAll ".*alertmanager\\.(.*)" "$1" }}{{ end }}
-      #
-      #       {{ define "slack.myorg.text" }}
-      #       {{- $root := . -}}
-      #       {{ range .Alerts }}
-      #         *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
-      #         *Cluster:* {{ template "cluster" $root }}
-      #         *Description:* {{ .Annotations.description }}
-      #         *Graph:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:>
-      #         *Runbook:* <{{ .Annotations.runbook }}|:spiral_note_pad:>
-      #         *Details:*
-      #           {{ range .Labels.SortedPairs }} - *{{ .Name }}:* `{{ .Value }}`
-      #           {{ end }}
-      #       {{ end }}
-      #       {{ end }}
 
       ingress:
         enabled: false
@@ -324,11 +305,6 @@ data:
         annotations: {}
         labels: {}
 
-        ## Final form of the hostname for each per replica ingress is
-        ## {{ ingressPerReplica.hostPrefix }}-{{ $replicaNumber }}.{{ ingressPerReplica.hostDomain }}
-        ##
-        ## Prefix for the per replica ingress that will have `-$replicaNumber`
-        ## appended to the end
         hostPrefix: ""
         ## Domain that will be used for the per replica ingress
         hostDomain: ""
@@ -351,7 +327,6 @@ data:
         tlsSecretPerReplica:
           enabled: false
           ## Final form of the secret for each per replica ingress is
-          ## {{ tlsSecretPerReplica.prefix }}-{{ $replicaNumber }}
           ##
           prefix: "alertmanager"
 
@@ -484,9 +459,7 @@ data:
         relabelings: []
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
       ## Settings affecting alertmanagerSpec
@@ -754,9 +727,6 @@ data:
         # name: ""
         annotations: {}
         data: {}
-      #   auth: |
-      #     foo:$apr1$OFG3Xybp$ckL0FHDAkoXYIlH9.cysT0
-      #     someoneelse:$apr1$DMZX2Z4q$6SbQIfyuLQd.xmo/P0m2c.
 
     ## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
     ##
@@ -933,9 +903,7 @@ data:
         relabelings: []
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
     ## Component scraping the kube api server
@@ -1098,12 +1066,10 @@ data:
         # - sourceLabels: [__name__, image]
         #   separator: ;
         #   regex: container_([a-z_]+);
-        #   replacement: $1
         #   action: drop
         # - sourceLabels: [__name__]
         #   separator: ;
         #   regex: container_(network_tcp_usage_total|network_udp_usage_total|tasks_state|cpu_load_average_10s)
-        #   replacement: $1
         #   action: drop
 
         ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
@@ -1113,12 +1079,10 @@ data:
         # - sourceLabels: [__name__, image]
         #   separator: ;
         #   regex: container_([a-z_]+);
-        #   replacement: $1
         #   action: drop
         # - sourceLabels: [__name__]
         #   separator: ;
         #   regex: container_(network_tcp_usage_total|network_udp_usage_total|tasks_state|cpu_load_average_10s)
-        #   replacement: $1
         #   action: drop
 
         ## RelabelConfigs to apply to samples before scraping
@@ -1131,9 +1095,7 @@ data:
             targetLabel: metrics_path
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
         ## RelabelConfigs to apply to samples before scraping
@@ -1145,9 +1107,7 @@ data:
             targetLabel: metrics_path
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
         ## RelabelConfigs to apply to samples before scraping
@@ -1159,9 +1119,7 @@ data:
             targetLabel: metrics_path
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
         ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
@@ -1171,12 +1129,10 @@ data:
         # - sourceLabels: [__name__, image]
         #   separator: ;
         #   regex: container_([a-z_]+);
-        #   replacement: $1
         #   action: drop
         # - sourceLabels: [__name__]
         #   separator: ;
         #   regex: container_(network_tcp_usage_total|network_udp_usage_total|tasks_state|cpu_load_average_10s)
-        #   replacement: $1
         #   action: drop
 
         ## RelabelConfigs to apply to samples before scraping
@@ -1189,9 +1145,7 @@ data:
             targetLabel: metrics_path
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
         ## Additional labels
@@ -1279,9 +1233,7 @@ data:
         relabelings: []
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
         ## Additional labels
@@ -1341,9 +1293,7 @@ data:
         relabelings: []
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
         ## Additional labels
@@ -1407,9 +1357,7 @@ data:
         relabelings: []
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
         ## MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
@@ -1426,9 +1374,7 @@ data:
         dnsmasqRelabelings: []
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
         ## Additional labels
@@ -1518,9 +1464,7 @@ data:
         relabelings: []
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
         ## Additional labels
@@ -1607,9 +1551,7 @@ data:
         relabelings: []
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
         ## Additional labels
@@ -1758,9 +1700,7 @@ data:
           relabelings: []
           # - sourceLabels: [__meta_kubernetes_pod_node_name]
           #   separator: ;
-          #   regex: ^(.*)$
           #   targetLabel: nodename
-          #   replacement: $1
           #   action: replace
 
       selfMonitor:
@@ -1830,7 +1770,6 @@ data:
           # - sourceLabels: [__name__]
           #   separator: ;
           #   regex: ^node_mountstats_nfs_(event|operations|transport)_.+
-          #   replacement: $1
           #   action: drop
 
           ## RelabelConfigs to apply to samples before scraping
@@ -1839,9 +1778,7 @@ data:
           relabelings: []
           # - sourceLabels: [__meta_kubernetes_pod_node_name]
           #   separator: ;
-          #   regex: ^(.*)$
           #   targetLabel: nodename
-          #   replacement: $1
           #   action: replace
       rbac:
         ## If true, create PSPs for node-exporter
@@ -2085,9 +2022,7 @@ data:
         relabelings: []
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
       ## Resource limits & requests
@@ -2262,9 +2197,7 @@ data:
 
       # Service for thanos service discovery on sidecar
       # Enable this can make Thanos Query can use
-      # `--store=dnssrv+_grpc._tcp.${kube-prometheus-stack.fullname}-thanos-discovery.${namespace}.svc.cluster.local` to discovery
       # Thanos sidecar on prometheus nodes
-      # (Please remember to change ${kube-prometheus-stack.fullname} and ${namespace}. Not just copy and paste!)
       thanosService:
         enabled: false
         annotations: {}
@@ -2487,9 +2420,6 @@ data:
         # name: ""
         annotations: {}
         data: {}
-      #   auth: |
-      #     foo:$apr1$OFG3Xybp$ckL0FHDAkoXYIlH9.cysT0
-      #     someoneelse:$apr1$DMZX2Z4q$6SbQIfyuLQd.xmo/P0m2c.
 
       ingress:
         enabled: true
@@ -2509,7 +2439,7 @@ data:
         ##
 
         hosts:
-          - &host prometheus.hemul.net
+          - &host prometheus.${CLUSTER_DOMAIN}
 
         ## Paths to use for ingress rules - one path should match the prometheusSpec.routePrefix
         ##
@@ -2542,9 +2472,6 @@ data:
         labels: {}
 
         ## Final form of the hostname for each per replica ingress is
-        ## {{ ingressPerReplica.hostPrefix }}-{{ $replicaNumber }}.{{ ingressPerReplica.hostDomain }}
-        ##
-        ## Prefix for the per replica ingress that will have `-$replicaNumber`
         ## appended to the end
         hostPrefix: ""
         ## Domain that will be used for the per replica ingress
@@ -2568,7 +2495,6 @@ data:
         tlsSecretPerReplica:
           enabled: false
           ## Final form of the secret for each per replica ingress is
-          ## {{ tlsSecretPerReplica.prefix }}-{{ $replicaNumber }}
           ##
           prefix: "prometheus"
 
@@ -2626,9 +2552,7 @@ data:
         relabelings: []
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
       ## Settings affecting prometheusSpec
@@ -3031,8 +2955,6 @@ data:
         #   - source_labels: [__address__]
         #     action: replace
         #     targetLabel: __address__
-        #     regex: ([^:;]+):(\d+)
-        #     replacement: ${1}:2379
         #   - source_labels: [__meta_kubernetes_node_name]
         #     action: keep
         #     regex: .*mst.*
@@ -3040,7 +2962,6 @@ data:
         #     action: replace
         #     targetLabel: node
         #     regex: (.*)
-        #     replacement: ${1}
         #   metric_relabel_configs:
         #   - regex: (kubernetes_io_hostname|failure_domain_beta_kubernetes_io_region|beta_kubernetes_io_os|beta_kubernetes_io_arch|beta_kubernetes_io_instance_type|failure_domain_beta_kubernetes_io_zone)
         #     action: labeldrop
@@ -3050,9 +2971,7 @@ data:
         # additionalScrapeConfigs: |
         #  - job_name: "node-exporter"
         #    gce_sd_configs:
-        #    {{range $zone := .Values.gcp_zones}}
         #    - project: "project1"
-        #      zone: "{{$zone}}"
         #      port: 9100
         #    {{end}}
         #    relabel_configs:
@@ -3106,7 +3025,6 @@ data:
         additionalAlertRelabelConfigs: []
         # - separator: ;
         #   regex: prometheus_replica
-        #   replacement: $1
         #   action: labeldrop
 
         ## If additional alert relabel configurations are already deployed in a single secret, or you want to manage
@@ -3147,7 +3065,6 @@ data:
           #   provider: gcp
           #   parameters:
           #     secrets: |
-          #       - resourceName: "projects/$PROJECT_ID/secrets/testsecret/versions/latest"
           #         fileName: "objstore.yaml"
           # objectStorageConfigFile: /var/secrets/object-store.yaml
 
@@ -3554,9 +3471,7 @@ data:
         relabelings: []
         # - sourceLabels: [__meta_kubernetes_pod_node_name]
         #   separator: ;
-        #   regex: ^(.*)$
         #   targetLabel: nodename
-        #   replacement: $1
         #   action: replace
 
       ## Settings affecting thanosRulerpec
@@ -3794,9 +3709,6 @@ data:
         # name: ""
         annotations: {}
         data: {}
-      #   auth: |
-      #     foo:$apr1$OFG3Xybp$ckL0FHDAkoXYIlH9.cysT0
-      #     someoneelse:$apr1$DMZX2Z4q$6SbQIfyuLQd.xmo/P0m2c.
 
     ## Setting to true produces cleaner resource names, but requires a data migration because the name of the persistent volume changes. Therefore this should only be set once on initial installation.
     ##

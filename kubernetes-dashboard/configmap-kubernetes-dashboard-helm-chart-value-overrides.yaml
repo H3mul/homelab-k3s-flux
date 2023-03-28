@@ -226,7 +226,7 @@ data:
       ##
 
       hosts:
-        - kubernetes.hemul.net
+        - &host kubernetes.${CLUSTER_DOMAIN}
 
       ## Kubernetes Dashboard Ingress TLS configuration
       ## Secrets must be manually created in the namespace
@@ -235,7 +235,7 @@ data:
       tls:
         - secretName: letsencrypt-wildcard-cert-prod
           hosts:
-            - kubernetes.hemul.net
+            - *host
 
     # Global dashboard settings
     settings:

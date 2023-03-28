@@ -426,18 +426,17 @@ data:
         annotations:
           ingress.kubernetes.io/protocol: https
         #   external-dns.alpha.kubernetes.io/hostname: dashboard.example.com
-        #   nginx.ingress.kubernetes.io/rewrite-target: /ceph-dashboard/$2
         #   kubernetes.io/ingress.class: nginx
         # If the dashboard has ssl: true the following will make sure the NGINX Ingress controller can expose the dashboard correctly
         #   nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         #   nginx.ingress.kubernetes.io/server-snippet: |
         #     proxy_ssl_verify off;
         host:
-          name: ceph.hemul.net
+          name: &host ceph.${CLUSTER_DOMAIN}
         tls:
           - secretName: letsencrypt-wildcard-cert-prod
             hosts:
-              - ceph.hemul.net
+              - *host
         ## Note: Only one of ingress class annotation or the `ingressClassName:` can be used at a time
         ## to set the ingress class
         ingressClassName: traefik

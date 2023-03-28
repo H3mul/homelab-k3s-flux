@@ -7,7 +7,11 @@ data:
   TIMEZONE: America/Vancouver
   FILESHARE_USER_ID: "100"
   FILESHARE_GROUP_ID: "101"
+
   CLUSTER_DOMAIN: "hemul.net"
+  CLUSTER_DOMAIN_DNS_ZONE: "hemul.net"
+
+  DNS_EMAIL: phil.d324@gmail.com
 
   VOLSYNC_BACKUP_SCHEDULE: "0 0 * * *"
 

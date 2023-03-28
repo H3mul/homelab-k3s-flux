@@ -4,17 +4,17 @@ metadata:
   name: letsencrypt-prod
 spec:
   acme:
-    email: phil.d324@gmail.com
+    email: ${DNS_EMAIL}
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
     - selector:
         dnsZones:
-          - "hemul.net"
+          - "${CLUSTER_DOMAIN_DNS_ZONE}"
       dns01:
         cloudflare:
-          email: phil.d324@gmail.com
+          email: ${DNS_EMAIL}
           apiTokenSecretRef:
             name: cloudflare-api-token
             key: cloudflare_api_token
