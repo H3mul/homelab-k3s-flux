@@ -5,7 +5,7 @@ metadata:
   namespace: cloudnative-pg
 
 spec:
-  schedule: "@daily"
+  schedule: "@weekly"
   backupOwnerReference: self
   cluster:
     name: postgres-cluster

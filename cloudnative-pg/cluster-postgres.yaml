@@ -19,18 +19,21 @@ spec:
     name: postgres-cluster-superuser
 
   backup:
-    retentionPolicy: 30d
+    retentionPolicy: 60d
     barmanObjectStore:
       wal:
         compression: gzip
-      destinationPath: "s3://${BUCKET_NAME}/"
-      endpointURL: "http://${BUCKET_HOST}:${BUCKET_PORT}"
+      destinationPath: s3://cloudnative-pg-backup/
+      endpointURL: https://s3.us-east-005.backblazeb2.com
+      serverName: postgres-cluster-backup-v1
+      # destinationPath: "s3://${BUCKET_NAME}/"
+      # endpointURL: "http://${BUCKET_HOST}:${BUCKET_PORT}"
       s3Credentials:
         accessKeyId:
-          name: postgres-backup-bucket
-          key: AWS_ACCESS_KEY_ID
+          name: b2-cloudnative-pg-bucket-credentials
+          key: B2_ACCOUNT_ID
         secretAccessKey:
-          name: postgres-backup-bucket
-          key: AWS_SECRET_ACCESS_KEY
+          name: b2-cloudnative-pg-bucket-credentials
+          key: B2_ACCOUNT_KEY
 
   externalClusters: []
