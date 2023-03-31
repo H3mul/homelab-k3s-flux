@@ -2940,7 +2940,12 @@ data:
         ## The scrape configuration example below will find master nodes, provided they have the name .*mst.*, relabel the
         ## port to 2379 and allow etcd scraping provided it is running on all Kubernetes master nodes
         ##
-        additionalScrapeConfigs: {}
+
+        additionalScrapeConfigs:
+          - job_name: openwrt
+            static_configs:
+              - targets: [ '10.1.1.1:9100']
+
         # - job_name: kube-etcd
         #   kubernetes_sd_configs:
         #     - role: node
