@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: loki
-      version: 4.8.x
+      version: 4.9.x
       sourceRef:
         kind: HelmRepository
         name: grafana
