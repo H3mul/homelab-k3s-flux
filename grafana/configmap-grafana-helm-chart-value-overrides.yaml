@@ -730,6 +730,12 @@ data:
           revision: 1
           datasource: Prometheus
 
+        isp-monitoring:
+          # Ref: https://grafana.com/grafana/dashboards/14206-isp-monitoring/
+          gnetId: 14206
+          revision: 1
+          datasource: Prometheus
+
         speedtest-exporter:
           # Ref: https://grafana.com/grafana/dashboards/13665-speedtest-exporter-dashboard/
           gnetId: 13665

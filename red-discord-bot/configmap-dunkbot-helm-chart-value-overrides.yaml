@@ -9,7 +9,7 @@ data:
     image:
       repository: phasecorex/red-discordbot
       tag: full
-      pullPolicy: Always
+      PullPolicy: IfNotPresent
 
     service:
       main:
