@@ -15,3 +15,7 @@ spec:
     kind: GitRepository
     name: flux-system
   validation: server
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
