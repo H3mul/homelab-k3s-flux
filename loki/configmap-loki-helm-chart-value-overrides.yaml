@@ -105,12 +105,16 @@ data:
         tag: 1.23-alpine
       ingress:
         enabled: false
+      affinity: |
+        podAntiAffinity: {}
 
     write:
       replicas: 1
       persistence:
         size: 10Gi
         storageClass: ceph-block
+      affinity: |
+        podAntiAffinity: {}
 
     read:
       replicas: 1
@@ -123,6 +127,8 @@ data:
       persistence:
         size: 10Gi
         storageClass: ceph-block
+      affinity: |
+        podAntiAffinity: {}
 
     backend:
       replicas: 1
@@ -135,6 +141,8 @@ data:
       persistence:
         size: 10Gi
         storageClass: ceph-block
+      affinity: |
+        podAntiAffinity: {}
 
     monitoring:
       serviceMonitor:
