@@ -1337,7 +1337,7 @@ data:
           }
         }
       ],
-      "refresh": "",
+      "refresh": "30s",
       "revision": 1,
       "schemaVersion": 38,
       "style": "dark",
@@ -1353,6 +1353,6 @@ data:
       "timezone": "",
       "title": "ISP Monitoring",
       "uid": "nCDESulMk",
-      "version": 2,
+      "version": 1,
       "weekStart": ""
     }
