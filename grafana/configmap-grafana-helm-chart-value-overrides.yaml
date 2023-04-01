@@ -718,11 +718,11 @@ data:
           revision: 16
           datasource: Prometheus
 
-        openwrt:
-          # Ref: https://grafana.com/grafana/dashboards/11147-openwrt/
-          gnetId: 11147
-          revision: 1
-          datasource: Prometheus
+        # openwrt:
+        #   # Ref: https://grafana.com/grafana/dashboards/11147-openwrt/
+        #   gnetId: 11147
+        #   revision: 1
+        #   datasource: Prometheus
 
         gitea:
           # Ref: https://grafana.com/grafana/dashboards/13192-gitea/
