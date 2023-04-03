@@ -2809,7 +2809,7 @@ data:
 
         ## Maximum size of metrics
         ##
-        retentionSize: 10GB 
+        retentionSize: 8GB 
 
         ## Enable compression of the write-ahead log using Snappy.
         ##
@@ -2914,7 +2914,7 @@ data:
               accessModes: ["ReadWriteOnce"]
               resources:
                 requests:
-                  storage: 6Gi
+                  storage: 10Gi
             selector: {}
 
         ## Using tmpfs volume
