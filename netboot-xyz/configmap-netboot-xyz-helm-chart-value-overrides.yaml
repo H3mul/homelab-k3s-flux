@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: netboot-xyz-helm-chart-value-overrides
+  namespace: netboot-xyz
+data:
+  values.yaml: |-
+    image:
+      repository: ghcr.io/h3mul/netboot-xyz
+      tag: 2.0.68
+
+    service:
+      main:
+        ports:
+          http:
+            port: 80
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: traefik
+        hosts:
+        - host: &host "netboot.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *host
