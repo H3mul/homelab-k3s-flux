@@ -8,7 +8,7 @@ data:
   FILESHARE_USER_ID: "100"
   FILESHARE_GROUP_ID: "101"
 
-  CLUSTER_DOMAIN: "hemul.net"
+  CLUSTER_DOMAIN: "talos.hemul.net"
   CLUSTER_DOMAIN_DNS_ZONE: "hemul.net"
 
   DNS_EMAIL: phil.d324@gmail.com
@@ -18,7 +18,7 @@ data:
   B2_VOLSYNC_BUCKET: k8s-volsync-backup
 
   ROUTER_IP: 10.1.1.1
-  BLOCKY_IP: 10.1.2.5
-  METALLB_ADDRESS_POOL: 10.1.2.1-10.1.2.254
+  BLOCKY_IP: 10.1.2.56
+  METALLB_ADDRESS_POOL: 10.1.2.50-10.1.2.254
 
   BITTORRENT_PORT: "18289"
