@@ -1,59 +1,74 @@
 apiVersion: volsync.backube/v1alpha1
-kind: ReplicationSource
-metadata:
-  name: jackett-config
-  namespace: jackett
-spec:
-  sourcePVC: jackett-config
-  trigger:
-    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
-  restic:
-    repository: jackett-config-restic
-
-    copyMethod: Snapshot
-    volumeSnapshotClassName: ceph-block
-    storageClassName: ceph-block
-
-    pruneIntervalDays: 10
-    cacheCapacity: 200Mi
-    retain:
-      daily: 7
-      weekly: 4
-      monthly: 6
-      within: 3d
-
-    moverSecurityContext:
-      runAsUser: 911
-      runAsGroup: 911
-      fsGroup: 911
-
----
-
-apiVersion: volsync.backube/v1alpha1
-kind: ReplicationSource
+kind: ReplicationDestination
 metadata:
   name: b2-jackett-config
-  namespace: jackett
 spec:
-  sourcePVC: jackett-config
   trigger:
-    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+    manual: restore-once
   restic:
     repository: b2-jackett-config-restic
+    # Use an existing PVC, don't provision a new one
+    destinationPVC: jackett-config
+    copyMethod: Direct
 
-    copyMethod: Snapshot
-    volumeSnapshotClassName: ceph-block
-    storageClassName: ceph-block
+# ---
 
-    pruneIntervalDays: 10
-    cacheCapacity: 200Mi
-    retain:
-      daily: 7
-      weekly: 4
-      monthly: 6
-      within: 3d
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationSource
+# metadata:
+#   name: jackett-config
+#   namespace: jackett
+# spec:
+#   sourcePVC: jackett-config
+#   trigger:
+#     schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+#   restic:
+#     repository: jackett-config-restic
 
-    moverSecurityContext:
-      runAsUser: 911
-      runAsGroup: 911
-      fsGroup: 911
+#     copyMethod: Snapshot
+#     volumeSnapshotClassName: ceph-block
+#     storageClassName: ceph-block
+
+#     pruneIntervalDays: 10
+#     cacheCapacity: 200Mi
+#     retain:
+#       daily: 7
+#       weekly: 4
+#       monthly: 6
+#       within: 3d
+
+#     moverSecurityContext:
+#       runAsUser: 911
+#       runAsGroup: 911
+#       fsGroup: 911
+
+# ---
+
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationSource
+# metadata:
+#   name: b2-jackett-config
+#   namespace: jackett
+# spec:
+#   sourcePVC: jackett-config
+#   trigger:
+#     schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+#   restic:
+#     repository: b2-jackett-config-restic
+
+#     copyMethod: Snapshot
+#     volumeSnapshotClassName: ceph-block
+#     storageClassName: ceph-block
+
+#     pruneIntervalDays: 10
+#     cacheCapacity: 200Mi
+#     retain:
+#       daily: 7
+#       weekly: 4
+#       monthly: 6
+#       within: 3d
+
+#     moverSecurityContext:
+#       runAsUser: 911
+#       runAsGroup: 911
+#       fsGroup: 911
