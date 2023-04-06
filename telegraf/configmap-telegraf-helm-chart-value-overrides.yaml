@@ -51,7 +51,7 @@ data:
 
             # DNS plugin
             [[inputs.dns_query]]
-              servers = ["10.1.2.5"]
+              servers = ["${BLOCKY_IP}"]
               domains = ["cloudflare.com", "google.com", "reddit.com", "twitter.com", "amazon.ca"]
 
             # Output format plugins
