@@ -20,7 +20,7 @@ spec:
 
   backup:
     retentionPolicy: 60d
-    barmanObjectStore:
+    barmanObjectStore: &backupObjStore
       wal:
         compression: gzip
       destinationPath: s3://cloudnative-pg-backup/
@@ -36,4 +36,10 @@ spec:
           name: b2-cloudnative-pg-bucket-credentials
           key: B2_ACCOUNT_KEY
 
-  externalClusters: []
+  bootstrap:
+    recovery:
+      source: clusterBackup
+
+  externalClusters:
+    - name: clusterBackup
+      barmanObjectStore: *backupObjStore
