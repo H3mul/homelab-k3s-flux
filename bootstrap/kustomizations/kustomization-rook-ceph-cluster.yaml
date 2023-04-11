@@ -7,7 +7,7 @@ spec:
   dependsOn:
   - name: "rook-ceph"
   interval: 30m
-  path: ./rook-ceph-cluster
+  path: ./cluster/rook-ceph-cluster
   prune: true # remove any elements later removed from the above path
   wait: true
   timeout: 10m # if not set, this defaults to interval duration, which is 1h

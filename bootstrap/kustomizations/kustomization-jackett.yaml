@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 15m
-  path: ./jackett
+  path: ./cluster/jackett
   prune: true # remove any elements later removed from the above path
   wait: true
   timeout: 2m # if not set, this defaults to interval duration, which is 1h

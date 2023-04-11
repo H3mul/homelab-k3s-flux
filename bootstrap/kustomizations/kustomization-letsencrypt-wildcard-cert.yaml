@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 15m
-  path: ./letsencrypt-wildcard-cert
+  path: ./cluster/letsencrypt-wildcard-cert
   dependsOn:
   - name: "cert-manager"
   - name: "sealed-secrets"

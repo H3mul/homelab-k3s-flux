@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
-  path: ./rook-ceph
+  path: ./cluster/rook-ceph
   prune: true # remove any elements later removed from the above path
   timeout: 10m # if not set, this defaults to interval duration, which is 1h
   sourceRef:
