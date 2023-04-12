@@ -1,11 +1,12 @@
 clusterName: homelab
 
-talosVersion: v1.3.6
-kubernetesVersion: 1.26.1
+talosVersion: v1.3.7
+kubernetesVersion: 1.26.3
 endpoint: "https://homelab.hemul.net:6443"
 
+allowSchedulingOnMasters: true
 cniConfig:
-  name: flannel
+  name: none
 
 additionalMachineCertSans:
   - homelab.hemul.net
@@ -21,18 +22,24 @@ nodes:
 controlPlane:
   patches:
     - |-
-      cluster:
-        allowSchedulingOnMasters: true
-        apiServer:
-        controllerManager:
-        discovery:
-          registries:
-            service:
-              disabled: true
-        proxy:
-          disabled: true
-        scheduler:
-
+      - op: add
+        path: /machine/kubelet/extraArgs
+        value:
+          rotate-server-certificates: "true"
+          feature-gates: CronJobTimeZone=true,GracefulNodeShutdown=true
+      - op: add
+        path: /cluster/controllerManager/extraArgs
+        value:
+          bind-address: 0.0.0.0
+      - op: add
+        path: /cluster/scheduler/extraArgs
+        value:
+          bind-address: 0.0.0.0
+      - op: add
+        path: /cluster/proxy/extraArgs
+        value:
+          bind-address: 0.0.0.0
+    - |-
       machine:
         network:
           interfaces:
