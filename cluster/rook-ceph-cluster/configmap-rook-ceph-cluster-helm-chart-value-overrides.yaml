@@ -365,12 +365,11 @@ data:
         # # nodes below will be used as storage resources. Each node's 'name' field should match their 'kubernetes.io/hostname' label.
 
         nodes:
-          - name: maliketh
+          - name: ofnir
             devices:
-              - name: "/dev/disk/by-path/pci-0000:00:14.0-usb-0:3:1.0-scsi-0:0:0:0"
+              - name: "/dev/sdb"
                 config:
-                  deviceClass: ssd
-        #       # - name: "/dev/disk/by-id/usb-Sabrent_Sabrent_012345678930-0:0"
+                  deviceClass: hdd
 
         # nodes:
         #   - name: maliketh
