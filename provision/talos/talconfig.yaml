@@ -1,0 +1,54 @@
+clusterName: homelab
+
+talosVersion: v1.3.6
+kubernetesVersion: 1.26.1
+endpoint: "https://homelab.hemul.net:6443"
+
+cniConfig:
+  name: flannel
+
+additionalMachineCertSans:
+  - homelab.hemul.net
+
+nodes:
+  - hostname: ofnir
+    disableSearchDomain: true
+    ipAddress: 10.1.1.7
+    controlPlane: true
+    installDiskSelector:
+      busPath: /pci0000:00/0000:00:17.0/ata2/host1/target1:0:0/1:0:0:0/
+
+controlPlane:
+  patches:
+    - |-
+      cluster:
+        allowSchedulingOnMasters: true
+        apiServer:
+        controllerManager:
+        discovery:
+          registries:
+            service:
+              disabled: true
+        proxy:
+          disabled: true
+        scheduler:
+
+      machine:
+        network:
+          interfaces:
+          - interface: eth0
+            dhcp: true
+          nameservers:
+            - 1.1.1.1
+            - 8.8.8.8
+        sysctls:
+          fs.inotify.max_user_watches: "1048576"
+          fs.inotify.max_user_instances: "8192"
+        time:
+          disabled: false
+          servers:
+            - time.cloudflare.com
+
+    - |-
+      - op: remove
+        path: /cluster/apiServer/admissionControl

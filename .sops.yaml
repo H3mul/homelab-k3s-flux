@@ -1,0 +1,7 @@
+creation_rules:
+  - path_regex: secret-.*\.sops\.ya?ml
+    encrypted_regex: "^(data|stringData)$"
+    pgp: A2AF5A4B747411B2D6B9331CFA018F24752F2F6E
+
+  - path_regex: .*\.ya?ml
+    pgp: A2AF5A4B747411B2D6B9331CFA018F24752F2F6E
