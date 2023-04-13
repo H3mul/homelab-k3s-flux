@@ -35,12 +35,12 @@ controlPlane:
         path: /cluster/scheduler/extraArgs
         value:
           bind-address: 0.0.0.0
-      - op: add
-        path: /cluster/proxy/extraArgs
-        value:
-          bind-address: 0.0.0.0
     - |-
       machine:
+        kubelet:
+          extraConfig:
+            rotate-server-certificates: true
+            serverTLSBootstrap: true
         network:
           interfaces:
           - interface: eth0
@@ -53,8 +53,11 @@ controlPlane:
           fs.inotify.max_user_instances: "8192"
         time:
           disabled: false
-          servers:
-            - time.cloudflare.com
+
+    - |-
+      cluster:
+        proxy:
+          disabled: true
 
     - |-
       - op: remove
