@@ -367,9 +367,13 @@ data:
         nodes:
           - name: ofnir
             devices:
-              - name: "/dev/sdb"
+              - name: "/dev/nvme0n1"
                 config:
-                  deviceClass: hdd
+                  deviceClass: ssd
+
+              # - name: "/dev/sdb"
+              #   config:
+              #     deviceClass: hdd
 
         # nodes:
         #   - name: maliketh
