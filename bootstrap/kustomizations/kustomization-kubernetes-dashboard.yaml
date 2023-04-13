@@ -11,9 +11,12 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-
   healthChecks:
     - apiVersion: apps/v1
       kind: Deployment
       name: kubernetes-dashboard
       namespace: kubernetes-dashboard
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
