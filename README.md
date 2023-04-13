@@ -35,6 +35,10 @@ talosctl apply-config --insecure --nodes $NODES --file ./clusterconfig/<node fil
 talosctl --nodes $NODES kubeconfig
 ```
 
+Additionally, each node needs to be
+
+- Added to the endpoint dns (see Kubernetes endpoint in talconfig.yaml)
+- Added to the router as a BGP neighbor
 
 ## 2. Bootstrap flux:
 https://fluxcd.io/flux/installation/#github-and-github-enterprise
