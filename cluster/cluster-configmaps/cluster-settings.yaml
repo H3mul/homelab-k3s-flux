@@ -18,6 +18,10 @@ data:
   B2_VOLSYNC_BUCKET: k8s-volsync-backup
 
   ROUTER_IP: 10.1.1.1
+  ROUTER_BGP_ASN: "64501"
+  # Must be unique on the network
+  LOCAL_BGP_ASN: "64502"
+
   BLOCKY_IP: 10.1.2.56
   METALLB_ADDRESS_POOL: 10.1.2.50-10.1.2.254
 
