@@ -2944,7 +2944,7 @@ data:
         additionalScrapeConfigs:
           - job_name: openwrt
             static_configs:
-              - targets: [ '${ROUTER_IP:}:9100']
+              - targets: [ '${ROUTER_IP}:9100']
 
         # - job_name: kube-etcd
         #   kubernetes_sd_configs:
