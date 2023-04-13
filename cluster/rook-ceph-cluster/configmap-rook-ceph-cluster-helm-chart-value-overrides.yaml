@@ -367,7 +367,13 @@ data:
         nodes:
           - name: ofnir
             devices:
-              - name: "/dev/nvme0n1"
+              - name: "nvme0n1"
+                config:
+                  deviceclass: ssd
+
+          - name: mimir
+            devices:
+              - name: "nvme0n1"
                 config:
                   deviceclass: ssd
 
