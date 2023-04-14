@@ -40,13 +40,13 @@ data:
       # -- Toolbox affinity
       affinity: {}
       # -- Toolbox resources
-      resources: {}
-      #   limits:
-      #     cpu: "500m"
-      #     memory: "1Gi"
-      #   requests:
-      #     cpu: "100m"
-      #     memory: "128Mi"
+      resources:
+        limits:
+          cpu: "500m"
+          memory: "1Gi"
+        requests:
+          cpu: 0
+          memory: 0
       # -- Set the priority class for the toolbox if desired
       # priorityClassName:
 
@@ -278,68 +278,68 @@ data:
       #   # These labels can be passed as LabelSelector to Prometheus
       #   monitoring:
 
-      resources: {}
-        # mgr:
-        #   limits:
-        #     cpu: "1000m"
-        #     memory: "1gi"
-        #   requests:
-        #     cpu: "500m"
-        #     memory: "512mi"
-        # mon:
-        #   limits:
-        #     cpu: "2000m"
-        #     memory: "2gi"
-        #   requests:
-        #     cpu: "1000m"
-        #     memory: "1gi"
-        # osd:
-        #   limits:
-        #     cpu: "2000m"
-        #     memory: "4gi"
-        #   requests:
-        #     cpu: "1000m"
-        #     memory: "4gi"
-        # prepareosd:
-        #   # limits: it is not recommended to set limits on the osd prepare job
-        #   #         since it's a one-time burst for memory that must be allowed to
-        #   #         complete without an oom kill.  note however that if a k8s
-        #   #         limitrange guardrail is defined external to rook, the lack of
-        #   #         a limit here may result in a sync failure, in which case a
-        #   #         limit should be added.  1200mi may suffice for up to 15ti
-        #   #         osds ; for larger devices 2gi may be required.
-        #   #         cf. https://github.com/rook/rook/pull/11103
-        #   requests:
-        #     cpu: "500m"
-        #     memory: "50mi"
-        # mgr-sidecar:
-        #   # limits:
-        #   #   cpu: "500m"
-        #   #   memory: "100mi"
-        #   requests:
-        #     cpu: "100m"
-        #     memory: "40mi"
-        # crashcollector:
-        #   # limits:
-        #   #   cpu: "500m"
-        #   #   memory: "60mi"
-        #   requests:
-        #     cpu: "100m"
-        #     memory: "60mi"
-        # logcollector:
-        #   # limits:
-        #   #   cpu: "500m"
-        #   #   memory: "1gi"
-        #   requests:
-        #     cpu: "100m"
-        #     memory: "100mi"
-        # cleanup:
-        #   # limits:
-        #   #   cpu: "500m"
-        #   #   memory: "1gi"
-        #   requests:
-        #     cpu: "500m"
-        #     memory: "100mi"
+      resources:
+        mgr:
+          limits:
+            cpu: "1000m"
+            memory: "1gi"
+          requests:
+            cpu: 0
+            memory: 0
+        mon:
+          limits:
+            cpu: "2000m"
+            memory: "2gi"
+          requests:
+            cpu: 0
+            memory: 0
+        osd:
+          limits:
+            cpu: "2000m"
+            memory: "4gi"
+          requests:
+            cpu: 0
+            memory: 0
+        prepareosd:
+          # limits: it is not recommended to set limits on the osd prepare job
+          #         since it's a one-time burst for memory that must be allowed to
+          #         complete without an oom kill.  note however that if a k8s
+          #         limitrange guardrail is defined external to rook, the lack of
+          #         a limit here may result in a sync failure, in which case a
+          #         limit should be added.  1200mi may suffice for up to 15ti
+          #         osds ; for larger devices 2gi may be required.
+          #         cf. https://github.com/rook/rook/pull/11103
+          requests:
+            cpu: 0
+            memory: 0
+        mgr-sidecar:
+          limits:
+            cpu: "500m"
+            memory: "100mi"
+          requests:
+            cpu: 0
+            memory: 0
+        crashcollector:
+          limits:
+            cpu: "500m"
+            memory: "60mi"
+          requests:
+            cpu: 0
+            memory: 0
+        logcollector:
+          limits:
+            cpu: "500m"
+            memory: "1gi"
+          requests:
+            cpu: 0
+            memory: 0
+        cleanup:
+          limits:
+            cpu: "500m"
+            memory: "1gi"
+          requests:
+            cpu: 0
+            memory: 0
 
       # the option to automatically remove osds that are out and are safe to destroy.
       removeosdsifoutandsafetoremove: false
@@ -532,13 +532,13 @@ data:
           metadataserver:
             activecount: 1
             activestandby: true
-            resources: {}
-            #   limits:
-            #     cpu: "2000m"
-            #     memory: "4gi"
-            #   requests:
-            #     cpu: "1000m"
-            #     memory: "4gi"
+            resources:
+              limits:
+                cpu: "100m"
+                memory: "1gi"
+              requests:
+                cpu: 0
+                memory: 0
             priorityclassname: system-cluster-critical
         storageclass:
           enabled: true
@@ -608,13 +608,13 @@ data:
           preservepoolsondelete: true
           gateway:
             port: 80
-            resources: {}
-            #   limits:
-            #     cpu: "2000m"
-            #     memory: "2gi"
-            #   requests:
-            #     cpu: "1000m"
-            #     memory: "1gi"
+            resources:
+              limits:
+                cpu: "100m"
+                memory: "100m"
+              requests:
+                cpu: 0
+                memory: 0
             # secureport: 443
             # sslcertificateref:
             instances: 1
