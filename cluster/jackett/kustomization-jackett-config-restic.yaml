@@ -8,7 +8,7 @@ spec:
   interval: 5m
   wait: true
   prune: true
-  path: ./jackett-volsync
+  path: ./cluster/jackett-volsync
   sourceRef:
     kind: GitRepository
     name: flux-system
