@@ -46,6 +46,7 @@ controlPlane:
         kubelet:
           extraConfig:
             serverTLSBootstrap: true
+            cpuManagerPolicy: none
         network:
           interfaces:
           - interface: eth0
