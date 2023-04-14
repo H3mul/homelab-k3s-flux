@@ -40,7 +40,7 @@ data:
       # -- Toolbox affinity
       affinity: {}
       # -- Toolbox resources
-      # resources:
+      resources: {}
       #   limits:
       #     cpu: "500m"
       #     memory: "1Gi"
@@ -532,7 +532,7 @@ data:
           metadataserver:
             activecount: 1
             activestandby: true
-            # resources:
+            resources: {}
             #   limits:
             #     cpu: "2000m"
             #     memory: "4gi"
@@ -608,7 +608,7 @@ data:
           preservepoolsondelete: true
           gateway:
             port: 80
-            # resources:
+            resources: {}
             #   limits:
             #     cpu: "2000m"
             #     memory: "2gi"

@@ -38,7 +38,7 @@ talosctl --nodes $NODES kubeconfig
 Additionally, each node needs to be
 
 - Added to the endpoint dns (see Kubernetes endpoint in talconfig.yaml)
-- Added to the router as a BGP neighbor
+- Added to the router as a BGP neighbor peer group: https://cloud.redhat.com/blog/metallb-in-bgp-mode
 
 ## 2. Bootstrap flux:
 https://fluxcd.io/flux/installation/#github-and-github-enterprise
