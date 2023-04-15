@@ -22,7 +22,7 @@ spec:
     #     name: volsync-jackett-config-bucket
     #   - kind: Secret
     #     name: volsync-jackett-config-bucket
-    #   - kind: Secret
-    #     name: b2-volsync-bucket-credentials
+      - kind: Secret
+        name: b2-volsync-bucket-credentials
     substitute:
       B2_VOLSYNC_BUCKET: ${B2_VOLSYNC_BUCKET}

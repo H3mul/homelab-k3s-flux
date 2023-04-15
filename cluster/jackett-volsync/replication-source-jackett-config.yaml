@@ -11,6 +11,10 @@ spec:
     # Use an existing PVC, don't provision a new one
     destinationPVC: jackett-config
     copyMethod: Direct
+    moverSecurityContext:
+      runAsUser: 911
+      runAsGroup: 911
+      fsGroup: 911
 
 # ---
 
