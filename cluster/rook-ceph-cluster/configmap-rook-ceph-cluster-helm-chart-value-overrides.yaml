@@ -353,6 +353,26 @@ data:
       storage: # cluster level storage configuration and selection
         useAllNodes: false
         useAllDevices: false
+
+        nodes:
+          - name: ofnir
+            devices:
+              - name: "nvme0n1"
+                config:
+                  deviceclass: ssd
+
+          - name: mimir
+            devices:
+              - name: "nvme0n1"
+                config:
+                  deviceclass: ssd        
+
+          - name: pyrre
+            devices:
+              - name: "sdb"
+                config:
+                  deviceclass: hdd        
+
         # devicefilter: sdb
         # config:
         #   crushRoot: "custom-root" # specify a non-default root label for the CRUSH map
