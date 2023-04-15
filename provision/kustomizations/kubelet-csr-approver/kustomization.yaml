@@ -9,7 +9,7 @@ helmCharts:
     namespace: kube-system
     valuesInline:
       providerRegex: |
-        ^(mimir|ofnir)$
+        ^(mimir|ofnir|pyrre|maliketh)$
       bypassDnsResolution: true
 commonAnnotations:
   meta.helm.sh/release-name: kubelet-csr-approver
