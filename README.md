@@ -35,6 +35,13 @@ talosctl apply-config --insecure --nodes $NODES --file ./clusterconfig/<node fil
 talosctl --nodes $NODES kubeconfig
 ```
 
+more here:
+https://github.com/budimanjojo/home-cluster/blob/main/talos/README.md
+
+```
+kubectl kustomize --enable-helm ./provision/kustomizations | kubectl apply -f -
+```
+
 Additionally, each node needs to be
 
 - Added to the endpoint dns (see Kubernetes endpoint in talconfig.yaml)
