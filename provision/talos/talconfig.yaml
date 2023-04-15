@@ -44,8 +44,6 @@ controlPlane:
     - |-
       machine:
         kubelet:
-          extraArgs:
-            rotate-server-certificates: true
           extraConfig:
             serverTLSBootstrap: true
             cpuManagerPolicy: none
