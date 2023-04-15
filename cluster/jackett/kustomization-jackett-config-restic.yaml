@@ -15,9 +15,9 @@ spec:
     namespace: flux-system
   timeout: 2m # if not set, this defaults to interval duration, which is 1h
   postBuild:
-    # substituteFrom:
-    #   - kind: Secret
-    #     name: restic-password
+    substituteFrom:
+      - kind: Secret
+        name: restic-password
     #   - kind: ConfigMap
     #     name: volsync-jackett-config-bucket
     #   - kind: Secret
