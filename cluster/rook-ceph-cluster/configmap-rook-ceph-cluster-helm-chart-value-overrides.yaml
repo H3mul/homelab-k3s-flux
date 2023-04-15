@@ -518,8 +518,8 @@ data:
                 cpu: "2000m"
                 memory: "4Gi"
               requests:
-                cpu: "1000m"
-                memory: "4Gi"
+                cpu: 0
+                memory: 0
             priorityClassName: system-cluster-critical
         storageClass:
           enabled: true
