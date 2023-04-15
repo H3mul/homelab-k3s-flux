@@ -282,21 +282,21 @@ data:
         mgr:
           limits:
             cpu: "1000m"
-            memory: "1gi"
+            memory: "1Gi"
           requests:
             cpu: 0
             memory: 0
         mon:
           limits:
             cpu: "2000m"
-            memory: "2gi"
+            memory: "2Gi"
           requests:
             cpu: 0
             memory: 0
         osd:
           limits:
             cpu: "2000m"
-            memory: "4gi"
+            memory: "4Gi"
           requests:
             cpu: 0
             memory: 0
@@ -315,28 +315,28 @@ data:
         mgr-sidecar:
           limits:
             cpu: "500m"
-            memory: "100mi"
+            memory: "100Mi"
           requests:
             cpu: 0
             memory: 0
         crashcollector:
           limits:
             cpu: "500m"
-            memory: "60mi"
+            memory: "60Mi"
           requests:
             cpu: 0
             memory: 0
         logcollector:
           limits:
             cpu: "500m"
-            memory: "1gi"
+            memory: "1Gi"
           requests:
             cpu: 0
             memory: 0
         cleanup:
           limits:
             cpu: "500m"
-            memory: "1gi"
+            memory: "1Gi"
           requests:
             cpu: 0
             memory: 0
@@ -535,7 +535,7 @@ data:
             resources:
               limits:
                 cpu: "100m"
-                memory: "1gi"
+                memory: "1Gi"
               requests:
                 cpu: 0
                 memory: 0
@@ -611,7 +611,7 @@ data:
             resources:
               limits:
                 cpu: "100m"
-                memory: "100m"
+                memory: "100Mi"
               requests:
                 cpu: 0
                 memory: 0
