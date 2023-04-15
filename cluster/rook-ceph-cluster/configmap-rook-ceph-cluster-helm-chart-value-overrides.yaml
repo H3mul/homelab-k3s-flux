@@ -6,7 +6,7 @@ metadata:
 data:
   values.yaml: |-  
     # Paste from:
-    # https://github.com/rook/rook/blob/10abbd0d8a0ff2e5330ceaca733a31eec4391a5a/deploy/charts/rook-ceph-cluster/values.yaml
+    # https://github.com/rook/rook/blob/46ece6c2a80a5c31b73832f235277607ceb987e5/deploy/charts/rook-ceph/values.yaml
 
     # Default values for a single rook-ceph cluster
     # This is a YAML-formatted file.
