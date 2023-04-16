@@ -1,8 +1,8 @@
-apiVersion: objectbucket.io/v1alpha1
-kind: ObjectBucketClaim
-metadata:
-  name: volsync-jackett-config-bucket
-  namespace: jackett
-spec:
-  generateBucketName: volsync-jackett-config
-  storageClassName: ceph-bucket
+# apiVersion: objectbucket.io/v1alpha1
+# kind: ObjectBucketClaim
+# metadata:
+#   name: volsync-jackett-config-bucket
+#   namespace: jackett
+# spec:
+#   generateBucketName: volsync-jackett-config
+#   storageClassName: ceph-bucket
