@@ -608,7 +608,7 @@ data:
             #   codingChunks: 1
           preservePoolsOnDelete: true
           gateway:
-            port: 80
+            port: 8080
             resources:
               limits:
                 cpu: "100m"
