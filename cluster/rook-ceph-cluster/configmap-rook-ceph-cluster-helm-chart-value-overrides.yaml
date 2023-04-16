@@ -608,18 +608,20 @@ data:
             #   codingChunks: 1
           preservePoolsOnDelete: true
           gateway:
-            port: 8080
+            port: 80
             resources:
               limits:
-                cpu: "100m"
-                memory: "100Mi"
+                cpu: "1000m"
+                memory: "1Gi"
               requests:
                 cpu: 0
                 memory: 0
-            # secureport: 443
-            # sslcertificateref:
+            # securePort: 443
+            # sslCertificateRef:
             instances: 1
-            priorityClassName: system-cluster-critical
+          healthCheck:
+            bucket:
+              interval: 60s
         storageClass:
           enabled: true
           name: ceph-bucket
