@@ -12,6 +12,11 @@ spec:
     destinationPVC: dunkbot-data
     copyMethod: Direct
 
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+
 # ---
 
 # apiVersion: volsync.backube/v1alpha1
