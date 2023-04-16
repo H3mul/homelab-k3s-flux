@@ -25,9 +25,7 @@ spec:
         compression: gzip
       destinationPath: s3://cloudnative-pg-backup/
       endpointURL: https://s3.us-east-005.backblazeb2.com
-      serverName: postgres-cluster-backup-v1
-      # destinationPath: "s3://${BUCKET_NAME}/"
-      # endpointURL: "http://${BUCKET_HOST}:${BUCKET_PORT}"
+      serverName: postgres-cluster-backup-v2
       s3Credentials:
         accessKeyId:
           name: b2-cloudnative-pg-bucket-credentials
@@ -42,4 +40,6 @@ spec:
 
   externalClusters:
     - name: clusterBackup
-      barmanObjectStore: *backupObjStore
+      barmanObjectStore:
+        <<: *backupObjStore
+        serverName: postgres-cluster-backup-v1
