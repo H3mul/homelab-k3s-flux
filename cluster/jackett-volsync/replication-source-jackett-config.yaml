@@ -1,20 +1,20 @@
-apiVersion: volsync.backube/v1alpha1
-kind: ReplicationDestination
-metadata:
-  name: b2-jackett-config
-  namespace: jackett
-spec:
-  trigger:
-    manual: restore-once
-  restic:
-    repository: b2-jackett-config-restic
-    # Use an existing PVC, don't provision a new one
-    destinationPVC: jackett-config
-    copyMethod: Direct
-    moverSecurityContext:
-      runAsUser: 911
-      runAsGroup: 911
-      fsGroup: 911
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationDestination
+# metadata:
+#   name: b2-jackett-config
+#   namespace: jackett
+# spec:
+#   trigger:
+#     manual: restore-once
+#   restic:
+#     repository: b2-jackett-config-restic
+#     # Use an existing PVC, don't provision a new one
+#     destinationPVC: jackett-config
+#     copyMethod: Direct
+#     moverSecurityContext:
+#       runAsUser: 911
+#       runAsGroup: 911
+#       fsGroup: 911
 
 # ---
 
@@ -49,31 +49,31 @@ spec:
 
 # ---
 
-# apiVersion: volsync.backube/v1alpha1
-# kind: ReplicationSource
-# metadata:
-#   name: b2-jackett-config
-#   namespace: jackett
-# spec:
-#   sourcePVC: jackett-config
-#   trigger:
-#     schedule: ${VOLSYNC_BACKUP_SCHEDULE}
-#   restic:
-#     repository: b2-jackett-config-restic
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: b2-jackett-config
+  namespace: jackett
+spec:
+  sourcePVC: jackett-config
+  trigger:
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+  restic:
+    repository: b2-jackett-config-restic
 
-#     copyMethod: Snapshot
-#     volumeSnapshotClassName: ceph-block
-#     storageClassName: ceph-block
+    copyMethod: Snapshot
+    volumeSnapshotClassName: ceph-block
+    storageClassName: ceph-block
 
-#     pruneIntervalDays: 10
-#     cacheCapacity: 200Mi
-#     retain:
-#       daily: 7
-#       weekly: 4
-#       monthly: 6
-#       within: 3d
+    pruneIntervalDays: 10
+    cacheCapacity: 200Mi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 6
+      within: 3d
 
-#     moverSecurityContext:
-#       runAsUser: 911
-#       runAsGroup: 911
-#       fsGroup: 911
+    moverSecurityContext:
+      runAsUser: 911
+      runAsGroup: 911
+      fsGroup: 911

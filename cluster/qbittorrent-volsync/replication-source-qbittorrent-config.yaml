@@ -1,21 +1,21 @@
-apiVersion: volsync.backube/v1alpha1
-kind: ReplicationDestination
-metadata:
-  name: b2-qbittorrent-config
-  namespace: media
-spec:
-  trigger:
-    manual: restore-once
-  restic:
-    repository: b2-qbittorrent-config-restic
-    # Use an existing PVC, don't provision a new one
-    destinationPVC: qbittorrent-config
-    copyMethod: Direct
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationDestination
+# metadata:
+#   name: b2-qbittorrent-config
+#   namespace: media
+# spec:
+#   trigger:
+#     manual: restore-once
+#   restic:
+#     repository: b2-qbittorrent-config-restic
+#     # Use an existing PVC, don't provision a new one
+#     destinationPVC: qbittorrent-config
+#     copyMethod: Direct
 
-    moverSecurityContext:
-      runAsUser: 101
-      runAsGroup: 101
-      fsGroup: 101
+#     moverSecurityContext:
+#       runAsUser: 101
+#       runAsGroup: 101
+#       fsGroup: 101
 
 # ---
 
@@ -50,31 +50,36 @@ spec:
 
 # ---
 
-# apiVersion: volsync.backube/v1alpha1
-# kind: ReplicationSource
-# metadata:
-#   name: qbittorrent-config
-#   namespace: media
-# spec:
-#   sourcePVC: qbittorrent-config
-#   trigger:
-#     schedule: ${VOLSYNC_BACKUP_SCHEDULE}
-#   restic:
-#     repository: qbittorrent-config-restic
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: qbittorrent-config
+  namespace: media
+spec:
+  sourcePVC: qbittorrent-config
+  trigger:
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+  restic:
+    repository: qbittorrent-config-restic
 
-#     copyMethod: Snapshot
-#     volumeSnapshotClassName: ceph-block
-#     storageClassName: ceph-block
+    copyMethod: Snapshot
+    volumeSnapshotClassName: ceph-block
+    storageClassName: ceph-block
 
-#     pruneIntervalDays: 10
-#     cacheCapacity: 200Mi
-#     retain:
-#       daily: 7
-#       weekly: 4
-#       monthly: 6
-#       within: 3d
+    pruneIntervalDays: 10
+    cacheCapacity: 200Mi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 6
+      within: 3d
 
-#     moverSecurityContext:
-#       runAsUser: ${FILESHARE_USER_ID}
-#       runAsGroup:  ${FILESHARE_GROUP_ID}
-#       fsGroup: ${FILESHARE_GROUP_ID}
+    # moverSecurityContext:
+    #   runAsUser: ${FILESHARE_USER_ID}
+    #   runAsGroup:  ${FILESHARE_GROUP_ID}
+    #   fsGroup: ${FILESHARE_GROUP_ID}
+
+    moverSecurityContext:
+      runAsUser: 101
+      runAsGroup: 101
+      fsGroup: 101

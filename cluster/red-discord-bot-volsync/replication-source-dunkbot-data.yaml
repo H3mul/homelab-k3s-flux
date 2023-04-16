@@ -1,21 +1,21 @@
-apiVersion: volsync.backube/v1alpha1
-kind: ReplicationDestination
-metadata:
-  name: b2-dunkbot-data
-  namespace: red-discord-bot
-spec:
-  trigger:
-    manual: restore-once
-  restic:
-    repository: b2-dunkbot-data-restic
-    # Use an existing PVC, don't provision a new one
-    destinationPVC: dunkbot-data
-    copyMethod: Direct
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationDestination
+# metadata:
+#   name: b2-dunkbot-data
+#   namespace: red-discord-bot
+# spec:
+#   trigger:
+#     manual: restore-once
+#   restic:
+#     repository: b2-dunkbot-data-restic
+#     # Use an existing PVC, don't provision a new one
+#     destinationPVC: dunkbot-data
+#     copyMethod: Direct
 
-    moverSecurityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
+#     moverSecurityContext:
+#       runAsUser: 1000
+#       runAsGroup: 1000
+#       fsGroup: 1000
 
 # ---
 
@@ -50,31 +50,31 @@ spec:
 
 # ---
 
-# apiVersion: volsync.backube/v1alpha1
-# kind: ReplicationSource
-# metadata:
-#   name: b2-dunkbot-data
-#   namespace: red-discord-bot
-# spec:
-#   sourcePVC: dunkbot-data
-#   trigger:
-#     schedule: ${VOLSYNC_BACKUP_SCHEDULE}
-#   restic:
-#     repository: b2-dunkbot-data-restic
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: b2-dunkbot-data
+  namespace: red-discord-bot
+spec:
+  sourcePVC: dunkbot-data
+  trigger:
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+  restic:
+    repository: b2-dunkbot-data-restic
 
-#     copyMethod: Snapshot
-#     volumeSnapshotClassName: ceph-block
-#     storageClassName: ceph-block
+    copyMethod: Snapshot
+    volumeSnapshotClassName: ceph-block
+    storageClassName: ceph-block
 
-#     pruneIntervalDays: 10
-#     cacheCapacity: 1Gi
-#     retain:
-#       daily: 7
-#       weekly: 4
-#       monthly: 6
-#       within: 3d
+    pruneIntervalDays: 10
+    cacheCapacity: 1Gi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 6
+      within: 3d
 
-#     moverSecurityContext:
-#       runAsUser: 1000
-#       runAsGroup: 1000
-#       fsGroup: 1000
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
