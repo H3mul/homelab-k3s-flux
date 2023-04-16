@@ -77,9 +77,9 @@ data:
           interval: 30s
           scrapeTimeout: 10s
 
-    secrets:
-      config-restic:
-        enabled: true
+    # secrets:
+    #   config-restic:
+    #     enabled: true
 
     persistence:
       config:

@@ -28,7 +28,7 @@ data:
     # -- IP address of the DNS server within the vxlan tunnel.
     # All mutated PODs will get this as their DNS server.
     # It must match VXLAN_GATEWAY_IP in settings.sh
-    DNS: 172.16.0.1
+    DNS: 172.16.1.1
 
     # -- The DNSPolicy to apply to the POD. Only when set to "None" will the
     # DNS value above apply. To avoid altering POD DNS (i.e., to allow
@@ -54,11 +54,11 @@ data:
       NOT_ROUTED_TO_GATEWAY_CIDRS: "10.0.0.0/8 192.168.0.0/16"
 
       # -- Vxlan ID to use
-      VXLAN_ID: 42
+      VXLAN_ID: 43
       # -- VXLAN needs an /24 IP range not conflicting with K8S and local IP ranges
-      VXLAN_IP_NETWORK: "172.16.0"
+      VXLAN_IP_NETWORK: 172.16.1
       # -- Keep a range of IPs for static assignment in nat.conf
-      VXLAN_GATEWAY_FIRST_DYNAMIC_IP: 20
+      # VXLAN_GATEWAY_FIRST_DYNAMIC_IP: 20
 
       # -- If using a VPN, interface name created by it
       VPN_INTERFACE: tun0
@@ -71,7 +71,7 @@ data:
 
       # -- DNS queries to these domains will be resolved by K8S DNS instead of
       # the default (typcally the VPN client changes it)
-      DNS_LOCAL_CIDRS: "local"
+      # DNS_LOCAL_CIDRS: "local"
 
     # -- settings to expose ports, usually through a VPN provider.
     # NOTE: if you change it you will need to manually restart the gateway POD
@@ -118,6 +118,11 @@ data:
           - secretRef:
               name: private-internet-access-openvpn
 
+        securityContext:
+          capabilities:
+            add:
+              - NET_ADMIN
+
         livenessProbe:
           exec:
             command:
@@ -127,23 +132,6 @@ data:
           initialDelaySeconds: 30
           periodSeconds: 60
           failureThreshold: 3
-
-        networkPolicy:
-          enabled: true
-          egress:
-            # Allow only VPN traffic to Internet
-            - to:
-              - ipBlock:
-                  cidr: 0.0.0.0/0
-              ports:
-              # VPN traffic (default OpenVPN)
-              - port: 1197
-                protocol: UDP
-            # Allow any traffic within k8s
-            - to:
-              - ipBlock:
-                  # Cluster IPs (default k3s)
-                  cidr: 10.0.0.0/8
 
     # -- The webhook is used to mutate the PODs matching the given
     # namespace labels. It inserts an init and sidecard helper containers
@@ -156,7 +144,7 @@ data:
         # -- image pullPolicy of the webhook
         pullPolicy: IfNotPresent
         # -- image tag of the webhook
-        tag: v3.8.0
+        tag: v3.9.0
 
       # -- number of webhook instances to deploy
       replicas: 1

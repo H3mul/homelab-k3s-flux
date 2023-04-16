@@ -20,22 +20,22 @@ spec:
     name: qbittorrent-helm-chart-value-overrides
     valuesKey: values.yaml # This is the default, but best to be explicit for clarity
 
-  - targetPath: secrets.config-restic.stringData.RESTIC_REPOSITORY
-    kind: ConfigMap
-    name: volsync-qbittorrent-config-bucket
-    valuesKey: BUCKET_NAME
+  # - targetPath: secrets.config-restic.stringData.RESTIC_REPOSITORY
+  #   kind: ConfigMap
+  #   name: volsync-qbittorrent-config-bucket
+  #   valuesKey: BUCKET_NAME
 
-  - targetPath: secrets.config-restic.stringData.RESTIC_PASSWORD
-    kind: Secret
-    name: restic-password
-    valuesKey: RESTIC_PASSWORD
+  # - targetPath: secrets.config-restic.stringData.RESTIC_PASSWORD
+  #   kind: Secret
+  #   name: restic-password
+  #   valuesKey: RESTIC_PASSWORD
 
-  - targetPath: secrets.config-restic.stringData.AWS_ACCESS_KEY_ID
-    kind: Secret
-    name: volsync-qbittorrent-config-bucket
-    valuesKey: AWS_ACCESS_KEY_ID
+  # - targetPath: secrets.config-restic.stringData.AWS_ACCESS_KEY_ID
+  #   kind: Secret
+  #   name: volsync-qbittorrent-config-bucket
+  #   valuesKey: AWS_ACCESS_KEY_ID
 
-  - targetPath: secrets.config-restic.stringData.AWS_SECRET_ACCESS_KEY
-    kind: Secret
-    name: volsync-qbittorrent-config-bucket
-    valuesKey: AWS_SECRET_ACCESS_KEY
+  # - targetPath: secrets.config-restic.stringData.AWS_SECRET_ACCESS_KEY
+  #   kind: Secret
+  #   name: volsync-qbittorrent-config-bucket
+  #   valuesKey: AWS_SECRET_ACCESS_KEY

@@ -7,6 +7,7 @@ data:
   TIMEZONE: America/Vancouver
   FILESHARE_USER_ID: "100"
   FILESHARE_GROUP_ID: "101"
+  FILESHARE_FS_GROUP: "101"
 
   CLUSTER_DOMAIN: "talos.hemul.net"
   CLUSTER_DOMAIN_DNS_ZONE: "hemul.net"
