@@ -9,7 +9,7 @@ data:
   FILESHARE_GROUP_ID: "101"
   FILESHARE_FS_GROUP: "101"
 
-  CLUSTER_DOMAIN: "talos.hemul.net"
+  CLUSTER_DOMAIN: "hemul.net"
   CLUSTER_DOMAIN_DNS_ZONE: "hemul.net"
 
   DNS_EMAIL: phil.d324@gmail.com
