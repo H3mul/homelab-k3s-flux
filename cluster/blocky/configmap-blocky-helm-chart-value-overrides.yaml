@@ -15,11 +15,10 @@ data:
         ports:
           http:
             port: 4000
-      dns-tcp:
+      dns:
         enabled: true
         type: LoadBalancer
-        externalIPs:
-          - ${BLOCKY_IP}
+        loadBalancerIP: ${BLOCKY_IP}
         externalTrafficPolicy: Local
         ports:
           dns-tcp:
@@ -27,18 +26,12 @@ data:
             port: 53
             protocol: TCP
             targetPort: 53
-      dns-udp:
-        enabled: true
-        type: LoadBalancer
-        externalIPs:
-          - ${BLOCKY_IP}
-        externalTrafficPolicy: Local
-        ports:
           dns-udp:
             enabled: true
             port: 53
             protocol: UDP
             targetPort: 53
+
     persistence:
       config:
         enabled: true
