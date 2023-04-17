@@ -1,0 +1,82 @@
+clusterName: homelab
+
+talosVersion: v1.3.7
+kubernetesVersion: 1.26.3
+endpoint: "https://homelab.hemul.net:6443"
+
+allowSchedulingOnMasters: true
+cniConfig:
+  name: none
+
+additionalMachineCertSans:
+  - homelab.hemul.net
+
+nodes:
+  - hostname: ofnir
+    disableSearchDomain: true
+    ipAddress: 10.1.1.7
+    controlPlane: true
+    installDiskSelector:
+      busPath: /pci0000:00/0000:00:17.0/ata2/host1/target1:0:0/1:0:0:0/
+  - hostname: mimir
+    disableSearchDomain: true
+    ipAddress: 10.1.1.8
+    controlPlane: true
+    installDiskSelector:
+      busPath: /pci0000:00/0000:00:17.0/ata1/host0/target0:0:0/0:0:0:0/
+  - hostname: pyrre
+    disableSearchDomain: true
+    ipAddress: 10.1.1.5
+    controlPlane: true
+    installDiskSelector:
+      busPath: /pci0000:00/0000:00:13.0/ata2/host1/target1:0:0/1:0:0:0/
+  - hostname: maliketh
+    disableSearchDomain: true
+    ipAddress: 10.1.1.9
+    controlPlane: true
+    installDiskSelector:
+      busPath: /pci0000:00/0000:00:17.0/ata1/host0/target0:0:0/0:0:0:0/
+
+controlPlane:
+  patches:
+    - |-
+      - op: add
+        path: /machine/kubelet/extraArgs
+        value:
+          rotate-server-certificates: "true"
+          feature-gates: CronJobTimeZone=true,GracefulNodeShutdown=true
+      - op: add
+        path: /cluster/controllerManager/extraArgs
+        value:
+          bind-address: 0.0.0.0
+      - op: add
+        path: /cluster/scheduler/extraArgs
+        value:
+          bind-address: 0.0.0.0
+    - |-
+      machine:
+        kubelet:
+          extraConfig:
+            serverTLSBootstrap: true
+            cpuManagerPolicy: none
+        network:
+          interfaces:
+          - interface: eth0
+            dhcp: true
+          nameservers:
+            - 1.1.1.1
+            - 8.8.8.8
+        sysctls:
+          fs.inotify.max_user_watches: "1048576"
+          fs.inotify.max_user_instances: "8192"
+        time:
+          disabled: false
+
+    - |-
+      cluster:
+        proxy:
+          disabled: true
+
+    - |-
+      - op: remove
+        path: /cluster/apiServer/admissionControl

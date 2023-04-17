@@ -1,11 +1,11 @@
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: letsencrypt-wildcard-cert
   namespace: flux-system
 spec:
   interval: 15m
-  path: ./letsencrypt-wildcard-cert
+  path: ./cluster/letsencrypt-wildcard-cert
   dependsOn:
   - name: "cert-manager"
   - name: "sealed-secrets"
@@ -15,4 +15,8 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  validation: server
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
+

@@ -3,3 +3,4 @@
 /.task
 secret-*.yaml
 !*secret-*-restic.yaml
+!*.sops.yaml

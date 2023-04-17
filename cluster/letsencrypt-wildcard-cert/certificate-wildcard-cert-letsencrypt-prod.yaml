@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: letsencrypt-wildcard-cert-prod
+  namespace: letsencrypt-wildcard-cert
+spec:
+  # secretName doesn't have to match the certificate name, but it may as well, for simplicity!
+  secretName: letsencrypt-wildcard-cert-prod
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces:
+        &namespaces "podinfo,rook-ceph,minio,gitea,theme-park,media,jackett,monitoring,kubernetes-dashboard"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: *namespaces
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - "${CLUSTER_DOMAIN}"
+    - "*.${CLUSTER_DOMAIN}"

@@ -1,0 +1,9 @@
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: bgppeer-${ROUTER_IP}
+  namespace: metallb-system
+spec:
+  myASN: ${LOCAL_BGP_ASN}
+  peerASN: ${ROUTER_BGP_ASN}
+  peerAddress: ${ROUTER_IP}

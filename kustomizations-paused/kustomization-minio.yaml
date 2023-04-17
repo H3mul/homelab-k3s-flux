@@ -1,0 +1,23 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: minio
+  namespace: flux-system
+spec:
+  path: ./cluster/minio
+  prune: true # remove any elements later removed from the above path
+  interval: 15m
+  timeout: 2m # if not set, this defaults to interval duration, which is 1h
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: minio
+      namespace: minio
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings

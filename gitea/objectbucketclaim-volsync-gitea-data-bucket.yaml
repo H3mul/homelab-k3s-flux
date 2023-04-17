@@ -1,8 +1,0 @@
-apiVersion: objectbucket.io/v1alpha1
-kind: ObjectBucketClaim
-metadata:
-  name: volsync-gitea-data-bucket
-  namespace: gitea
-spec:
-  generateBucketName: volsync-gitea-data
-  storageClassName: ceph-bucket
