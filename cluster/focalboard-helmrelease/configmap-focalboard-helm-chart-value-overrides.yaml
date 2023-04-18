@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: focalboard-helm-chart-value-overrides
+  namespace: focalboard
+data:
+  values.yaml: |-
+    initContainers:
+      init-db:
+        image: ghcr.io/onedr0p/postgres-initdb:14.7
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: POSTGRES_HOST
+            value: postgres-cluster-rw.cloudnative-pg.svc.cluster.local
+          - name: POSTGRES_SUPER_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-cluster-superuser
+                key: username
+          - name: POSTGRES_SUPER_PASS
+            valueFrom:
+              secretKeyRef:
+                name: postgres-cluster-superuser
+                key: password
+        envFrom:
+          - secretRef:
+              name: focalboard-postgres-credentials
+
+    image:
+      repository: mattermost/focalboard
+      tag: latest
+    
+    configMaps:
+      config:
+        enabled: true
+        data:
+          config.json: |
+            {
+              "serverRoot": "http://localhost:8000",
+              "port": 8000,
+              "dbtype": "postgres",
+              "dbconfig": "postgres://${POSTGRES_USER}:${POSTGRES_PASS}@postgres-cluster-rw.cloudnative-pg.svc.cluster.local:5432/${POSTGRES_DB}?sslmode=disable&connect_timeout=10",
+              "postgres_dbconfig": "dbname=focalboard sslmode=disable",
+              "useSSL": false,
+              "webpath": "./pack",
+              "filespath": "/data/files",
+              "telemetry": true,
+              "session_expire_time": 2592000,
+              "session_refresh_time": 18000,
+              "localOnly": false,
+              "enableLocalMode": true,
+              "localModeSocketLocation": "/var/tmp/focalboard_local.socket"
+            }
+
+    persistence:
+      config:
+        name: focalboard-config
+        enabled: true
+        type: configMap
+        mountPath: /opt/focalboard/config.json
+        subPath: config.json
+        readOnly: true
+
+    env:
+      FOCALBOARD_PORT: 8000
+    service:
+      main:
+        ports:
+          http:
+            port: 8000
+    ingress:
+      main:
+        enabled: true
+        hosts:
+          - host: &host focalboard.${CLUSTER_DOMAIN}
+            paths:
+              - path: "/"
+                pathType: "Prefix"
+        tls:
+          - hosts:
+              - *host
+            secretName: letsencrypt-wildcard-cert-prod
