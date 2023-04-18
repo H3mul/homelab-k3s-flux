@@ -1,0 +1,127 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: vikunja-helm-chart-value-overrides
+  namespace: vikunja
+data:
+  values.yaml: |-
+    initContainers:
+      init-db:
+        image: ghcr.io/onedr0p/postgres-initdb:14.7
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: POSTGRES_HOST
+            value: postgres-cluster-rw.cloudnative-pg.svc.cluster.local
+          - name: POSTGRES_SUPER_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-cluster-superuser
+                key: username
+          - name: POSTGRES_SUPER_PASS
+            valueFrom:
+              secretKeyRef:
+                name: postgres-cluster-superuser
+                key: password
+        envFrom:
+          - secretRef:
+              name: vikunja-postgres-credentials
+
+    image:
+      repository: caddy
+      tag: 2.6.4-alpine
+      pullPolicy: IfNotPresent
+    sidecars:
+      frontend:
+        image: vikunja/frontend:0.20.5@sha256:5aad76d28c5dd8f5f5f4e6d5ba3459138676d37e5f79747f53ce64a52ba78b56
+      api:
+        image: vikunja/api:0.20.2@sha256:0e4e98299bc9f4be1bf32a928aa8572b1ea315e4429e440282c85dfe079f65db
+        env:
+          - name: VIKUNJA_SERVICE_TIMEZONE
+            value: ${TIMEZONE}
+          - name: VIKUNJA_DATABASE_TYPE
+            value: 'postgres'
+          - name: VIKUNJA_SERVICE_FRONTENDURL
+            value: https://vikunja.${CLUSTER_DOMAIN}
+          - name: VIKUNJA_DATABASE_USER
+            valueFrom:
+              secretKeyRef:
+                name: vikunja-postgres-credentials
+                key: POSTGRES_USER
+          - name: VIKUNJA_DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: vikunja-postgres-credentials
+                key: POSTGRES_PASS
+          - name: VIKUNJA_DATABASE_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: vikunja-postgres-credentials
+                key: POSTGRES_DB
+          - name: VIKUNJA_DATABASE_HOST
+            value: postgres-cluster-rw.cloudnative-pg.svc.cluster.local
+        volumeMounts:
+          - name: files
+            mountPath: /app/vikunja/files
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8080
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: 'traefik'
+        hosts:
+          - host: &host 'vikunja.${CLUSTER_DOMAIN}'
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    configMaps:
+      caddy-config:
+        enabled: true
+        data:
+          Caddyfile: |-
+              {
+                admin off
+                auto_https off
+              }
+              :8080 {
+                  log {
+                      output stdout
+                  }
+                  @api {
+                      path /api/*
+                      path /.well-known/*
+                      path /dav/*
+                  }
+                  header {
+                      # Remove Server header
+                      -Server
+                  }
+                  # API
+                  handle @api {
+                      reverse_proxy localhost:3456
+                  }
+                  # Filtron
+                  handle {
+                      reverse_proxy localhost:80
+                  }
+              }
+
+    persistence:
+      files:
+        enabled: true
+        existingClaim: vikunja-files
+        mountpath: /app/vikunja/files
+      caddy-config:
+        enabled: true
+        name: vikunja-caddy-config
+        type: configMap
+        mountPath: /etc/caddy/Caddyfile
+        subPath: Caddyfile
