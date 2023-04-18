@@ -1,0 +1,79 @@
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationDestination
+# metadata:
+#   name: b2-vikunja-files
+#   namespace: vikunja
+# spec:
+#   trigger:
+#     manual: restore-once
+#   restic:
+#     repository: b2-vikunja-files-restic
+#     # Use an existing PVC, don't provision a new one
+#     destinationPVC: vikunja-files
+#     copyMethod: Direct
+    # moverSecurityContext:
+    #   runAsUser: 1000
+    #   runAsGroup: 1000
+    #   fsGroup: 1000
+
+# ---
+
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationSource
+# metadata:
+#   name: vikunja-files
+#   namespace: vikunja
+# spec:
+#   sourcePVC: vikunja-files
+#   trigger:
+#     schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+#   restic:
+#     repository: vikunja-files-restic
+
+#     copyMethod: Snapshot
+#     volumeSnapshotClassName: ceph-block
+#     storageClassName: ceph-block
+
+#     pruneIntervalDays: 10
+#     cacheCapacity: 200Mi
+#     retain:
+#       daily: 7
+#       weekly: 4
+#       monthly: 6
+#       within: 3d
+
+    # moverSecurityContext:
+    #   runAsUser: 1000
+    #   runAsGroup: 1000
+    #   fsGroup: 1000
+
+# ---
+
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: b2-vikunja-files
+  namespace: vikunja
+spec:
+  sourcePVC: vikunja-files
+  trigger:
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+  restic:
+    repository: b2-vikunja-files-restic
+
+    copyMethod: Snapshot
+    volumeSnapshotClassName: ceph-block
+    storageClassName: ceph-block
+
+    pruneIntervalDays: 10
+    cacheCapacity: 5Gi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 6
+      within: 3d
+
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
