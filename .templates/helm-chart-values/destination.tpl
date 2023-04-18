@@ -1,1 +1,1 @@
-/${name}/configmap-${name}-helm-chart-value-overrides.yaml
+/cluster/${name}/configmap-${name}-helm-chart-value-overrides.yaml

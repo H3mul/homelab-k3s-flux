@@ -1,1 +1,1 @@
-/${name}/helmrelease-${name}.yaml
+/cluster/${name}/helmrelease-${name}.yaml

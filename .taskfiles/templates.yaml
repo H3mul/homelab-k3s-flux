@@ -38,6 +38,7 @@ tasks:
     desc: Render a template from the .templates dir
     silent: true
     vars:
+      namespace: "{{.ns}}"
       template_dir: "{{.TEMPLATE_ROOT_DIR}}/{{.template}}"
       src: "{{.template_dir}}/{{.TEMPLATE_BODY_FILENAME}}"
       dst_rel:
@@ -61,6 +62,8 @@ tasks:
 
   k-secret:
     desc: generate an empty kubernetes secret
+    vars:
+      namespace: "{{.ns}}"
     preconditions:
       - sh: "[ '{{.name}}' != '<no value>' ]"
         msg: "Variable .name is not set"
