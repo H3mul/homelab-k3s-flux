@@ -7,25 +7,27 @@ metadata:
 data:
   values.yaml: |-
     image:
-      repository: ghcr.io/onedr0p/jellyfin
+      repository: linuxserver/jellyfin
       tag: 10.8.9
 
-    podSecurityContext:
-      runAsUser: ${FILESHARE_USER_ID}
-      runAsGroup: ${FILESHARE_GROUP_ID}
-      fsGroup: ${FILESHARE_GROUP_ID}
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 65539
+    # podSecurityContext:
+    #   runAsUser: 
+    #   runAsGroup: ${FILESHARE_GROUP_ID}
+    #   fsGroup: ${FILESHARE_GROUP_ID}
+    #   fsGroupChangePolicy: "OnRootMismatch"
+    #   supplementalGroups:
+    #     - 65539
 
     env:
-      DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
-
+      PUID: ${FILESHARE_USER_ID}
+      PGID: ${FILESHARE_GROUP_ID}
+      TZ: ${TIMEZONE}
+      JELLYFIN_PublishedServerUrl: https://jellyfin.${CLUSTER_DOMAIN}
     service:
       main:
         ports:
           http:
-            port: 8086
+            port: 8096
 
     ingress:
       main:
@@ -59,4 +61,4 @@ data:
       media:
         enabled: true
         existingClaim: qbittorrent-download
-        mountPath: /storage/media
+        mountPath: /data
