@@ -38,8 +38,6 @@ data:
       runAsGroup: ${FILESHARE_GROUP_ID}
       fsGroup: ${FILESHARE_GROUP_ID}
       fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 65539
 
     persistence:
       config:
