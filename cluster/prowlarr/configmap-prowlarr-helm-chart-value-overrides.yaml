@@ -2,26 +2,33 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   creationTimestamp: null
-  name: sonarr-helm-chart-value-overrides
+  name: prowlarr-helm-chart-value-overrides
   namespace: media
 data:
   values.yaml: |-
     image:
-      repository: ghcr.io/onedr0p/sonarr-develop
-      tag: 4.0.0.448
+      repository: ghcr.io/onedr0p/prowlarr
+      tag: 1.3.2.3006
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
 
     env:
-      - name: SONARR__INSTANCE_NAME
-        value: Sonarr
-      - name: SONARR__PORT
-        value: &port 8989
-      - name: SONARR__LOG_LEVEL
-        value: info
-      - name: SONARR__API_KEY
+      PROWLARR__INSTANCE_NAME: Prowlarr
+      PROWLARR__PORT: &port 9696
+      PROWLARR__LOG_LEVEL: info
+      PROWLARR__ANALYTICS_ENABLED: "False"
+      PROWLARR__AUTHENTICATION_METHOD: External
+      PROWLARR__API_KEY:
         valueFrom:
           secretKeyRef:
-            name: sonarr-api-key
+            name: prowlarr-api-key
             key: api_key
+
+    hostname: prowlarr
 
     service:
       main:
@@ -32,17 +39,17 @@ data:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: "nginx"
         annotations:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_hide_header "x-webkit-csp";
             proxy_hide_header "content-security-policy";
             proxy_hide_header "X-Frame-Options";
             proxy_set_header Accept-Encoding "";
-            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${CLUSTER_DOMAIN}/css/base/sonarr/nord.css"></head>';
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${CLUSTER_DOMAIN}/css/base/prowlarr/nord.css"></head>';
             sub_filter_once on;
         hosts:
-          - host: &host sonarr.${CLUSTER_DOMAIN}
+          - host: &host prowlarr.${CLUSTER_DOMAIN}
             paths:
               - path: /
         tls:
@@ -65,8 +72,3 @@ data:
         size: 200Mi
         mountPath: /config
         storageClass: ceph-block
-
-      media:
-        enabled: true
-        existingClaim: qbittorrent-download
-        mountPath: /data/downloads
