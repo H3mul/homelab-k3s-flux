@@ -69,4 +69,4 @@ data:
       media:
         enabled: true
         existingClaim: qbittorrent-download
-        mountPath: /data/downloads
+        mountPath: /downloads
