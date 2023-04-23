@@ -6,7 +6,7 @@ metadata:
 spec:
   resources:
     requests:
-      storage: "900Gi"
+      storage: "901Gi"
   accessModes:
   - ReadWriteMany
   storageClassName: ceph-filesystem
