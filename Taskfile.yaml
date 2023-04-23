@@ -56,3 +56,10 @@ tasks:
           -e POSTGRES_USER="{{.dbuser}}" \
           -e POSTGRES_PASS="{{.dbpass}}" \
           ghcr.io/onedr0p/postgres-initdb:14.7
+
+  k-provision-resources:
+    desc: Provision/update the base resources required for the cluster (CNI, CSR approver)
+    dir: '{{.PROJECT_DIR}}'
+    cmds:
+      - kubectl kustomize --enable-helm ./provision/kustomizations | kubectl apply -f -
+      - rm -r ./provision/kustomizations/*/charts
