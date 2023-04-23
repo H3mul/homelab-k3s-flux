@@ -95,6 +95,10 @@ data:
           "dryRun": false,
           "printConfig": true,
           "repositories": ["H3mul/homelab-k3s-flux"],
+          "extends": [
+            "config:base",
+            "docker:enableMajor"
+          ],
           "flux": {
             "fileMatch": ["\\.yaml$"]
           }
