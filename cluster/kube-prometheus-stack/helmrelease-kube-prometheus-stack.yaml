@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: 45.8.x
+      version: 45.19.x
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
