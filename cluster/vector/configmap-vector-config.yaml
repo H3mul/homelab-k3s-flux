@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vector-config
+  namespace: monitoring
+data: 
+  vector.yaml: |-
+    # From: https://github.com/rgl/talos-vagrant/blob/caed35d76c4e495f5aad73199cec5472f114b30f/vector.yml
+
+    sources:
+      talos_source:
+        type: socket
+        mode: tcp
+        address: 0.0.0.0:5170
+        decoding:
+          codec: json
+        host_key: __host
+    transforms:
+      talos_transform:
+        type: remap
+        inputs:
+          - talos_source
+        source: |
+          .timestamp = del(."talos-time")
+    sinks:
+      loki:
+        type: loki
+        inputs:
+          - talos_transform
+        endpoint: http://loki-gateway.monitoring.svc.cluster.local
+        labels:
+          job: talos
+          host: '{{ __host }}'
+          service: '{{ "talos-service" }}'
+          level: '{{ "talos-level" }}'
+        encoding:
+          codec: json
+          except_fields:
+            - __host
+            - '"talos-service"'
+            - '"talos-level"'
+        batch:
+          max_bytes: 1048576 # 1 MiB
