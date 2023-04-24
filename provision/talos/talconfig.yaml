@@ -73,6 +73,10 @@ controlPlane:
           fs.inotify.max_user_instances: "8192"
         time:
           disabled: false
+        logging:
+          destinations:
+            - endpoint: tcp://vector.hemul.net:5170
+              format: json_lines
 
     - |-
       cluster:
