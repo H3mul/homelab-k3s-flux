@@ -101,6 +101,9 @@ data:
           ],
           "flux": {
             "fileMatch": ["\\.yaml$"]
+          },
+          "helm-values": {
+            "fileMatch": ["\\.yaml$"]
           }
         }
 
@@ -239,7 +242,8 @@ data:
     #     name: env-configmap
 
     # -- Environment variables to set on the renovate container
-    env: {}
+    env:
+      LOG_LEVEL: debug
 
     # -- Additional env. Helpful too if you want to use anything other than a `value` source.
     envList: []
