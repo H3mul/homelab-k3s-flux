@@ -61,6 +61,11 @@ data:
                   - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
                   - https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
                   - https://raw.githubusercontent.com/deathbybandaid/piholeparser/master/Subscribable-Lists/CountryCodesLists/Russia.txt
+              whiteLists:
+                ads:
+                  - |
+                    # Twitch avatar cdn
+                    static-cdn.jtvnw.net
               clientGroupsBlock:
                 default:
                   - ads
