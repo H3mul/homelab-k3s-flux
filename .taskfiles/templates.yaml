@@ -34,6 +34,22 @@ tasks:
         vars:
           template: helmrepository
 
+  template-kustomization:
+    desc: Render templates for a single customization
+    cmds:
+      - task: template
+        vars:
+          template: helmrelease
+      - task: template
+        vars:
+          template: helm-chart-values
+      - task: template
+        vars:
+          template: kustomization
+      - task: template
+        vars:
+          template: namespace
+
   template:
     desc: Render a template from the .templates dir
     silent: true
