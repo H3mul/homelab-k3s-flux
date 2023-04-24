@@ -56,6 +56,8 @@ controlPlane:
     - |-
       machine:
         kubelet:
+          extraArgs:
+            feature-gates: CSINodeExpandSecret=true
           extraConfig:
             serverTLSBootstrap: true
             cpuManagerPolicy: none
