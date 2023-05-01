@@ -15,7 +15,7 @@ spec:
   healthChecks:
     - apiVersion: apps/v1
       kind: StatefulSet
-      name: loki-read
+      name: loki-backend
       namespace: monitoring
     - apiVersion: apps/v1
       kind: StatefulSet
