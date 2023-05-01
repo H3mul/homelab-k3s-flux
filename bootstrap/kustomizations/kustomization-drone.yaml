@@ -17,6 +17,10 @@ spec:
       kind: Deployment
       name: drone
       namespace: drone
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: drone-runner-docker
+      namespace: drone
   postBuild:
     substituteFrom:
       - kind: ConfigMap
