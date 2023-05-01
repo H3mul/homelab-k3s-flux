@@ -24,7 +24,7 @@ data:
     securityContext: true
 
     exposeServices: false
-    serviceType: NodePort        # serviceType for OpenFaaS gateway
+    serviceType: ClusterIP       # serviceType for OpenFaaS gateway
     async: true                  # No known reason to disable this, kept for legacy reasons 
 
     queueMode: ""                # Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming 
@@ -299,14 +299,17 @@ data:
       hosts:
       - host: &host "openfaas.${CLUSTER_DOMAIN}"
         serviceName: gateway
+        servicePort: 8080
         path: /
       tls:
       - secretName: letsencrypt-wildcard-cert-prod
         hosts:
         - *host
+      annotations:
+        kubernetes.io/ingress.class: traefik
 
       ## You can specify the ingress controller by using the ingressClassName
-      ingressClassName: traefik
+      # ingressClassName: traefik
 
     # ingressOperator (optional) – component to have specific FQDN and TLS for Functions
     # https://github.com/openfaas-incubator/ingress-operator
