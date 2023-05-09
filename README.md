@@ -52,6 +52,8 @@ https://fluxcd.io/flux/installation/#github-and-github-enterprise
 
 Set up a github personal access token and run:
 
+(to regenerate token, first delete the current flux secret: `kubectl -n flux-system delete secret flux-system`)
+
 ```bash
 GITHUB_TOKEN=personal-access-token \
 flux bootstrap github \

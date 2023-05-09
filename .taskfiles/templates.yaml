@@ -15,7 +15,7 @@ tasks:
       - mkdir -p {{.TEMPLATE_ROOT_DIR}}/{{.template}}
       - touch {{.TEMPLATE_ROOT_DIR}}/{{.template}}/{{"{"}}{{.TEMPLATE_BODY_FILENAME}},{{.TEMPLATE_DESTINATION_FILENAME}}{{"}"}}
 
-  template-all:
+  template-full:
     desc: Render all templates
     cmds:
       - task: template
