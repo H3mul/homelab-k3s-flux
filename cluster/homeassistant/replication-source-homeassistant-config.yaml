@@ -6,7 +6,7 @@ metadata:
 spec:
   sourcePVC: homeassistant-config
   trigger:
-    schedule: $${VOLSYNC_BACKUP_SCHEDULE}
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
   restic:
     repository: b2-homeassistant-config-restic
 
