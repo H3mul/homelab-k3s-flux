@@ -7,7 +7,7 @@ metadata:
 data:
   values.yaml: |-
     # Pasted from:
-    # https://github.com/backube/volsync/blob/757a70065d1683206f827cda7bdbf385e20d989c/helm/volsync/values.yaml
+    # https://github.com/backube/volsync/blob/c02360c88f1db04094e57a5c15f16d3236a8207f/helm/volsync/values.yaml
 
     # Default values for volsync.
     replicaCount: 1
@@ -20,22 +20,27 @@ data:
       # Directly specifies the SHA hash of the container image to deploy
       image: ""
     rclone:
-      repository: quay.io/backube/volsync-mover-rclone
+      repository: quay.io/backube/volsync
       # Overrides the image tag whose default is the chart appVersion.
       tag: ""
       image: ""
     restic:
-      repository: quay.io/backube/volsync-mover-restic
+      repository: quay.io/backube/volsync
       # Overrides the image tag whose default is the chart appVersion.
       tag: ""
       image: ""
     rsync:
-      repository: quay.io/backube/volsync-mover-rsync
+      repository: quay.io/backube/volsync
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: ""
+      image: ""
+    rsync-tls:
+      repository: quay.io/backube/volsync
       # Overrides the image tag whose default is the chart appVersion.
       tag: ""
       image: ""
     syncthing:
-      repository: quay.io/backube/volsync-mover-syncthing
+      repository: quay.io/backube/volsync
       # Overrides the image tag whose default is the chart appVersion.
       tag: ""
       image: ""
@@ -44,7 +49,7 @@ data:
 
     metrics:
       # Disable auth checks when scraping metrics (allow anyone to scrape)
-      disableAuth: true
+      disableAuth: false
 
     imagePullSecrets: []
     nameOverride: ""
@@ -61,14 +66,10 @@ data:
 
     podAnnotations: {}
 
-    podSecurityContext:
-      # fsGroup: 2000
-      runAsNonRoot: true
-      # seccompProfile:
-      #   type: RuntimeDefault
+    # Default security context values are in deployment-controller.yaml
+    podSecurityContext: {}
 
     securityContext:
-      runAsUser: 1000
       allowPrivilegeEscalation: false
       capabilities:
         drop:
