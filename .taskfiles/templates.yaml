@@ -50,6 +50,22 @@ tasks:
         vars:
           template: namespace
 
+  template-volsync:
+    desc: Render templates for a single volsync
+    cmds:
+      - task: template
+        vars:
+          template: replicationsource
+      - task: template
+        vars:
+          template: restic-kustomization
+      - task: template
+        vars:
+          template: secret-config-restic
+      - task: template
+        vars:
+          template: namespace
+
   template:
     desc: Render a template from the .templates dir
     silent: true
@@ -58,7 +74,7 @@ tasks:
       template_dir: "{{.TEMPLATE_ROOT_DIR}}/{{.template}}"
       src: "{{.template_dir}}/{{.TEMPLATE_BODY_FILENAME}}"
       dst_rel:
-        sh: namespace={{.namespace}} name={{.name}} envsubst < {{.template_dir}}/{{.TEMPLATE_DESTINATION_FILENAME}}
+        sh: export namespace={{.namespace}} name={{.name}}; envsubst '${name},${namespace}' < {{.template_dir}}/{{.TEMPLATE_DESTINATION_FILENAME}}
       dst: "{{.PROJECT_DIR}}{{.dst_rel}}"
     preconditions:
       - sh: "[ '{{.name}}' != '<no value>' ]"
@@ -74,7 +90,7 @@ tasks:
     cmds:
       - echo "Creating {{.dst_rel}}..."
       - mkdir -p $(dirname {{.dst}})
-      - namespace={{.namespace}} name={{.name}} envsubst < {{.src}} > {{.dst}}
+      - export namespace={{.namespace}} name={{.name}}; envsubst '${name},${namespace}' < {{.src}} > {{.dst}}
 
   k-secret:
     desc: generate an empty kubernetes secret
