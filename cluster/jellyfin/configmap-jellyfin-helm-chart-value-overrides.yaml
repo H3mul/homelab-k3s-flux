@@ -9,6 +9,7 @@ data:
     image:
       repository: linuxserver/jellyfin
       tag: 10.8.10
+      pullPolicy: Always
 
     # podSecurityContext:
     #   runAsUser: 
