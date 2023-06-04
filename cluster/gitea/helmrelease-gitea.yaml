@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: gitea
-      version: 8.1.x
+      version: 8.3.x
       sourceRef:
         kind: HelmRepository
         name: gitea-charts
