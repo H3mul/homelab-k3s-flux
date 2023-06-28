@@ -57,14 +57,6 @@ data:
           hosts:
           - *host
 
-    podSecurityContext:
-      runAsUser: ${FILESHARE_USER_ID}
-      runAsGroup: ${FILESHARE_GROUP_ID}
-      fsGroup: ${FILESHARE_GROUP_ID}
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 65539
-
     persistence:
       config:
         enabled: true
