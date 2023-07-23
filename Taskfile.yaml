@@ -57,6 +57,23 @@ tasks:
           -e POSTGRES_PASS="{{.dbpass}}" \
           ghcr.io/onedr0p/postgres-initdb:14.7
 
+  k-init-mysql:
+    desc: Manually initialize postgres-cluster using onedr0p/postgres-initdb
+    vars:
+      MYSQL_SUPER_USER: root
+      MYSQL_SUPER_PASS:
+        sh: kubectl -n mysql-operator get secret mysql-main -o go-template="{{ "{{" }}.data.ROOT_PASSWORD | base64decode{{ "}}" }}"
+    cmds:
+      - |
+        docker run --rm \
+          -e INIT_MYSQL_SUPER_USER="{{.MYSQL_SUPER_USER}}" \
+          -e INIT_MYSQL_SUPER_PASS="{{.MYSQL_SUPER_PASS}}" \
+          -e INIT_MYSQL_HOST="{{.host}}" \
+          -e INIT_MYSQL_DBNAME="{{.dbname}}" \
+          -e INIT_MYSQL_USER="{{.dbuser}}" \
+          -e INIT_MYSQL_PASS="{{.dbpass}}" \
+          ghcr.io/h3mul/mysql-init:rolling
+
   k-provision-resources:
     desc: Provision/update the base resources required for the cluster (CNI, CSR approver)
     dir: '{{.PROJECT_DIR}}'
