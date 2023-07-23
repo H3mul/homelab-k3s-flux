@@ -1,0 +1,21 @@
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlCluster
+metadata:
+  name: main
+  namespace: mysql-operator
+spec:
+  replicas: 1
+  secretName: mysql-main
+  backupSecretName: mysql-main-backup
+  backupSchedule: "@weekly"
+  backupURL: s3://mysql-operator-backup/main
+  backupRemoteDeletePolicy: retain
+  backupScheduleJobsHistoryLimit: 10
+  volumeSpec:
+    persistentVolumeClaim:
+      accessModes:
+       - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: ceph-block
