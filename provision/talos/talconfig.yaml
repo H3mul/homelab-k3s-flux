@@ -1,7 +1,7 @@
 clusterName: homelab
 
-talosVersion: v1.3.7
-kubernetesVersion: 1.26.3
+talosVersion: v1.4.7
+kubernetesVersion: 1.27.4
 endpoint: "https://homelab.hemul.net:6443"
 
 allowSchedulingOnMasters: true
