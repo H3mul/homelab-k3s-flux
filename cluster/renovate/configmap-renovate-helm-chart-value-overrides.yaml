@@ -104,7 +104,8 @@ data:
           },
           "helm-values": {
             "fileMatch": ["helm-chart-value-overrides\\.yaml$"]
-          }
+          },
+          "ignorePaths": ["kustomizations-paused/**"]
         }
 
       # -- Use the Helm tpl function on your configuration. See README for how to use this value
