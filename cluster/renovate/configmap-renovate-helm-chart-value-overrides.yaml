@@ -103,7 +103,7 @@ data:
             "fileMatch": ["\\.yaml$"]
           },
           "helm-values": {
-            "fileMatch": ["\\.yaml$"]
+            "fileMatch": ["helm-chart-value-overrides\\.yaml$"]
           }
         }
 
