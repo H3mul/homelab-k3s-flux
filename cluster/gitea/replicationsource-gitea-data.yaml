@@ -56,7 +56,7 @@ metadata:
   name: b2-gitea-data
   namespace: gitea
 spec:
-  sourcePVC: data-gitea-0
+  sourcePVC: gitea-shared-storage
   trigger:
     schedule: ${VOLSYNC_BACKUP_SCHEDULE}
   restic:
