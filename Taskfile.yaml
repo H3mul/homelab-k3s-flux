@@ -6,6 +6,7 @@ vars:
 
 includes:
   templates: .taskfiles/templates.yaml
+  refactor: .taskfiles/refactor-helmrelease.yaml
 
 tasks:
   default:

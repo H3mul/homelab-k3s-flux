@@ -1,0 +1,34 @@
+version: "3"
+
+tasks:
+  refactor-all-helmreleases:
+    ignore_error: true
+    desc: Move helm-chart-value-overrides values into helmrelease files if separate for ALL helmreleases found
+    dir: '{{.PROJECT_DIR}}'
+    vars:
+      releasedirs:
+        sh: fd helm-chart-value-overrides.yaml | xargs dirname
+    cmds:
+      - for: { var: releasedirs }
+        task: refactor-single-helmrelease
+        vars:
+          releasedir: '{{.ITEM}}'
+
+  refactor-single-helmrelease:
+    desc: Move helm-chart-value-overrides values into helmrelease files if separate
+    dir: '{{.PROJECT_DIR}}'
+    vars:
+      helmrelease:
+        sh: echo {{.releasedir}}/helmrelease-*.yaml
+      values_file:
+        sh: echo {{.releasedir}}/configmap-*-helm-chart-value-overrides.yaml
+    preconditions:
+      - sh: "test -f {{.values_file}}"
+        msg: "Values file doesnt exist: {{.values_file}}"
+      - sh: "test -f {{.helmrelease}}"
+        msg: "HelmRelease file doesnt exist: {{.helmrelease}}"
+    cmds:
+      - yq -i --yaml-output 'del(.spec.valuesFrom) | del (.spec.values)' {{.helmrelease}}
+      - echo -e "  values:" >> {{.helmrelease}}
+      - sed -e "1,/values\.yaml/d" {{.values_file}} | tee --append {{.helmrelease}}
+      - rm {{.values_file}}
