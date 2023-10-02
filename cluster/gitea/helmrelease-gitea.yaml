@@ -15,35 +15,35 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: gitea
-  # postRenderers:
-  #   - kustomize:
-  #       patchesStrategicMerge:
-  #         - kind: Deployment
-  #           apiVersion: apps/v1
-  #           metadata:
-  #             name: gitea
-  #           spec:
-  #             template:
-  #               spec:
-  #                 initContainers:
-  #                   - name: init-db
-  #                     image: ghcr.io/onedr0p/postgres-initdb:14.7
-  #                     env:
-  #                       - name: POSTGRES_HOST
-  #                         value: postgres-cluster-rw.cloudnative-pg.svc.cluster.local
-  #                       - name: POSTGRES_SUPER_USER
-  #                         valueFrom:
-  #                           secretKeyRef:
-  #                             name: postgres-cluster-superuser
-  #                             key: username
-  #                       - name: POSTGRES_SUPER_PASS
-  #                         valueFrom:
-  #                           secretKeyRef:
-  #                             name: postgres-cluster-superuser
-  #                             key: password
-  #                     envFrom:
-  #                       - secretRef:
-  #                           name: gitea-postgres-credentials
+  postRenderers:
+    - kustomize:
+        patchesStrategicMerge:
+          - kind: Deployment
+            apiVersion: apps/v1
+            metadata:
+              name: gitea
+            spec:
+              template:
+                spec:
+                  initContainers:
+                    - name: init-db
+                      image: ghcr.io/onedr0p/postgres-initdb:14.7
+                      env:
+                        - name: POSTGRES_HOST
+                          value: postgres-cluster-rw.cloudnative-pg.svc.cluster.local
+                        - name: POSTGRES_SUPER_USER
+                          valueFrom:
+                            secretKeyRef:
+                              name: postgres-cluster-superuser
+                              key: username
+                        - name: POSTGRES_SUPER_PASS
+                          valueFrom:
+                            secretKeyRef:
+                              name: postgres-cluster-superuser
+                              key: password
+                      envFrom:
+                        - secretRef:
+                            name: gitea-postgres-credentials
   valuesFrom:
   - kind: Secret
     name: gitea-postgres-credentials

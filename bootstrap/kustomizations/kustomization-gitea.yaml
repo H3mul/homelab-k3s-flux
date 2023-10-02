@@ -14,7 +14,7 @@ spec:
 
   healthChecks:
     - apiVersion: apps/v1
-      kind: StatefulSet
+      kind: Deployment
       name: gitea
       namespace: gitea
   postBuild:

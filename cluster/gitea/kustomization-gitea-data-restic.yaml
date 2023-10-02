@@ -20,10 +20,6 @@ spec:
         name: restic-password
       - kind: Secret
         name: b2-volsync-bucket-credentials
-    #   - kind: ConfigMap
-    #     name: volsync-gitea-data-bucket
-    #   - kind: Secret
-    #     name: volsync-gitea-data-bucket
     substitute:
       B2_VOLSYNC_BUCKET: ${B2_VOLSYNC_BUCKET}
 
