@@ -15,7 +15,18 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: speedtest-exporter
-  valuesFrom:
-  - kind: ConfigMap
-    name: speedtest-exporter-helm-chart-value-overrides
-    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  values:
+    image:
+      repository: ghcr.io/miguelndecarvalho/speedtest-exporter
+      tag: "v3.5.3"
+
+    service:
+      main:
+        enabled: true
+        ports:
+          http:
+            enabled: false
+          metrics:
+            enabled: true
+            protocol: TCP
+            port: 9798

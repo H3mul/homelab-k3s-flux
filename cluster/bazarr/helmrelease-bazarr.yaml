@@ -15,7 +15,52 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: bazarr
-  valuesFrom:
-  - kind: ConfigMap
-    name: bazarr-helm-chart-value-overrides
-    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  values:
+    image:
+      repository: linuxserver/bazarr
+      tag: 1.2.0
+
+    env:
+      PUID: ${FILESHARE_USER_ID}
+      PGID: ${FILESHARE_GROUP_ID}
+      TZ: ${TIMEZONE}
+
+    service:
+      main:
+        ports:
+          http:
+            port: 6767
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_hide_header "x-webkit-csp";
+            proxy_hide_header "content-security-policy";
+            proxy_hide_header "X-Frame-Options";
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${CLUSTER_DOMAIN}/css/base/bazarr/nord.css"></head>';
+            sub_filter_once on;
+        hosts:
+          - host: &host bazarr.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *host
+
+    persistence:
+      config:
+        enabled: true
+        type: pvc
+        size: 200Mi
+        mountPath: /config
+        storageClass: ceph-block
+
+      media:
+        enabled: true
+        existingClaim: qbittorrent-download
+        mountPath: /downloads

@@ -15,7 +15,68 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: sonarr
-  valuesFrom:
-  - kind: ConfigMap
-    name: sonarr-helm-chart-value-overrides
-    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  values:
+    image:
+      repository: ghcr.io/onedr0p/sonarr-develop
+      tag: 4.0.0.448
+
+    env:
+      - name: SONARR__INSTANCE_NAME
+        value: Sonarr
+      - name: SONARR__PORT
+        value: &port 8989
+      - name: SONARR__LOG_LEVEL
+        value: info
+      - name: SONARR__API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: sonarr-api-key
+            key: api_key
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_hide_header "x-webkit-csp";
+            proxy_hide_header "content-security-policy";
+            proxy_hide_header "X-Frame-Options";
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${CLUSTER_DOMAIN}/css/base/sonarr/nord.css"></head>';
+            sub_filter_once on;
+        hosts:
+          - host: &host sonarr.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *host
+
+    podSecurityContext:
+      runAsUser: ${FILESHARE_USER_ID}
+      runAsGroup: ${FILESHARE_GROUP_ID}
+      fsGroup: ${FILESHARE_GROUP_ID}
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 65539
+
+    persistence:
+      config:
+        enabled: true
+        type: pvc
+        size: 200Mi
+        mountPath: /config
+        storageClass: ceph-block
+
+      media:
+        enabled: true
+        existingClaim: qbittorrent-download
+        mountPath: /downloads

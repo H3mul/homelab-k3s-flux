@@ -15,7 +15,44 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: jellyseerr
-  valuesFrom:
-  - kind: ConfigMap
-    name: jellyseerr-helm-chart-value-overrides
-    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  values:
+    image:
+      repository: docker.io/fallenbagel/jellyseerr
+      tag: 1.5.0
+
+    env:
+      TZ: ${TIMEZONE}
+      LOG_LEVEL: "info"
+
+    service:
+      main:
+        ports:
+          http:
+            port: 5055
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: traefik
+        hosts:
+          - host: &host jellyseerr.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *host
+
+    podSecurityContext:
+      runAsUser: ${FILESHARE_USER_ID}
+      runAsGroup: ${FILESHARE_GROUP_ID}
+      fsGroup: ${FILESHARE_GROUP_ID}
+      fsGroupChangePolicy: "OnRootMismatch"
+
+    persistence:
+      config:
+        enabled: true
+        type: pvc
+        size: 200Mi
+        mountPath: /app/config
+        storageClass: ceph-block

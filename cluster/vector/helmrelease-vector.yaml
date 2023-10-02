@@ -15,7 +15,26 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: vector
-  valuesFrom:
-  - kind: ConfigMap
-    name: vector-helm-chart-value-overrides
-    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  values:
+    image:
+      repository: timberio/vector
+      tag: 0.29.X-debian
+
+    args: ["--config", "/etc/vector/vector.yaml"]
+
+    service:
+      main:
+        type: LoadBalancer
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: vector.${CLUSTER_DOMAIN}
+        ports:
+          http:
+            port: 5170
+
+    persistence:
+      config:
+        enabled: true
+        type: configMap
+        name: vector-config
+        mountPath: /etc/vector/vector.yaml
+        subPath: vector.yaml

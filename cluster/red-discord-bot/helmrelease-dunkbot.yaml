@@ -15,7 +15,26 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: dunkbot
-  valuesFrom:
-  - kind: ConfigMap
-    name: dunkbot-helm-chart-value-overrides
-    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  values:
+    image:
+      repository: phasecorex/red-discordbot
+      tag: full
+      PullPolicy: IfNotPresent
+
+    service:
+      main:
+        enabled: false
+
+    env:
+      TZ: ${TIMEZONE}
+      PREFIX: "!"
+
+    envFrom:
+      - secretRef:
+          name: dunkbot-discord-token
+
+    persistence:
+      data:
+        enabled: true
+        mountPath: /data
+        existingClaim: dunkbot-data

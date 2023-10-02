@@ -15,7 +15,56 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: telegraf
-  valuesFrom:
-  - kind: ConfigMap
-    name: telegraf-helm-chart-value-overrides
-    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  values:
+    image:
+      repository: telegraf
+      tag: 1.26-alpine
+      PullPolicy: IfNotPresent
+
+    service:
+      main:
+        ports:
+          http:
+            port: 9283
+
+    serviceMonitor:
+      main:
+        enabled: true
+        endpoints:
+        - port: http
+          scheme: http
+          path: /metrics
+          interval: 30s
+          scrapeTimeout: 10s
+
+    persistence:
+      config:
+        enabled: true
+        type: configMap
+        name: telegraf-config
+        mountPath: /etc/telegraf/telegraf.conf
+        subPath: telegraf.conf
+
+    configMaps:
+      config:
+        enabled: true
+        data:
+          telegraf.conf: |-
+
+            # From: https://mrkaran.dev/posts/isp-monitoring/
+
+            [[inputs.ping]]
+              urls = ["1.1.1.1", "google.com", "reddit.com", "twitter.com", "amazon.ca"]
+              count = 4
+              ping_interval = 1.0
+              timeout = 2.0
+
+            # DNS plugin
+            [[inputs.dns_query]]
+              servers = ["${BLOCKY_IP}"]
+              domains = ["cloudflare.com", "google.com", "reddit.com", "twitter.com", "amazon.ca"]
+
+            # Output format plugins
+            [[outputs.prometheus_client]]
+              listen = ":9283"
+              metric_version = 2

@@ -15,27 +15,103 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: qbittorrent
-  valuesFrom:
-  - kind: ConfigMap
-    name: qbittorrent-helm-chart-value-overrides
-    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  values:
+    podAnnotations:
+      setGateway: "true"
+    image:
+      repository: ghcr.io/onedr0p/qbittorrent
+      tag: 4.5.2
 
-  # - targetPath: secrets.config-restic.stringData.RESTIC_REPOSITORY
-  #   kind: ConfigMap
-  #   name: volsync-qbittorrent-config-bucket
-  #   valuesKey: BUCKET_NAME
+    hostname: qbittorrent # needed for an static IP
 
-  # - targetPath: secrets.config-restic.stringData.RESTIC_PASSWORD
-  #   kind: Secret
-  #   name: restic-password
-  #   valuesKey: RESTIC_PASSWORD
+    env:
+      TZ: "${TIMEZONE}"
+      QBITTORRENT__PORT: 8080
+      QBITTORRENT__BT_PORT: "${BITTORRENT_PORT}"
 
-  # - targetPath: secrets.config-restic.stringData.AWS_ACCESS_KEY_ID
-  #   kind: Secret
-  #   name: volsync-qbittorrent-config-bucket
-  #   valuesKey: AWS_ACCESS_KEY_ID
+    service:
+      main:
+        ports:
+          http:
+            port: 8080
+          metrics:
+            enabled: true
+            port: &metricsport 17871
+      bittorrent:
+        enabled: true
+        type: ClusterIP
+        ports:
+          bittorrent:
+            enabled: true
+            port: ${BITTORRENT_PORT}
+            protocol: TCP
+            targetPort: ${BITTORRENT_PORT}
 
-  # - targetPath: secrets.config-restic.stringData.AWS_SECRET_ACCESS_KEY
-  #   kind: Secret
-  #   name: volsync-qbittorrent-config-bucket
-  #   valuesKey: AWS_SECRET_ACCESS_KEY
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_hide_header "x-webkit-csp";
+            proxy_hide_header "content-security-policy";
+            proxy_hide_header "X-Frame-Options";
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${CLUSTER_DOMAIN}/css/base/qbittorrent/nord.css"></head>';
+            sub_filter_once on;
+        hosts:
+        - host: &host "torrent.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *host
+
+    sidecars:
+      exporter:
+        image: caseyscarborough/qbittorrent-exporter:v1.3.2
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: QBITTORRENT_BASE_URL
+            value: http://localhost:8080
+
+    serviceMonitor:
+      main:
+        enabled: true
+        endpoints:
+        - port: metrics
+          scheme: http
+          path: /metrics
+          interval: 30s
+          scrapeTimeout: 10s
+
+    # secrets:
+    #   config-restic:
+    #     enabled: true
+
+    persistence:
+      config:
+        enabled: true
+        mountPath: /config
+        existingClaim: qbittorrent-config
+
+      downloads:
+        enabled: true
+        mountPath: /downloads
+        existingClaim: qbittorrent-download
+
+    podSecurityContext:
+      runAsUser: ${FILESHARE_USER_ID}
+      runAsGroup:  ${FILESHARE_GROUP_ID}
+      fsGroup: ${FILESHARE_GROUP_ID}
+      supplementalGroups:
+      - 65536
+
+    # resources:
+    #   requests:
+    #     memory: 250Mi
+    #     cpu: 500m
+    #   limits:
+    #     memory: 6000Mi

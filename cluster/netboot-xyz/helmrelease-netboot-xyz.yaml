@@ -15,7 +15,27 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: netboot-xyz
-  valuesFrom:
-  - kind: ConfigMap
-    name: netboot-xyz-helm-chart-value-overrides
-    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  values:
+    image:
+      repository: ghcr.io/h3mul/netboot-xyz
+      tag: 2.0.68
+
+    service:
+      main:
+        ports:
+          http:
+            port: 80
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: traefik
+        hosts:
+        - host: &host "netboot.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *host

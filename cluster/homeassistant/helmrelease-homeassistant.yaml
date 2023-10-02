@@ -15,7 +15,56 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: homeassistant
-  valuesFrom:
-  - kind: ConfigMap
-    name: homeassistant-helm-chart-value-overrides
-    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  values:
+    global:
+      nameOverride: homeassistant
+    image:
+      repository: ghcr.io/onedr0p/home-assistant
+      tag: 2023.5.4
+    service:
+      main:
+        ports:
+          http:
+            port: 8123
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_set_header Host $http_host;
+            proxy_set_header Upgrade $http_upgrade;
+        hosts:
+          - host: &host hass.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *host
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: OnRootMismatch
+
+    persistence:
+      config:
+        enabled: true
+        type: pvc
+        size: 3Gi
+        mountPath: /config
+        storageClass: ceph-block
+
+    # envFrom:
+    #   - secretRef:
+    #       name: homeassistant-secret
+
+    # env:
+    #   postgresql_uri:
+    #     valueFrom:
+    #       secretKeyRef:
+    #         name: pgo-cluster-pguser-homeassistant
+    #         key: uri

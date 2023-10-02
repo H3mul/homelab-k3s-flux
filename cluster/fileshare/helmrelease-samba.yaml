@@ -1,21 +1,54 @@
-  apiVersion: helm.toolkit.fluxcd.io/v2beta1
-  kind: HelmRelease
-  metadata:
-    name: samba-fileshare
-    namespace: media
-  spec:
-    chart:
-      spec:
-        chart: app-template
-        version: 1.5.x
-        sourceRef:
-          kind: HelmRepository
-          name: bjw-s
-          namespace: flux-system
-    interval: 15m
-    timeout: 5m
-    releaseName: samba-fileshare
-    valuesFrom:
-    - kind: ConfigMap
-      name: samba-fileshare-helm-chart-value-overrides
-      valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: samba-fileshare
+  namespace: media
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: samba-fileshare
+  values:
+    image:
+      # https://hub.docker.com/r/dperson/samba
+      repository: upagge/samba
+      tag: latest
+    env:
+      TZ: "${TIMEZONE}"
+      PERMISSIONS: true
+      SHARE: "Share;/share;yes;no;no"
+      USERID: "${FILESHARE_USER_ID}"
+      GROUPID: "${FILESHARE_GROUP_ID}"
+    envFrom:
+      - secretRef:
+          name: samba-fileshare-credentials
+
+    service:
+      main:
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: share.${CLUSTER_DOMAIN}
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        ports:
+          http:
+            enabled: false
+            port: 139
+          smb:
+            enabled: true
+            port: 445
+    persistence:
+      data:
+        enabled: true
+        mountPath: /share
+        existingClaim: fileshare
+      torrent-download:
+        enabled: true
+        mountPath: /share/Torrent
+        existingClaim: qbittorrent-download
