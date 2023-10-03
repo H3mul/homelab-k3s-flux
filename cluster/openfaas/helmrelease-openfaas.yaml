@@ -130,7 +130,7 @@ spec:
       image: ghcr.io/openfaasltd/gateway:0.2.13
 
     gateway:
-      image: ghcr.io/openfaas/gateway:0.26.3
+      image: ghcr.io/openfaas/gateway:0.27.2
       readTimeout: "65s"
       writeTimeout: "65s"
       upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
