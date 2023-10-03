@@ -24,7 +24,7 @@ spec:
   releaseName: rook-ceph-cluster
   values:
     # Paste from:
-    # https://github.com/rook/rook/blob/46ece6c2a80a5c31b73832f235277607ceb987e5/deploy/charts/rook-ceph-cluster/values.yaml
+    # https://github.com/rook/rook/blob/559f6605cca65028f032b52de9d7f437e4ff1695/deploy/charts/rook-ceph-cluster/values.yaml
 
     # Default values for a single rook-ceph cluster
     # This is a YAML-formatted file.
@@ -52,7 +52,7 @@ spec:
       # -- Enable Ceph debugging pod deployment. See [toolbox](../Troubleshooting/ceph-toolbox.md)
       enabled: true
       # -- Toolbox image, defaults to the image used by the Ceph cluster
-      image: quay.io/ceph/ceph:v17.2.6
+      image: #quay.io/ceph/ceph:v17.2.6
       # -- Toolbox tolerations
       tolerations: []
       # -- Toolbox affinity
@@ -66,7 +66,7 @@ spec:
           cpu: 0
           memory: 0
       # -- Set the priority class for the toolbox if desired
-      # priorityClassName:
+      priorityClassName:
 
     monitoring:
       # -- Enable Prometheus integration, will also create necessary RBAC rules to allow Operator to create ServiceMonitors.
@@ -76,7 +76,7 @@ spec:
       createPrometheusRules: false
       # -- The namespace in which to create the prometheus rules, if different from the rook cluster namespace.
       # If you have multiple rook-ceph clusters in the same k8s cluster, choose the same namespace (ideally, namespace with prometheus
-      # deployed) to set rulesNamespace for all the clusters. Otherwise, you will get duplicate alerts with multiple alert definitions.
+      # deployed) to set rulesNamespaceOverride for all the clusters. Otherwise, you will get duplicate alerts with multiple alert definitions.
       rulesNamespaceOverride:
       # Monitoring settings for external clusters:
       # externalMgrEndpoints: <list of endpoints>
@@ -114,8 +114,8 @@ spec:
         # If you want to be more precise, you can always use a timestamp tag such quay.io/ceph/ceph:v15.2.11-20200419
         # This tag might not contain a new Ceph version, just security fixes from the underlying operating system, which will reduce vulnerabilities
         image: quay.io/ceph/ceph:v17.2.6
-        # Whether to allow unsupported versions of Ceph. Currently `pacific` and `quincy` are supported.
-        # Future versions such as `reef` (v18) would require this to be set to `true`.
+        # Whether to allow unsupported versions of Ceph. Currently `pacific`, `quincy`, and `reef` are supported.
+        # Future versions such as `squid` (v19) would require this to be set to `true`.
         # Do not set to true in production.
         allowUnsupported: false
 
@@ -222,7 +222,7 @@ spec:
         periodicity: daily # one of: hourly, daily, weekly, monthly
         maxLogSize: 500M # SUFFIX may be 'M' or 'G'. Must be at least 1M.
 
-      # automate [data cleanup process](https://github.com/rook/rook/blob/master/Documentation/ceph-teardown.md#delete-the-data-on-hosts) in cluster destruction.
+      # automate [data cleanup process](https://github.com/rook/rook/blob/master/Documentation/Storage-Configuration/ceph-teardown.md#delete-the-data-on-hosts) in cluster destruction.
       cleanupPolicy:
         # Since cluster cleanup is destructive to data, confirmation is required.
         # To destroy all Rook data on hosts during uninstall, confirmation must be set to "yes-really-destroy-data".
@@ -346,15 +346,22 @@ spec:
             memory: 0
         logcollector:
           limits:
-            cpu: "500m"
-            memory: "1Gi"
+            cpu: 0
+            memory: 0
           requests:
             cpu: 0
             memory: 0
         cleanup:
           limits:
-            cpu: "500m"
-            memory: "1Gi"
+            cpu: 0
+            memory: 0
+          requests:
+            cpu: 0
+            memory: 0
+        exporter:
+          limits:
+            cpu: 0
+            memory: 0
           requests:
             cpu: 0
             memory: 0
@@ -458,9 +465,9 @@ spec:
         annotations:
           ingress.kubernetes.io/protocol: https
         #   external-dns.alpha.kubernetes.io/hostname: dashboard.example.com
-        #   kubernetes.io/ingress.class: nginx
-        # if the dashboard has ssl: true the following will make sure the nginx ingress controller can expose the dashboard correctly
-        #   nginx.ingress.kubernetes.io/backend-protocol: "https"
+        #   nginx.ingress.kubernetes.io/rewrite-target: /ceph-dashboard/$2
+        # If the dashboard has ssl: true the following will make sure the NGINX Ingress controller can expose the dashboard correctly
+        #   nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         #   nginx.ingress.kubernetes.io/server-snippet: |
         #     proxy_ssl_verify off;
         host:
@@ -499,7 +506,7 @@ spec:
           #            - key: rook-ceph-role
           #              values:
           #                - storage-node
-          # see https://github.com/rook/rook/blob/master/Documentation/ceph-block.md#provision-storage for available configuration
+          # see https://github.com/rook/rook/blob/master/Documentation/Storage-Configuration/Block-Storage-RBD/block-storage.md#provision-storage for available configuration
           parameters:
             # (optional) mapOptions is a comma-separated list of map options.
             # For krbd options refer
@@ -572,7 +579,7 @@ spec:
           allowVolumeExpansion: true
           volumeBindingMode: "Immediate"
           mountOptions: []
-          # see https://github.com/rook/rook/blob/master/Documentation/ceph-filesystem.md#provision-storage for available configuration
+          # see https://github.com/rook/rook/blob/master/Documentation/Storage-Configuration/Shared-Filesystem-CephFS/filesystem-storage.md#provision-storage for available configuration
           parameters:
             # The secrets contain Ceph admin credentials.
             csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
@@ -640,15 +647,87 @@ spec:
             # securePort: 443
             # sslCertificateRef:
             instances: 1
-          healthCheck:
-            bucket:
-              interval: 60s
+            priorityClassName: system-cluster-critical
         storageClass:
           enabled: true
           name: ceph-bucket
           reclaimPolicy: Delete
           volumeBindingMode: "Immediate"
-          # see https://github.com/rook/rook/blob/master/Documentation/ceph-object-bucket-claim.md#storageclass for available configuration
+          # see https://github.com/rook/rook/blob/master/Documentation/Storage-Configuration/Object-Storage-RGW/ceph-object-bucket-claim.md#storageclass for available configuration
           parameters:
             # note: objectStoreNamespace and objectStoreName are configured by the chart
-            region: us-west-1
+            region: us-east-1
+        ingress:
+          # Enable an ingress for the ceph-objectstore
+          enabled: false
+          # annotations: {}
+          # host:
+          #   name: objectstore.example.com
+          #   path: /
+          # tls:
+          # - hosts:
+          #     - objectstore.example.com
+          #   secretName: ceph-objectstore-tls
+          # ingressClassName: nginx
+
+    # cephECBlockPools are disabled by default, please remove the comments and set desired values to enable it
+    #cephECBlockPools:
+    #  # For erasure coded a replicated metadata pool is required.
+    #  # https://rook.io/docs/rook/latest/CRDs/Shared-Filesystem/ceph-filesystem-crd/#erasure-coded
+    #  - name: ec-metadata-pool
+    #    # see https://github.com/rook/rook/blob/master/Documentation/CRDs/Block-Storage/ceph-block-pool-crd.md#spec for available configuration
+    #    spec:
+    #      replicated:
+    #        size: 2
+    #  - name: ec-data-pool
+    #    spec:
+    #      failureDomain: osd
+    #      erasureCoded:
+    #        dataChunks: 2
+    #        codingChunks: 1
+    #      deviceClass: hdd
+
+    # cephECStorageClass also is disabled by default, please remove the comments and set desired values to enable it
+    # if cephECBlockPools are uncommented you must remove the comments of cephEcStorageClass as well
+    #cephECStorageClass:
+    #  name: rook-ceph-block
+    #  # Change "rook-ceph" provisioner prefix to match the operator namespace if needed
+    #  provisioner: rook-ceph.rbd.csi.ceph.com # driver:namespace:operator
+    #  parameters:
+    #    # clusterID is the namespace where the rook cluster is running
+    #    # If you change this namespace, also change the namespace below where the secret namespaces are defined
+    #    clusterID: rook-ceph # namespace:cluster
+    #
+    #    # If you want to use erasure coded pool with RBD, you need to create
+    #    # two pools. one erasure coded and one replicated.
+    #    # You need to specify the replicated pool here in the `pool` parameter, it is
+    #    # used for the metadata of the images.
+    #    # The erasure coded pool must be set as the `dataPool` parameter below.
+    #    dataPool: ec-data-pool
+    #    pool: ec-metadata-pool
+    #
+    #    # (optional) mapOptions is a comma-separated list of map options.
+    #    # For krbd options refer
+    #    # https://docs.ceph.com/docs/master/man/8/rbd/#kernel-rbd-krbd-options
+    #    # For nbd options refer
+    #    # https://docs.ceph.com/docs/master/man/8/rbd-nbd/#options
+    #    # mapOptions: lock_on_read,queue_depth=1024
+    #
+    #    # (optional) unmapOptions is a comma-separated list of unmap options.
+    #    # For krbd options refer
+    #    # https://docs.ceph.com/docs/master/man/8/rbd/#kernel-rbd-krbd-options
+    #    # For nbd options refer
+    #    # https://docs.ceph.com/docs/master/man/8/rbd-nbd/#options
+    #    # unmapOptions: force
+    #
+    #    # RBD image format. Defaults to "2".
+    #    imageFormat: "2"
+    #
+    #    # RBD image features, equivalent to OR'd bitfield value: 63
+    #    # Available for imageFormat: "2". Older releases of CSI RBD
+    #    # support only the `layering` feature. The Linux kernel (KRBD) supports the
+    #    # full feature complement as of 5.4
+    #    # imageFeatures: layering,fast-diff,object-map,deep-flatten,exclusive-lock
+    #    imageFeatures: layering
+    #  allowVolumeExpansion: true
+    #  reclaimPolicy: Delete
