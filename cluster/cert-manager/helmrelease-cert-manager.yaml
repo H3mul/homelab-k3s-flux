@@ -346,7 +346,7 @@ spec:
       image:
         registry: docker.io
         repository: bitnami/cert-manager-webhook
-        tag: 1.11.0-debian-11-r10
+        tag: 1.12.2-debian-11-r10
         digest: ""
         ## Specify a imagePullPolicy
         ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
