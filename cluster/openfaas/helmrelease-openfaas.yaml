@@ -92,7 +92,7 @@ spec:
     ## now be set "enabled=false" when using the new autoscaler
     ## since it handles scaling to zero
     faasIdler:
-      image: ghcr.io/openfaasltd/faas-idler:0.5.3
+      image: ghcr.io/openfaasltd/faas-idler:0.5.4
       replicas: 1
       enabled: false
       inactivityDuration: 3m                # If a function is inactive for 15 minutes, it may be scaled to zero
