@@ -266,7 +266,7 @@ spec:
       annotations: {}
 
     alertmanager:
-      image: prom/alertmanager:v0.25.0
+      image: prom/alertmanager:v0.26.0
       create: false
       resources:
         requests:
