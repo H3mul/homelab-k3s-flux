@@ -21,7 +21,7 @@ spec:
     cleanupOnFail: true
   values:
     # Pasted from:
-    # https://github.com/openfaas/faas-netes/blob/56e7de5dbd35c6b9267d09914d4ae5adea91eb36/chart/openfaas/values.yaml
+    # https://github.com/openfaas/faas-netes/blob/46f7f83828b71647e9809bd158a32ed5a45b912f/chart/openfaas/values.yaml
 
     functionNamespace: openfaas-fn  # Default namespace for functions
 
@@ -29,7 +29,12 @@ spec:
     openfaasPro: false
 
     httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS core components
-    clusterRole: false            # Set to true for multiple namespaces, pro scaler and CPU/RAM metrics in OpenFaaS REST API
+
+    # set clusterRole: true for:
+    ## Multiple-namespaces
+    ## CPU/RAM metrics in OpenFaaS API
+    clusterRole: false
+
     createCRDs: true              # Set to false if applying CRDs in another way
 
     basic_auth: true              # Authentication for core components, no good reason to disable this
@@ -47,93 +52,33 @@ spec:
     # https://kubernetes.io/docs/concepts/policy/pod-security-policy/
     psp: false
 
-    # image pull policy for openfaas components, can change to `IfNotPresent` in offline env
+    # image pull policy for openfaas components, can change to `IfNotPresent` for an air-gapped environment
     openfaasImagePullPolicy: "Always"
 
-    # openfaasPro components, which require openfaasPro=true
-    # clusterRole is also recommended for collecting CPU/RAM metrics for Pro add-ons
-
-    # OpenFaaS Pro
-    ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
-    ## Includes: scale to zero
-    autoscaler:
-      image: ghcr.io/openfaasltd/autoscaler:0.2.9
-      replicas: 1
-      enabled: true
-      resources:
-        requests:
-          memory: "128Mi"
-        limits:
-          memory: "256Mi"
-      # When disableHorizontalScaling is set to true, then the autoscaler will 
-      # only scale to zero, without scaling replicas between the defined Min and Max
-      # count for the function
-      disableHorizontalScaling: false
-
-    # OpenFaaS Pro
-    ## To use with port-forwarding, set publicURL to 
-    ## http://127.0.0.1
-    dashboard:
-      image: ghcr.io/openfaasltd/openfaas-dashboard:0.2.1
-      publicURL: https://dashboard.example.com
-      # Name of signing key secret for sessions.
-      # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
-      signingKeySecret: ""
-      replicas: 1
-      enabled: false
-      resources:
-        requests:
-          memory: "128Mi"
-        limits:
-          memory: "256Mi"
-
-    # OpenFaaS Pro
-    ## faasIdler is the original scale to zero feature, but must
-    ## now be set "enabled=false" when using the new autoscaler
-    ## since it handles scaling to zero
-    faasIdler:
-      image: ghcr.io/openfaasltd/faas-idler:0.5.3
-      replicas: 1
-      enabled: false
-      inactivityDuration: 3m                # If a function is inactive for 15 minutes, it may be scaled to zero
-      reconcileInterval: 2m                 # The interval between each attempt to scale functions to zero
-      readOnly: false                       # When set to true, no functions are scaled to zero
-      writeDebug: false                     # Write additional debug information
-      resources:
-        requests:
-          memory: "64Mi"
-
-    # OpenFaaS Pro
-    ## OIDC plugin for authentication on the OpenFaaS REST API
-    oidcAuthPlugin:
-      enabled: false
-      verbose: false # debug setting
-      provider: "" # Put "azure" if using Azure as a provider, leave blank for any other provider.
-      insecureTLS: false
-      scopes: "openid profile email"
-      openidURL: "https://example.eu.auth0.com/.well-known/openid-configuration"
-      audience: https://example.eu.auth0.com/api/v2/
-      welcomePageURL: https://gateway.openfaas.example.com
-      cookieDomain: ".openfaas.example.com"
-      baseHost: "https://auth.openfaas.example.com"
-      clientSecret: ""
-      clientID: ""
-      resources:
-        requests:
-          memory: "120Mi"
-
-      replicas: 1
-      image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.5.5
-      securityContext: true
+    functions:
+      imagePullPolicy: "Always"    # Image pull policy for deployed functions, for OpenFaaS Pro you can also set: IfNotPresent and Never.
+      httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
+      setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
+      readinessProbe:
+        initialDelaySeconds: 0
+        timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
+        periodSeconds: 2            # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+        successThreshold: 1
+        failureThreshold: 3
+      livenessProbe:
+        initialDelaySeconds: 0
+        timeoutSeconds: 1
+        periodSeconds: 2           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+        failureThreshold: 3
 
     gatewayPro:
-      image: ghcr.io/openfaasltd/gateway:0.2.13
+      image: ghcr.io/openfaasltd/gateway:0.4.6
 
     gateway:
-      image: ghcr.io/openfaas/gateway:0.26.3
-      readTimeout: "65s"
-      writeTimeout: "65s"
-      upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
+      image: ghcr.io/openfaas/gateway:0.27.2
+      readTimeout: "1m05s"
+      writeTimeout: "1m05s"
+      upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
       replicas: 1
       scaleFromZero: true
       # change the port when creating multiple releases in the same baremetal cluster
@@ -150,61 +95,52 @@ spec:
       probeFunctions: false
 
       # See the HPA rule from the Customer Community
-      # https://github.com/openfaas/openfaas-pro/blob/master/gateway-hpa.yaml
+      # https://github.com/openfaas/customers/blob/master/gateway-hpa.yaml
       resources:
         requests:
           memory: "120Mi"
+          cpu: "50m"
 
       readinessProbe:
-        initialDelaySeconds: 0
-        periodSeconds: 10
+        initialDelaySeconds: 1
+        periodSeconds: 5
         timeoutSeconds: 5
         failureThreshold: 3
         successThreshold: 1
 
       livenessProbe:
-        initialDelaySeconds: 0
-        periodSeconds: 10
+        initialDelaySeconds: 1
+        periodSeconds: 5
         timeoutSeconds: 5
         failureThreshold: 3
         successThreshold: 1
 
-    faasnetesPro:
-      image: ghcr.io/openfaasltd/faas-netes:0.2.8
-
-    operatorPro:
-      image: ghcr.io/openfaasltd/faas-netes:0.2.8
-
-    faasnetes:
-      image: ghcr.io/openfaas/faas-netes:0.16.7
-      imagePullPolicy: "Always"    # Image pull policy for deployed functions
-      httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
-      setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
-      readinessProbe:
-        initialDelaySeconds: 2
-        timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
-        periodSeconds: 2            # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
-      livenessProbe:
-        initialDelaySeconds: 2
-        timeoutSeconds: 1
-        periodSeconds: 2           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
-      resources:
-        requests:
-          memory: "120Mi"
-
+    # For OpenFaaS Pro and the Function CRD
     operator:
-      image: ghcr.io/openfaas/faas-netes:0.16.7
+      image: ghcr.io/openfaasltd/faas-netes:0.4.21
       create: false
       resources:
         requests:
           memory: "120Mi"
+          cpu: "50m"
+
+    faasnetesPro:
+      image: ghcr.io/openfaasltd/faas-netes:0.4.21
+
+    # For the Community Edition
+    faasnetes:
+      image: ghcr.io/openfaas/faas-netes:0.17.1
+      resources:
+        requests:
+          memory: "120Mi"
+          cpu: "50m"
 
     # The values for jetstreamQueueWorker are merged with those under
     # the "queueWorkerPro" and "queueWorker" section
     #  
     # Enable automatically when nats.queueMode is set to "jetstream"
     jetstreamQueueWorker:
-      image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.6
+      image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.13
       durableName: "faas-workers"
       # Configure the max waiting pulls for the queue-worker JetStream consumer. 
       # The value should be at least max_inflight * replicas.
@@ -226,7 +162,7 @@ spec:
     #
     # Enabled automatically when openfaasPro is set to true
     queueWorkerPro:
-      image: ghcr.io/openfaasltd/queue-worker:0.2.2
+      image: ghcr.io/openfaasltd/queue-worker:0.3.0
       maxRetryAttempts: "10"
       maxRetryWait: "120s"
       initialRetryWait: "10s"
@@ -246,7 +182,7 @@ spec:
     # Community Edition, maxInflight is 1
     # Name of shared queue is "faas-request"
     queueWorker:
-      image: ghcr.io/openfaas/queue-worker:0.13.3
+      image: ghcr.io/openfaas/queue-worker:0.14.0
       # Control HA of queue-worker
       replicas: 1
       queueGroup: "faas"
@@ -254,20 +190,91 @@ spec:
       resources:
         requests:
           memory: "120Mi"
+          cpu: "50m"
 
-    # monitoring and auto-scaling components
-    # both components
+    # OpenFaaS Pro
+    ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
+    ## Includes: scale to zero
+    autoscaler:
+      image: ghcr.io/openfaasltd/autoscaler:0.3.1
+      replicas: 1
+      enabled: true
+      resources:
+        requests:
+          memory: "128Mi"
+        limits:
+          memory: "256Mi"
+      # When disableHorizontalScaling is set to true, then the autoscaler will 
+      # only scale to zero, without scaling replicas between the defined Min and Max
+      # count for the function
+      disableHorizontalScaling: false
+
+    # OpenFaaS Pro
+    ## To use with port-forwarding, set publicURL to 
+    ## http://127.0.0.1
+    dashboard:
+      image: ghcr.io/openfaasltd/openfaas-dashboard:0.4.7
+      publicURL: https://dashboard.example.com
+      # Name of signing key secret for sessions.
+      # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
+      signingKeySecret: ""
+      replicas: 1
+      enabled: false
+      logs:
+        debug: false
+        format: "console"
+      resources:
+        requests:
+          memory: "128Mi"
+        limits:
+          memory: "256Mi"
+
+    # OpenFaaS Enterprise (OpenFaaS IAM)
+    # OIDC plugin for authentication on the OpenFaaS REST API
+    oidcAuthPlugin:
+      image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.6.5
+      insecureTLS: false
+      verbose: true # debug setting
+      replicas: 1
+      securityContext: true
+      resources:
+        requests:
+          memory: "120Mi"
+          cpu: "50m"
+
+    iam:
+      enabled: false
+      # systemIssuer represents the issuer for the OpenFaaS system components
+      systemIssuer:
+        url: https://gateway.example.com
+
+      # dashboardIssuer represents the issuer for the OpenFaaS dashboard
+      dashboardIssuer:
+        url: https://example.eu.auth0.com
+        clientId: ""
+        clientSecret: ""
+        scopes:
+          - openid
+          - profile
+          - email
+
+      # kubernetesIssuer represents the Kubernetes service account issuer.
+      kubernetesIssuer:
+        create: true
+        url: https://kubernetes.default.svc.cluster.local
+        tokenExpiry: 2h
+
     prometheus:
-      image: prom/prometheus:v2.43.0
-      create: false
+      image: prom/prometheus:v2.47.0
+      create: true
       resources:
         requests:
           memory: "512Mi"
       annotations: {}
 
     alertmanager:
-      image: prom/alertmanager:v0.25.0
-      create: false
+      image: prom/alertmanager:v0.26.0
+      create: true
       resources:
         requests:
           memory: "25Mi"
@@ -277,7 +284,7 @@ spec:
     stan:
       # Image used for the NATS Streaming when using the deprecated 
       # support in the Community Edition (CE)
-      image: nats-streaming:0.25.3
+      image: nats-streaming:0.25.5
 
     # NATS (required for async)
     nats:
@@ -292,12 +299,12 @@ spec:
         host: ""
         port: ""
       # The version of NATS Core used with OpenFaaS Pro and JetStream
-      image: nats:2.9.15
+      image: nats:2.9.22
       enableMonitoring: false
       metrics:
         # Should stay off by default because the exporter is not multi-arch (yet)
         enabled: false
-        image: natsio/prometheus-nats-exporter:0.10.1
+        image: natsio/prometheus-nats-exporter:0.12.0
       resources:
         requests:
           memory: "120Mi"
@@ -323,7 +330,7 @@ spec:
         kubernetes.io/ingress.class: traefik
 
       ## You can specify the ingress controller by using the ingressClassName
-      # ingressClassName: traefik
+      #ingressClassName: nginx
 
     # ingressOperator (optional) – component to have specific FQDN and TLS for Functions
     # https://github.com/openfaas-incubator/ingress-operator
