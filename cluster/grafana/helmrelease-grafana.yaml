@@ -159,7 +159,7 @@ spec:
 
     downloadDashboardsImage:
       repository: curlimages/curl
-      tag: 7.85.0
+      tag: 8.3.0
       sha: ""
       pullPolicy: IfNotPresent
 
