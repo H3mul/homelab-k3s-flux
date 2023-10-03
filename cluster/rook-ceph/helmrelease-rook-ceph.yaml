@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: rook-ceph
-      version: 1.11.x
+      version: 1.12.x
       sourceRef:
         kind: HelmRepository
         name: rook-release
@@ -38,7 +38,7 @@ spec:
       repository: rook/ceph
       # -- Image tag
       # @default -- `master`
-      tag: v1.11.4
+      tag: v1.12.4
       # -- Image pull policy
       pullPolicy: IfNotPresent
 
