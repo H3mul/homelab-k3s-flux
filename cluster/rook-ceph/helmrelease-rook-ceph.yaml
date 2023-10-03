@@ -24,11 +24,7 @@ spec:
   releaseName: rook-ceph
   values:
     # Pasted from:
-    # https://github.com/rook/rook/blob/10abbd0d8a0ff2e5330ceaca733a31eec4391a5a/deploy/charts/rook-ceph/values.yaml
-    # Default values for rook-ceph-operator
-    # This is a YAML-formatted file.
-    # Declare variables to be passed into your templates.
-
+    # https://github.com/rook/rook/blob/559f6605cca65028f032b52de9d7f437e4ff1695/deploy/charts/rook-ceph/values.yaml
     # Default values for rook-ceph-operator
     # This is a YAML-formatted file.
     # Declare variables to be passed into your templates.
@@ -38,7 +34,7 @@ spec:
       repository: rook/ceph
       # -- Image tag
       # @default -- `master`
-      tag: v1.12.4
+      tag: master
       # -- Image pull policy
       pullPolicy: IfNotPresent
 
@@ -181,6 +177,10 @@ spec:
       # @default -- `RollingUpdate`
       cephFSPluginUpdateStrategy:
 
+      # -- A maxUnavailable parameter of CSI cephFS plugin daemonset update strategy.
+      # @default -- `1`
+      cephFSPluginUpdateStrategyMaxUnavailable:
+
       # -- CSI NFS plugin daemonset update strategy, supported values are OnDelete and RollingUpdate
       # @default -- `RollingUpdate`
       nfsPluginUpdateStrategy:
@@ -281,6 +281,7 @@ spec:
             limits:
               memory: 256Mi
               cpu: 100m
+
       # -- CEPH CSI RBD plugin resource requirement list
       # @default -- see values.yaml
       csiRBDPluginResource: |
@@ -308,6 +309,7 @@ spec:
             limits:
               memory: 256Mi
               cpu: 100m
+
       # -- CEPH CSI CephFS provisioner resource requirement list
       # @default -- see values.yaml
       csiCephFSProvisionerResource: |
@@ -359,6 +361,7 @@ spec:
             limits:
               memory: 256Mi
               cpu: 100m
+
       # -- CEPH CSI CephFS plugin resource requirement list
       # @default -- see values.yaml
       csiCephFSPluginResource: |
@@ -386,6 +389,7 @@ spec:
             limits:
               memory: 256Mi
               cpu: 100m
+
       # -- CEPH CSI NFS provisioner resource requirement list
       # @default -- see values.yaml
       csiNFSProvisionerResource: |
@@ -400,11 +404,20 @@ spec:
         - name : csi-nfsplugin
           resource:
             requests:
-              memory: 0
-              cpu: 0
+              memory: 512Mi
+              cpu: 250m
             limits:
               memory: 1Gi
               cpu: 500m
+        - name : csi-attacher
+          resource:
+            requests:
+              memory: 512Mi
+              cpu: 250m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+
       # -- CEPH CSI NFS plugin resource requirement list
       # @default -- see values.yaml
       csiNFSPluginResource: |
@@ -424,6 +437,7 @@ spec:
             limits:
               memory: 1Gi
               cpu: 500m
+
       # Set provisionerTolerations and provisionerNodeAffinity for provisioner pod.
       # The CSI provisioner would be best to start on the same nodes as other ceph daemons.
 
@@ -475,38 +489,46 @@ spec:
       # @default -- `8080`
       rbdLivenessMetricsPort:
 
+      serviceMonitor:
+        # -- Enable ServiceMonitor for Ceph CSI drivers
+        enabled: false
+        # -- Service monitor scrape interval
+        interval: 5s
+        # -- ServiceMonitor additional labels
+        labels: {}
+
       # -- Kubelet root directory path (if the Kubelet uses a different path for the `--root-dir` flag)
       # @default -- `/var/lib/kubelet`
       kubeletDirPath:
 
       cephcsi:
         # -- Ceph CSI image
-        # @default -- `quay.io/cephcsi/cephcsi:v3.8.0`
+        # @default -- `quay.io/cephcsi/cephcsi:v3.9.0`
         image:
 
       registrar:
         # -- Kubernetes CSI registrar image
-        # @default -- `registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.7.0`
+        # @default -- `registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.8.0`
         image:
 
       provisioner:
         # -- Kubernetes CSI provisioner image
-        # @default -- `registry.k8s.io/sig-storage/csi-provisioner:v3.4.0`
+        # @default -- `registry.k8s.io/sig-storage/csi-provisioner:v3.5.0`
         image:
 
       snapshotter:
         # -- Kubernetes CSI snapshotter image
-        # @default -- `registry.k8s.io/sig-storage/csi-snapshotter:v6.2.1`
+        # @default -- `registry.k8s.io/sig-storage/csi-snapshotter:v6.2.2`
         image:
 
       attacher:
         # -- Kubernetes CSI Attacher image
-        # @default -- `registry.k8s.io/sig-storage/csi-attacher:v4.1.0`
+        # @default -- `registry.k8s.io/sig-storage/csi-attacher:v4.3.0`
         image:
 
       resizer:
         # -- Kubernetes CSI resizer image
-        # @default -- `registry.k8s.io/sig-storage/csi-resizer:v1.7.0`
+        # @default -- `registry.k8s.io/sig-storage/csi-resizer:v1.8.0`
         image:
 
       # -- Image pull policy
@@ -525,7 +547,7 @@ spec:
         # -- Enable CSIAddons
         enabled: false
         # -- CSIAddons Sidecar image
-        image: "quay.io/csiaddons/k8s-sidecar:v0.5.0"
+        image: "quay.io/csiaddons/k8s-sidecar:v0.7.0"
 
       nfs:
         # -- Enable the nfs csi driver
@@ -577,6 +599,8 @@ spec:
 
     # -- Enable discovery daemon
     enableDiscoveryDaemon: false
+    # -- Set the discovery daemon device discovery interval (default to 60m)
+    discoveryDaemonInterval: 60m
 
     # -- The timeout for ceph commands in seconds
     cephCommandsTimeoutSeconds: "15"
@@ -612,12 +636,12 @@ spec:
       podLabels: # "key1=value1,key2=value2"
       # -- Add resources to discover daemon pods
       resources:
-        # - limits:
-        #     cpu: 500m
-        #     memory: 512Mi
-        # - requests:
-        #     memory: 0
-        #     cpu: 0
+      #   - limits:
+      #       cpu: 500m
+      #       memory: 512Mi
+      #   - requests:
+      #       cpu: 100m
+      #       memory: 128Mi
 
     # -- Whether to disable the admission controller
     disableAdmissionController: true
