@@ -16,7 +16,7 @@ spec:
   timeout: 5m
   values:
     # Pasted from:
-    # https://github.com/piraeusdatastore/helm-charts/blob/bc135abc9dff8e96cdb9efea56328032391ec0d0/charts/snapshot-controller/values.yaml
+    # https://github.com/piraeusdatastore/helm-charts/blob/7a96fea9f043f530635be4037d3a24380215ff84/charts/snapshot-controller/values.yaml
 
     replicaCount: 1
 
@@ -32,7 +32,10 @@ spec:
       tag: ""
 
     imagePullSecrets: []
+
     podAnnotations: {}
+
+    podLabels: {}
 
     podSecurityContext: {}
       # fsGroup: 2000
@@ -52,6 +55,10 @@ spec:
     tolerations: []
 
     affinity: {}
+
+    pdb: {}
+
+    topologySpreadConstraints: []
 
     rbac:
       # Specifies whether RBAC resources should be created
