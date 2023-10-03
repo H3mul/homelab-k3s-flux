@@ -170,10 +170,10 @@ spec:
         successThreshold: 1
 
     faasnetesPro:
-      image: ghcr.io/openfaasltd/faas-netes:0.2.8
+      image: ghcr.io/openfaasltd/faas-netes:0.4.21
 
     operatorPro:
-      image: ghcr.io/openfaasltd/faas-netes:0.2.8
+      image: ghcr.io/openfaasltd/faas-netes:0.4.21
 
     faasnetes:
       image: ghcr.io/openfaas/faas-netes:0.16.7
