@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: mysql-operator
-      version: 0.6.x
+      version: 0.6.3
       sourceRef:
         kind: HelmRepository
         name: bitpoke
@@ -45,7 +45,7 @@ spec:
     metricsExporter:
       image:
         repository: docker.io/prom/mysqld-exporter
-        tag: "v0.15.0"
+        tag: "v0.13.0"
 
     imagePullSecrets: []
     nameOverride: ""
@@ -213,7 +213,7 @@ spec:
         ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
         ##   GKE, AWS & OpenStack)
         ##
-        storageClass: ceph-block
+        # storageClass: "-"
         # annotations: {}
         # selector:
         #  matchLabels: {}
