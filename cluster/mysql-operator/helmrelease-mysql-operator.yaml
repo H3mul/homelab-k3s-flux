@@ -45,7 +45,7 @@ spec:
     metricsExporter:
       image:
         repository: docker.io/prom/mysqld-exporter
-        tag: "v0.15.0"
+        tag: "v0.13.0"
 
     imagePullSecrets: []
     nameOverride: ""
