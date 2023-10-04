@@ -72,7 +72,7 @@ spec:
       config:
         enabled: true
         type: pvc
-        size: 200Mi
+        size: 500Mi
         mountPath: /config
         storageClass: ceph-block
 
