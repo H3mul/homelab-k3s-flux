@@ -101,8 +101,8 @@ spec:
       config: |
         {
           "platform": "github",
-          "autodiscover": "false",
-          "dryRun": false,
+          "autodiscover": false,
+          "dryRun": null,
           "printConfig": true,
           "repositories": ["H3mul/homelab-k3s-flux"],
           "ignorePaths": ["disabled/**"],
