@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/radarr
-      tag: 4.4.4.7068
+      tag: 4.7.5.7809
 
     env:
       RADARR__INSTANCE_NAME: Radarr
