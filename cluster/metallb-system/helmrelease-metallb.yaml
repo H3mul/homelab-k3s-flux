@@ -342,7 +342,7 @@ spec:
         enabled: false
         image:
           repository: quay.io/frrouting/frr
-          tag: 8.5.2
+          tag: 8.5.3
           pullPolicy:
         metricsPort: 7473
         resources: {}
