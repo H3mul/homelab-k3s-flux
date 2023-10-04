@@ -281,7 +281,7 @@ spec:
       enabled: true
       image:
         repository: kubernetesui/metrics-scraper
-        tag: v1.0.8
+        tag: v1.0.9
       resources: {}
       ## SecurityContext especially for the kubernetes dashboard metrics scraper container
       ## If not set, the global containterSecurityContext values will define these values
