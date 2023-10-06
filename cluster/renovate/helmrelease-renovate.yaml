@@ -108,7 +108,9 @@ spec:
           "ignorePaths": ["disabled/**"],
           "extends": [
             "config:recommended",
-            "docker:enableMajor"
+            ":automergeMinor",
+            ":automergePr",
+            ":disableRateLimiting"
           ],
           "flux": {
             "fileMatch": ["\\.yaml$"]
