@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: ansible-runner
+resources:
+  - pvc-mongodb-dump.yaml 
+  - cronjob-weekly-ansible-runner.yaml 
+  - sealed-secret-ansible-runner-ssh-key.yaml
+  - sealed-secret-mongodb-credentials.yaml
+  - kustomization-mongo-dump-restic.yaml 
+  - replication-source-b2-mongo-dump.yaml
+generatorOptions:
+ disableNameSuffixHash: true
+configMapGenerator:
+- name: ansible-playbooks
+  namespace: ansible-runner
+  files:
+  - playbooks/ansible-playbook-site.yaml
+  - playbooks/ansible-requirements.yaml
+  - playbooks/ansible-inventory.yaml

@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: weekly-ansible-runner
+  namespace: ansible-runner
+spec:
+  schedule: "@weekly"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: site
+            image: ghcr.io/h3mul/ansible-run:8.4.0
+            imagePullPolicy: Always
+
+            env:
+            - name: ADDITIONAL_ARGS
+              value: -vv
+            - name: PLAYBOOK_FILE
+              value: /ansible_playbooks/ansible-playbook-site.yaml
+            - name: REQUIREMENTS_FILE
+              value: /ansible_playbooks/ansible-requirements.yaml
+            - name: INVENTORY
+              value: /ansible_playbooks/ansible-inventory.yaml
+            - name: MONGO_DUMP_DEST
+              value: /data/mongo-dump
+            
+            envFrom:
+              - secretRef:
+                  name: mongodb-credentials
+
+            volumeMounts:
+            - name: ansible-playbooks
+              mountPath: /ansible_playbooks
+            - name: ssh-keys
+              mountPath: /root/.ssh
+            - name: mongo-dump
+              mountPath: /data/mongo-dump
+
+          restartPolicy: OnFailure
+
+          volumes:
+          - name: ansible-playbooks
+            configMap:
+              name: ansible-playbooks
+          - name: mongo-dump
+            persistentVolumeClaim:
+              claimName: mongodb-dump
+          - name: ssh-keys
+            secret:
+              secretName: ansible-runner-ssh-key
+              items:
+                - key: id_ed25519
+                  path: id_ed25519
+                  mode: 0600
+                - key: id_ed25519.pub
+                  path: id_ed25519.pub
+                  mode: 0600

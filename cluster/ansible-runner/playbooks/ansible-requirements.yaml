@@ -1,0 +1,4 @@
+collections:
+  - name: https://github.com/H3mul/ansible-collections.git#/common
+    type: git
+    version: main

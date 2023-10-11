@@ -1,0 +1,40 @@
+- hosts: all
+  collections:
+    - h3mul.common
+  roles:
+    - role: docker-mongo-db-dump
+      vars:
+        mongo_db_dump_mongo_container_name: "mongo"
+        mongo_db_dump_user: "{{ lookup('env','MONGO_ADMIN_USER') }}"
+        mongo_db_dump_pass: "{{ lookup('env','MONGO_ADMIN_PASS') }}"
+        mongo_db_dump_local_dest: "{{ lookup('env','MONGO_DUMP_DEST') }}"
+        mongo_db_dump_file_name: "mongo.dump.{{ ansible_host }}"
+
+    - role: apt-packages
+      tags: apt-packages
+      vars:
+        apt_upgrade: safe
+        apt_packages:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - python3-pip
+        - virtualenv
+        - python3-setuptools
+
+    - role: fail2ban
+      tags: fail2ban
+      vars:
+        fail2ban_services:
+          - name: sshd
+            bantime: 3600
+
+    - role: ufw
+      tags: ufw
+      vars:
+        allowed_ufw_rules:
+          - OpenSSH
+
+    - role: docker
+      tags: docker
