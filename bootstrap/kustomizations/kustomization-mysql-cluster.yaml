@@ -15,9 +15,9 @@ spec:
     name: flux-system
 
   healthChecks:
-    - apiVersion: mysql.presslabs.org/v1alpha1
-      kind: MysqlCluster
-      name: main
+    - apiVersion: apps/v1
+      kind: StatefulSet
+      name: main-mysql
       namespace: mysql-operator
   postBuild:
     substituteFrom:
