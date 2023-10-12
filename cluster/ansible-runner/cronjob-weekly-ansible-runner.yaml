@@ -12,7 +12,7 @@ spec:
           containers:
           - name: site
             image: ghcr.io/h3mul/ansible-run:8.4.0
-            imagePullPolicy: Always
+            imagePullPolicy: IfNotPresent
 
             env:
             - name: ADDITIONAL_ARGS
@@ -25,6 +25,12 @@ spec:
               value: /ansible_playbooks/ansible-inventory.yaml
             - name: MONGO_DUMP_DEST
               value: /data/mongo-dump
+            - name: TZ
+              value: ${TIMEZONE}
+            - name: HOST_DOMAIN
+              value: vpn-na.${CLUSTER_DOMAIN}
+            - name: ACME_EMAIL
+              value: ${DNS_EMAIL}
             
             envFrom:
               - secretRef:

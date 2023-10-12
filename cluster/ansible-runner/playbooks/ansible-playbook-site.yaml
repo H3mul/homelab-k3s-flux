@@ -1,40 +1,158 @@
 - hosts: all
+
+  vars:
+    host_domain: "{{ lookup('env','HOST_DOMAIN') }}"
+    acme_email: "{{ lookup('env','ACME_EMAIL') }}"
+    timezone: "{{ lookup('env','TZ', default='America/Vancouver') }}"
+    mongo_db_admin_user: "{{ lookup('env','MONGO_ADMIN_USER') }}"
+    mongo_db_admin_pass: "{{ lookup('env','MONGO_ADMIN_PASS') }}"
+    mongo_db_pritunl_user: "{{ lookup('env','MONGO_PRITUNL_USER') }}"
+    mongo_db_pritunl_pass: "{{ lookup('env','MONGO_PRITUNL_PASS') }}"
+    mongo_db_pritunl_db: "{{ lookup('env','MONGO_PRITUNL_DB') }}"
+    mongo_db_dump_local_dest: "{{ lookup('env','MONGO_DUMP_DEST') }}"
+
   collections:
     - h3mul.common
-  roles:
-    - role: docker-mongo-db-dump
-      vars:
-        mongo_db_dump_mongo_container_name: "mongo"
-        mongo_db_dump_user: "{{ lookup('env','MONGO_ADMIN_USER') }}"
-        mongo_db_dump_pass: "{{ lookup('env','MONGO_ADMIN_PASS') }}"
-        mongo_db_dump_local_dest: "{{ lookup('env','MONGO_DUMP_DEST') }}"
-        mongo_db_dump_file_name: "mongo.dump.{{ ansible_host }}"
 
-    - role: apt-packages
-      tags: apt-packages
-      vars:
-        apt_upgrade: safe
-        apt_packages:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - software-properties-common
-        - python3-pip
-        - virtualenv
-        - python3-setuptools
+  # roles:
+  #   - role: docker-mongo-db-dump
+  #     vars:
+  #       mongo_db_dump_mongo_container_name: "mongo"
+  #       mongo_db_dump_user: "{{ mongo_db_admin_user }}"
+  #       mongo_db_dump_pass: "{{ mongo_db_admin_pass }}"
+  #       mongo_db_dump_file_name: "mongo.dump.{{ ansible_host }}"
 
-    - role: fail2ban
-      tags: fail2ban
-      vars:
-        fail2ban_services:
-          - name: sshd
-            bantime: 3600
+  #   - role: apt-packages
+  #     tags: apt-packages
+  #     vars:
+  #       apt_upgrade: safe
+  #       apt_packages:
+  #       - apt-transport-https
+  #       - ca-certificates
+  #       - curl
+  #       - software-properties-common
+  #       - python3-pip
+  #       - virtualenv
+  #       - python3-setuptools
 
-    - role: ufw
-      tags: ufw
-      vars:
-        allowed_ufw_rules:
-          - OpenSSH
+  #   - role: fail2ban
+  #     tags: fail2ban
+  #     vars:
+  #       fail2ban_services:
+  #         - name: sshd
+  #           bantime: 3600
 
-    - role: docker
-      tags: docker
+  #   - role: ufw
+  #     tags: ufw
+  #     vars:
+  #       allowed_ufw_rules:
+  #         - OpenSSH
+
+  #   - role: docker
+  #     tags: docker
+
+  tasks:
+    # - name: Remove project
+    #   community.docker.docker_compose:
+    #     project_src: pritunl
+    #     state: absent
+
+    - name: Reconcile pritunl stack
+      community.docker.docker_compose:
+        project_name: pritunl
+        definition:
+          services:
+            mongo:
+              image: mongo:latest
+              container_name: mongo
+              networks:
+                - pritunl
+              volumes:
+                - mongo-data:/data/db
+              environment:
+                MONGO_INITDB_ROOT_USERNAME: "{{ mongo_db_admin_user }}"
+                MONGO_INITDB_ROOT_PASSWORD: "{{ mongo_db_admin_pass }}"
+              restart: unless-stopped
+
+            pritunl:
+              image: h3mul/pritunl:latest
+              container_name: pritunl
+              networks:
+                - pritunl
+                - proxy
+              privileged: true
+              sysctls:
+                - net.ipv6.conf.all.disable_ipv6=0
+              ports:
+                - 14951:14951/udp
+              environment:
+                TZ: "{{ timezone }}"
+                REVERSE_PROXY: "true"
+                MONGODB_URI: mongodb://{{ mongo_db_pritunl_user }}:{{ mongo_db_pritunl_pass }}@mongo:27017/{{ mongo_db_pritunl_db }}?authSource=admin
+              depends_on:
+                  - mongo
+              restart: unless-stopped
+              labels:
+                traefik.enable: "true"
+                traefik.docker.network: pritunl_proxy
+                traefik.http.services.pritunl.loadbalancer.server.port:    9700
+                traefik.http.services.pritunl.loadbalancer.server.scheme:  http
+
+                traefik.http.routers.pritunl.service:          pritunl
+                traefik.http.routers.pritunl.rule:             "Host(`{{ host_domain }}`)"
+                traefik.http.routers.pritunl.entrypoints:      "websecure"
+                traefik.http.routers.pritunl.tls:              "true"
+                traefik.http.routers.pritunl.tls.certresolver: "letsencryptresolver"
+
+            traefik:
+              image: traefik:v3.0
+              container_name: traefik
+              ports:
+                - 80:80
+                - 443:443
+              volumes:
+                - traefik-certs:/letsencrypt
+                - /var/run/docker.sock:/var/run/docker.sock:ro
+              networks:
+                - proxy
+              restart: unless-stopped
+              dns:
+                - 1.1.1.1
+                - 8.8.8.8
+              command:
+                - --log.level=INFO
+                - --providers.docker=true
+                - --providers.docker.exposedbydefault=false
+                - --serverstransport.insecureskipverify=true
+                - --entrypoints.web.address=:80
+                - --entrypoints.websecure.address=:443
+                - --certificatesresolvers.letsencryptresolver.acme.tlschallenge=true
+                - --certificatesresolvers.letsencryptresolver.acme.email={{ acme_email }}
+                - --certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json
+                  # Use letsencrypt staging
+                # - --certificatesresolvers.letsencryptresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+                # - --accesslog=true
+                # - --api
+                # - --api.dashboard
+                # - --api.insecure=true
+
+          networks:
+            pritunl:
+            proxy:
+
+          volumes:
+            traefik-certs:
+            mongo-data:
+
+      register: docker_compose_output
+
+    - name: Show results
+      ansible.builtin.debug:
+        var: docker_compose_output
+
+    - name: Verify that containers are up
+      ansible.builtin.assert:
+        that:
+          - "docker_compose_output.services.pritunl.pritunl.state.running"
+          - "docker_compose_output.services.mongo.mongo.state.running"
+          - "docker_compose_output.services.traefik.traefik.state.running"
