@@ -1,0 +1,28 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: b2-calibre-web-config
+  namespace: media
+spec:
+  sourcePVC: calibre-web-config
+  trigger:
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+  restic:
+    repository: b2-calibre-web-config-restic
+
+    copyMethod: Snapshot
+    volumeSnapshotClassName: ceph-block
+    storageClassName: ceph-block
+
+    pruneIntervalDays: 10
+    cacheCapacity: 5Gi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 6
+      within: 3d
+
+    moverSecurityContext:
+      runAsUser: ${FILESHARE_USER_ID}
+      runAsGroup: ${FILESHARE_GROUP_ID}
+      fsGroup: ${FILESHARE_GROUP_ID}

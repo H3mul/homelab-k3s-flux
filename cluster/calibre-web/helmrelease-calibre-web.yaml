@@ -18,15 +18,15 @@ spec:
   values:
     controllers:
       main:
-        pod:
-          enableServiceLinks: false
-          securityContext:
-            runAsUser: ${FILESHARE_USER_ID}
-            runAsGroup:  ${FILESHARE_GROUP_ID}
-            fsGroup: ${FILESHARE_GROUP_ID}
-            fsGroupChangePolicy: "OnRootMismatch"
-            supplementalGroups:
-              - 65539
+        # pod:
+        #   enableServiceLinks: false
+        #   securityContext:
+        #     runAsUser: ${FILESHARE_USER_ID}
+        #     runAsGroup:  ${FILESHARE_GROUP_ID}
+        #     fsGroup: ${FILESHARE_GROUP_ID}
+        #     fsGroupChangePolicy: "OnRootMismatch"
+        #     supplementalGroups:
+        #       - 65539
 
         containers:
           main:
