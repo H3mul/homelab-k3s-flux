@@ -75,7 +75,7 @@
               restart: unless-stopped
 
             pritunl:
-              image: ghcr.io/h3mul/pritunl:v1.30.3292.22
+              image: ghcr.io/h3mul/pritunl:v1.32.3660.72
               container_name: pritunl
               networks:
                 - pritunl
