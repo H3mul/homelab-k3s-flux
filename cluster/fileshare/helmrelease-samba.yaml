@@ -52,3 +52,7 @@ spec:
         enabled: true
         mountPath: /share/Torrent
         existingClaim: qbittorrent-download
+      calibre-books:
+        enabled: true
+        mountPath: "/share/Books/Calibre Library"
+        existingClaim: calibre-web-books
