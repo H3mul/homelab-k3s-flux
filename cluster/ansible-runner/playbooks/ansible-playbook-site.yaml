@@ -156,3 +156,6 @@
           - "docker_compose_output.services.pritunl.pritunl.state.running"
           - "docker_compose_output.services.mongo.mongo.state.running"
           - "docker_compose_output.services.traefik.traefik.state.running"
+
+    - name: prune docker images to save space
+      shell: docker image prune -f
