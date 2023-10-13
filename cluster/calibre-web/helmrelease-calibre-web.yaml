@@ -1,0 +1,92 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: calibre-web
+  namespace: media
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 2.0.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: calibre-web
+  values:
+    controllers:
+      main:
+        pod:
+          enableServiceLinks: false
+          securityContext:
+            runAsUser: ${FILESHARE_USER_ID}
+            runAsGroup:  ${FILESHARE_GROUP_ID}
+            fsGroup: ${FILESHARE_GROUP_ID}
+            fsGroupChangePolicy: "OnRootMismatch"
+            supplementalGroups:
+              - 65539
+
+        containers:
+          main:
+            image:
+              repository: linuxserver/calibre-web
+              tag: "0.6.20"
+            env:
+              PUID: ${FILESHARE_USER_ID}
+              PGID: ${FILESHARE_GROUP_ID}
+              TZ: ${TIMEZONE}
+              DOCKER_MODS: linuxserver/mods:universal-calibre
+            resources:
+              limits:
+                memory: 470M
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8083
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_hide_header "x-webkit-csp";
+            proxy_hide_header "content-security-policy";
+            proxy_hide_header "X-Frame-Options";
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${CLUSTER_DOMAIN}/css/base/qbittorrent/nord.css"></head>';
+            sub_filter_once on;
+        hosts:
+          - host: &host calibre.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  name: main
+                  port: http
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *host
+
+    persistence:
+      books:
+        enabled: true
+        type: persistentVolumeClaim
+        size: 10Gi
+        globalMounts:
+          - path: /books
+        accessMode: ReadWriteMany
+        storageClass: ceph-filesystem
+          
+      config:
+        enabled: true
+        type: persistentVolumeClaim
+        size: 1Gi
+        globalMounts:
+          - path: /config
+        accessMode: ReadWriteOnce
+        storageClass: ceph-block
