@@ -110,13 +110,17 @@ spec:
             "config:recommended",
             ":automergeMinor",
             ":automergePr",
-            ":disableRateLimiting"
+            ":disableRateLimiting",
+            ":docker"
           ],
           "ignoreTests": true,
           "flux": {
             "fileMatch": ["\\.yaml$"]
           },
           "helm-values": {
+            "fileMatch": ["\\.yaml$"]
+          },
+          "docker-compose": {
             "fileMatch": ["\\.yaml$"]
           }
         }
