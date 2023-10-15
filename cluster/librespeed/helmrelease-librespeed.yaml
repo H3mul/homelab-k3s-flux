@@ -1,0 +1,61 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: librespeed
+  namespace: librespeed
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 2.0.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: librespeed
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: linuxserver/librespeed
+              tag: 5.2.5
+            env:
+              TZ: "${TIMEZONE}"
+              PUID: 1000
+              PGID: 1000
+              CUSTOM_RESULTS: false
+            resources:
+              limits:
+                memory: 500Mi
+    service:
+      main:
+        ports:
+          http:
+            port: 80
+
+    ingress:
+      main:
+        enabled: true
+        className: nginx
+        annotations:
+          haproxy.org/response-set-header: |
+            Strict-Transport-Security "max-age=31536000"
+            X-Frame-Options "DENY"
+            X-Content-Type-Options "nosniff"
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${CLUSTER_DOMAIN}/css/base/librespeed/nord.css"></head>';
+            Referrer-Policy "no-referrer-when-downgrade"
+        hosts:
+          - host: &host speed.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  name: main
+                  port: http
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *host
