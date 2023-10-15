@@ -85,8 +85,6 @@
                 - net.ipv6.conf.all.disable_ipv6=0
               ports:
                 - 14951:14951/udp
-                - 10366:10366/udp
-                - 10367:10367/udp
               environment:
                 TZ: "{{ timezone }}"
                 REVERSE_PROXY: "true"
