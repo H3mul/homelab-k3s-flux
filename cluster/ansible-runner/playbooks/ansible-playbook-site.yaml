@@ -85,12 +85,16 @@
                 - net.ipv6.conf.all.disable_ipv6=0
               ports:
                 - 14951:14951/udp
+                - 10366:10366/udp
+                - 10367:10367/udp
               environment:
                 TZ: "{{ timezone }}"
                 REVERSE_PROXY: "true"
                 MONGODB_URI: mongodb://{{ mongo_db_pritunl_user }}:{{ mongo_db_pritunl_pass }}@mongo:27017/{{ mongo_db_pritunl_db }}?authSource=admin
+              volumes:
+                - pritunl-session:/var/lib/pritunl
               depends_on:
-                  - mongo
+                - mongo
               restart: unless-stopped
               labels:
                 traefik.enable: "true"
@@ -141,6 +145,7 @@
             proxy:
 
           volumes:
+            pritunl-session:
             traefik-certs:
             mongo-data:
 
