@@ -42,12 +42,12 @@ spec:
         enabled: true
         className: nginx
         annotations:
-          haproxy.org/response-set-header: |
-            Strict-Transport-Security "max-age=31536000"
-            X-Frame-Options "DENY"
-            X-Content-Type-Options "nosniff"
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_hide_header "x-webkit-csp";
+            proxy_hide_header "content-security-policy";
+            proxy_hide_header "X-Frame-Options";
             sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${CLUSTER_DOMAIN}/css/base/librespeed/nord.css"></head>';
-            Referrer-Policy "no-referrer-when-downgrade"
+            sub_filter_once on;
         hosts:
           - host: &host speed.${CLUSTER_DOMAIN}
             paths:
