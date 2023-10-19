@@ -1,0 +1,63 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: pritunl-gateway
+  namespace: vpn-gateway
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 2.0.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: pritunl-gateway
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: qmcgaw/gluetun
+              tag: v3.35.0
+            env:
+              TZ: "${TIMEZONE}"
+              VPN_SERVICE_PROVIDER: custom
+              VPN_TYPE: openvpn
+              OPENVPN_CUSTOM_CONFIG: /gluetun/ovpn/custom.conf
+              DOT: "off"
+              FIREWALL: "off"
+
+            resources:
+              limits:
+                memory: 500Mi
+
+            securityContext:
+              capabilities:
+                add:
+                  - NET_ADMIN
+            probes:
+              liveness:
+                enabled: false
+    
+    service:
+      main:
+        type: LoadBalancer
+        annotations:
+          metallb.universe.tf/loadBalancerIPs: 10.1.2.11
+        enabled: true
+        ports:
+          http:
+            primary: false
+            port: 5001
+
+    persistence:
+      config:
+        enabled: true
+        type: secret
+        name: pritunl-ovpn-config
+        globalMounts:
+          - path: /gluetun/ovpn
