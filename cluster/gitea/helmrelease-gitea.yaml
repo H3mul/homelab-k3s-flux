@@ -92,9 +92,6 @@ spec:
     ## @param strategy.rollingUpdate.maxUnavailable maxUnavailable
     strategy:
       type: "RollingUpdate"
-      rollingUpdate:
-        maxSurge: "100%"
-        maxUnavailable: 0
 
     ## @param clusterDomain cluster domain
     clusterDomain: cluster.local
