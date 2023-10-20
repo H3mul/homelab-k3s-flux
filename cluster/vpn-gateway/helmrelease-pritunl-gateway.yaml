@@ -62,6 +62,22 @@ spec:
                 enabled: false
               readiness:
                 enabled: false
+
+          iperf:
+            image:
+              repository: alpine
+              tag: 3.18.4
+            command: ["/bin/sh"]
+            args:
+              - "-c"
+              - "apk add iperf && iperf -s -p 5001"
+            probes:
+              startup:
+                enabled: false
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
     
     service:
       main:
