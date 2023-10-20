@@ -78,6 +78,6 @@ spec:
       config:
         enabled: true
         type: secret
-        name: pritunl-ovpn-config
+        name: pritunl-ovpn-test-config
         globalMounts:
           - path: /gluetun/ovpn
