@@ -47,21 +47,21 @@ spec:
               readiness:
                 enabled: false
 
-          tcpdump:
-            image:
-              repository: alpine
-              tag: 3.18.4
-            command: ["/bin/sh"]
-            args:
-              - "-c"
-              - "apk add tcpdump && tcpdump -nn -i any"
-            probes:
-              startup:
-                enabled: false
-              liveness:
-                enabled: false
-              readiness:
-                enabled: false
+          # tcpdump:
+          #   image:
+          #     repository: alpine
+          #     tag: 3.18.4
+          #   command: ["/bin/sh"]
+          #   args:
+          #     - "-c"
+          #     - "apk add tcpdump && tcpdump -nn -i any"
+          #   probes:
+          #     startup:
+          #       enabled: false
+          #     liveness:
+          #       enabled: false
+          #     readiness:
+          #       enabled: false
 
           iperf:
             image:
