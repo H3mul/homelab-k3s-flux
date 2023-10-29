@@ -71,7 +71,7 @@ spec:
 
     sidecars:
       exporter:
-        image: caseyscarborough/qbittorrent-exporter:v1.3.2
+        image: caseyscarborough/qbittorrent-exporter:v1.3.5
         imagePullPolicy: IfNotPresent
         env:
           - name: QBITTORRENT_BASE_URL
