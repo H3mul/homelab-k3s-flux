@@ -50,17 +50,20 @@
           - name: traefik-auth
             chain: DOCKER-USER
             logpath: "{{ traefik_access_logs }}"
+            bantime: 3600
             port: http,https
 
           - name: traefik-botsearch
             chain: DOCKER-USER
             logpath: "{{ traefik_access_logs }}"
+            bantime: 3600
             port: http,https
 
           - name: traefik-badbots
             chain: DOCKER-USER
             logpath: "{{ traefik_access_logs }}"
             port: http,https
+            bantime: 3600
             filter: apache-badbots
 
     - role: ufw
@@ -74,6 +77,11 @@
       tags: ssh-server
       vars:
         sshd_port: "{{ ssh_port }}"
+
+    - role: import-ssh-keys
+      tags: import-ssh-keys
+      vars:
+        ssh_keys_gh_users: [ "h3mul" ]
 
     - role: docker
       tags: docker
