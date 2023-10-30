@@ -10,6 +10,8 @@
     mongo_db_pritunl_pass: "{{ lookup('env','MONGO_PRITUNL_PASS') }}"
     mongo_db_pritunl_db: "{{ lookup('env','MONGO_PRITUNL_DB') }}"
     mongo_db_dump_local_dest: "{{ lookup('env','MONGO_DUMP_DEST') }}"
+    traefik_access_logs_dir: "/var/log/traefik"
+    traefik_access_logs: "{{ traefik_access_logs_dir }}/access.log"
 
   collections:
     - h3mul.common
@@ -38,9 +40,27 @@
     - role: fail2ban
       tags: fail2ban
       vars:
+        fail2ban_use_traefik_filters: true
         fail2ban_services:
           - name: sshd
             bantime: 3600
+
+          - name: traefik-auth
+            chain: DOCKER-USER
+            logpath: "{{ traefik_access_logs }}"
+            port: http,https
+            maxretry: 5
+
+          - name: traefik-botsearch
+            chain: DOCKER-USER
+            logpath: "{{ traefik_access_logs }}"
+            port: http,https
+
+          - name: traefik-badbots
+            chain: DOCKER-USER
+            logpath: "{{ traefik_access_logs }}"
+            port: http,https
+            filter: apache-badbots
 
     - role: ufw
       tags: ufw
@@ -115,6 +135,7 @@
                 - 443:443
               volumes:
                 - traefik-certs:/letsencrypt
+                - "{{ traefik_access_logs_dir }}:/logs"
                 - /var/run/docker.sock:/var/run/docker.sock:ro
               networks:
                 - proxy
@@ -124,6 +145,8 @@
                 - 8.8.8.8
               command:
                 - --log.level=INFO
+                - --accesslog=true
+                - --accesslog.filePath=/logs/access.log
                 - --providers.docker=true
                 - --providers.docker.exposedbydefault=false
                 - --serverstransport.insecureskipverify=true
