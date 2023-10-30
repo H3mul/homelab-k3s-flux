@@ -12,6 +12,7 @@
     mongo_db_dump_local_dest: "{{ lookup('env','MONGO_DUMP_DEST') }}"
     traefik_access_logs_dir: "/var/log/traefik"
     traefik_access_logs: "{{ traefik_access_logs_dir }}/access.log"
+    ssh_port: 34581
 
   collections:
     - h3mul.common
@@ -43,13 +44,13 @@
         fail2ban_use_traefik_filters: true
         fail2ban_services:
           - name: sshd
+            port: "{{ ssh_port }}"
             bantime: 3600
 
           - name: traefik-auth
             chain: DOCKER-USER
             logpath: "{{ traefik_access_logs }}"
             port: http,https
-            maxretry: 5
 
           - name: traefik-botsearch
             chain: DOCKER-USER
@@ -65,8 +66,14 @@
     - role: ufw
       tags: ufw
       vars:
-        allowed_ufw_rules:
-          - OpenSSH
+        ufw_allowed_ports_in:
+          - port: "{{ ssh_port }}"
+            proto: tcp
+
+    - role: ssh-server
+      tags: ssh-server
+      vars:
+        sshd_port: "{{ ssh_port }}"
 
     - role: docker
       tags: docker

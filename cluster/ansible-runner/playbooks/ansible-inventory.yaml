@@ -1,5 +1,5 @@
 vpn-na:
   hosts:
-    vpn-na.hemul.net
+    vpn-na.hemul.net:34581
   vars:
     ansible_user: root
