@@ -28,7 +28,7 @@ spec:
             - name: TZ
               value: ${TIMEZONE}
             - name: HOST_DOMAIN
-              value: vpn-na.${CLUSTER_DOMAIN}
+              value: ${CLUSTER_DOMAIN}
             - name: ACME_EMAIL
               value: ${DNS_EMAIL}
             

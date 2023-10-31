@@ -137,7 +137,7 @@
                 traefik.http.services.pritunl.loadbalancer.server.scheme:  http
 
                 traefik.http.routers.pritunl.service:          pritunl
-                traefik.http.routers.pritunl.rule:             "Host(`{{ host_domain }}`)"
+                traefik.http.routers.pritunl.rule:             "Host(`pritunl.{{ host_domain }}`)"
                 traefik.http.routers.pritunl.entrypoints:      "websecure"
                 traefik.http.routers.pritunl.tls:              "true"
                 traefik.http.routers.pritunl.tls.certresolver: "letsencryptresolver"
@@ -177,6 +177,54 @@
                 # - --api.dashboard
                 # - --api.insecure=true
 
+            wireguard:
+              image: linuxserver/wireguard:1.0.20210914
+              container_name: wireguard
+              environment:
+                LOG_CONFS: "true"
+              cap_add:
+                - NET_ADMIN
+              volumes:
+                - wireguard-conf:/config
+              ports:
+                # port for wireguard-ui. this must be set here as the `wireguard-ui` container joins the network of this container and hasn't its own network over which it could publish the ports
+                # port of the wireguard server
+                - 51820:51820/udp
+              restart: unless-stopped
+
+            wireguard-ui:
+              image: ngoduykhanh/wireguard-ui:0.5.2
+              container_name: wireguard-ui
+              depends_on:
+                - wireguard
+              cap_add:
+                - NET_ADMIN
+              environment:
+                WGUI_MANAGE_START: "true"
+                WGUI_MANAGE_RESTART: "true"
+                WGUI_CONFIG_FILE_PATH: /config/wg_confs/wg0.conf
+              networks:
+                - proxy
+              logging:
+                driver: json-file
+                options:
+                  max-size: 50m
+              volumes:
+                - wireguard-ui-db:/app/db
+                - wireguard-conf:/config
+              restart: unless-stopped
+              labels:
+                traefik.enable: "true"
+                traefik.docker.network: pritunl_proxy
+                traefik.http.services.wireguard-ui.loadbalancer.server.port:    5000
+                traefik.http.services.wireguard-ui.loadbalancer.server.scheme:  http
+                traefik.http.routers.wireguard-ui.service:          wireguard-ui
+                traefik.http.routers.wireguard-ui.rule:             "Host(`wireguard.{{ host_domain }}`)"
+                traefik.http.routers.wireguard-ui.entrypoints:      "websecure"
+                traefik.http.routers.wireguard-ui.tls:              "true"
+                traefik.http.routers.wireguard-ui.tls.certresolver: "letsencryptresolver"
+
+
           networks:
             pritunl:
             proxy:
@@ -185,6 +233,8 @@
             pritunl-session:
             traefik-certs:
             mongo-data:
+            wireguard-conf:
+            wireguard-ui-db:
 
       register: docker_compose_output
 
