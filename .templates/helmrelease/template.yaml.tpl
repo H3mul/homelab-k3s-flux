@@ -15,7 +15,4 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: ${name}
-  valuesFrom:
-  - kind: ConfigMap
-    name: ${name}-helm-chart-value-overrides
-    valuesKey: values.yaml # This is the default, but best to be explicit for clarity
+  values:

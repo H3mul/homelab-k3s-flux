@@ -23,9 +23,6 @@ tasks:
           template: helmrelease
       - task: template
         vars:
-          template: helm-chart-values
-      - task: template
-        vars:
           template: kustomization
       - task: template
         vars:
@@ -40,9 +37,6 @@ tasks:
       - task: template
         vars:
           template: helmrelease
-      - task: template
-        vars:
-          template: helm-chart-values
       - task: template
         vars:
           template: kustomization
