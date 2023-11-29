@@ -392,7 +392,7 @@ spec:
                 config:
                   deviceclass: nvme        
 
-          - name: maliketh
+          - name: gemino
             devices:
               - name: "sdb"
                 config:
