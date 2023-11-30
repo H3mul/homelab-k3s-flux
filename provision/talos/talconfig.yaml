@@ -1,7 +1,7 @@
 clusterName: homelab
 
-talosVersion: v1.5.4
-kubernetesVersion: 1.28.3
+talosVersion: v1.5.5
+kubernetesVersion: 1.28.4
 endpoint: "https://homelab.hemul.net:6443"
 
 allowSchedulingOnMasters: true
@@ -24,12 +24,6 @@ nodes:
     controlPlane: true
     installDiskSelector:
       busPath: /pci0000:00/0000:00:17.0/ata1/host0/target0:0:0/0:0:0:0/
-  - hostname: pyrre
-    disableSearchDomain: true
-    ipAddress: 10.1.1.5
-    controlPlane: true
-    installDiskSelector:
-      busPath: /pci0000:00/0000:00:13.0/ata2/host1/target1:0:0/1:0:0:0/
   - hostname: maliketh
     disableSearchDomain: true
     ipAddress: 10.1.1.9
