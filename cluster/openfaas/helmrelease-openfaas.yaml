@@ -72,7 +72,7 @@ spec:
         failureThreshold: 3
 
     gatewayPro:
-      image: ghcr.io/openfaasltd/gateway:0.4.12
+      image: ghcr.io/openfaasltd/gateway:0.4.13
 
     gateway:
       image: ghcr.io/openfaas/gateway:0.27.3
