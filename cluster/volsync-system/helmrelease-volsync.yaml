@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: volsync
-      version: 0.7.1
+      version: 0.8.x
       sourceRef:
         kind: HelmRepository
         name: backube
@@ -16,7 +16,7 @@ spec:
   timeout: 5m
   values:
     # Pasted from:
-    # https://github.com/backube/volsync/blob/c02360c88f1db04094e57a5c15f16d3236a8207f/helm/volsync/values.yaml
+    # https://github.com/backube/volsync/blob/43852304277c1127e4de04223cdbe83100aec8bb/helm/volsync/values.yaml
 
     # Default values for volsync.
     replicaCount: 1
@@ -58,7 +58,7 @@ spec:
 
     metrics:
       # Disable auth checks when scraping metrics (allow anyone to scrape)
-      disableAuth: true
+      disableAuth: false
 
     imagePullSecrets: []
     nameOverride: ""
