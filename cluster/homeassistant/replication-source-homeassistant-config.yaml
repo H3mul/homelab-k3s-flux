@@ -15,7 +15,7 @@ spec:
     storageClassName: ceph-block
 
     pruneIntervalDays: 10
-    cacheCapacity: 3G
+    cacheCapacity: 6G
     retain:
       daily: 7
       weekly: 4
