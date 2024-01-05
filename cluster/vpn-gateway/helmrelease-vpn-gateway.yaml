@@ -33,7 +33,7 @@ spec:
       pullPolicy: IfNotPresent
       # -- image tag of the gateway and inserted helper containers
       # @default -- chart.appVersion
-      tag: v1.8.1
+      tag: v1.10.0
 
     # -- IP address of the DNS server within the vxlan tunnel.
     # All mutated PODs will get this as their DNS server.
