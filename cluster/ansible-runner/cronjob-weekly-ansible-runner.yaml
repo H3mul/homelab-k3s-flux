@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
           - name: site
-            image: ghcr.io/h3mul/ansible-run:8.4.0
+            image: ghcr.io/h3mul/ansible-run:8.6.1
             imagePullPolicy: Always
 
             env:
