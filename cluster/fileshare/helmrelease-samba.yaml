@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.x
+      version: 2.4.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -16,45 +16,63 @@ spec:
   timeout: 5m
   releaseName: samba-fileshare
   values:
-    image:
-      # https://hub.docker.com/r/dperson/samba
-      repository: upagge/samba
-      tag: latest
-    env:
-      TZ: "${TIMEZONE}"
-      PERMISSIONS: false
-      SMB: false
-      RECYCLE: false
-      SHARE: "Share;/share;yes;no;no"
-      USERID: "${FILESHARE_USER_ID}"
-      GROUPID: "${FILESHARE_GROUP_ID}"
-    envFrom:
-      - secretRef:
-          name: samba-fileshare-credentials
+
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              # https://hub.docker.com/r/dperson/samba
+              repository: upagge/samba
+              tag: latest
+            env:
+              TZ: "${TIMEZONE}"
+              PERMISSIONS: false
+              SMB: false
+              RECYCLE: false
+              SHARE: "Share;/share;yes;no;no"
+              USERID: "${FILESHARE_USER_ID}"
+              GROUPID: "${FILESHARE_GROUP_ID}"
+            envFrom:
+              - secretRef:
+                  name: samba-fileshare-credentials
 
     service:
       main:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: share.${CLUSTER_DOMAIN}
         type: LoadBalancer
-        externalTrafficPolicy: Local
+        # externalTrafficPolicy: Local
         ports:
           http:
             enabled: false
+            primary: false
+          nbt:
+            primary: false
             port: 139
-          smb:
-            enabled: true
+            targetPort: 139
+            protocol: TCP
+          samba:
+            primary: true
             port: 445
+            targetPort: 445
+            protocol: TCP
+
     persistence:
       data:
         enabled: true
-        mountPath: /share
+        globalMounts:
+          - path: /share
         existingClaim: fileshare
+
       torrent-download:
         enabled: true
-        mountPath: /share/Torrent
+        globalMounts:
+          - path: /share/Torrent
         existingClaim: qbittorrent-download
+
       calibre-books:
         enabled: true
-        mountPath: "/share/Books/Calibre Library"
+        globalMounts:
+          - path: "/share/Books/Calibre Library"
         existingClaim: calibre-web-books
