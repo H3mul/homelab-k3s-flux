@@ -27,10 +27,7 @@ spec:
               tag: latest
             env:
               TZ: "${TIMEZONE}"
-              # PERMISSIONS: true
-              # SMB: false
-              # RECYCLE: false
-              SHARE: "Share;/share;yes;no;no"
+              SHARE: "Share;/share;yes;no;no;all;share;;"
               USERID: "${FILESHARE_USER_ID}"
               GROUPID: "${FILESHARE_GROUP_ID}"
             envFrom:
