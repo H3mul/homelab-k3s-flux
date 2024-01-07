@@ -23,13 +23,13 @@ spec:
           main:
             image:
               # https://hub.docker.com/r/dperson/samba
-              repository: upagge/samba
+              repository: dperson/samba
               tag: latest
             env:
               TZ: "${TIMEZONE}"
-              PERMISSIONS: false
-              SMB: false
-              RECYCLE: false
+              # PERMISSIONS: true
+              # SMB: false
+              # RECYCLE: false
               SHARE: "Share;/share;yes;no;no"
               USERID: "${FILESHARE_USER_ID}"
               GROUPID: "${FILESHARE_GROUP_ID}"
