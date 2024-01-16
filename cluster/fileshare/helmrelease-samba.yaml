@@ -22,7 +22,6 @@ spec:
         containers:
           main:
             image:
-              # https://hub.docker.com/r/dperson/samba
               repository: dperson/samba
               tag: latest
             env:
@@ -73,3 +72,9 @@ spec:
         globalMounts:
           - path: "/share/Books/Calibre Library"
         existingClaim: calibre-web-books
+
+      syncthing-data:
+        enabled: true
+        globalMounts:
+          - path: "/share/Share"
+        existingClaim: syncthing-data
