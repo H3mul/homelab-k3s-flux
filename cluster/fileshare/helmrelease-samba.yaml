@@ -76,5 +76,5 @@ spec:
       syncthing-data:
         enabled: true
         globalMounts:
-          - path: "/share/Share"
+          - path: "/share/Sync"
         existingClaim: syncthing-data
