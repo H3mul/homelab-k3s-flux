@@ -31,6 +31,7 @@ spec:
         ports:
           http:
             port: 8384
+
       listdisc:
         enabled: true
         controller: main
@@ -48,14 +49,14 @@ spec:
     ingress:
       main:
         enabled: true
-        className: traefik
+        className: nginx
         hosts:
-          - host: &host syncthing.${CLUSTER_DOMAIN}
-            paths:
-              - path: /
-                service:
-                  name: main
-                  port: http
+        - host: &host syncthing.${CLUSTER_DOMAIN}
+          paths:
+            - path: /
+              service:
+                name: main
+                port: http
         tls:
         - secretName: letsencrypt-wildcard-cert-prod
           hosts:
