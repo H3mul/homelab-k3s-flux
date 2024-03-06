@@ -58,7 +58,7 @@ spec:
 
     metrics:
       # Disable auth checks when scraping metrics (allow anyone to scrape)
-      disableAuth: false
+      disableAuth: true
 
     imagePullSecrets: []
     nameOverride: ""
