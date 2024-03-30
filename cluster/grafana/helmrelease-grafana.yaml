@@ -133,7 +133,7 @@ spec:
         # -- The Docker registry
         registry: docker.io
         repository: bats/bats
-        tag: "v1.10.0"
+        tag: "1.11.0"
       imagePullPolicy: IfNotPresent
       securityContext: {}
 
