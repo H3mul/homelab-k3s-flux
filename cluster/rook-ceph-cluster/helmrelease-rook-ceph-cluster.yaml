@@ -383,12 +383,6 @@ spec:
         useAllDevices: false
 
         nodes:
-          - name: ofnir
-            devices:
-              - name: "nvme0n1"
-                config:
-                  deviceclass: nvme
-
           - name: mimir
             devices:
               - name: "nvme0n1"
@@ -398,9 +392,6 @@ spec:
           - name: gemino
             devices:
               - name: "sdb"
-                config:
-                  deviceclass: hdd        
-              - name: "sdc"
                 config:
                   deviceclass: hdd        
 
