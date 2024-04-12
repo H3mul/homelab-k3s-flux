@@ -744,6 +744,13 @@ spec:
 
     dashboards:
       default:
+        opnsense:
+          # Ref: https://grafana.com/grafana/dashboards/19366-opnsense/
+          gnetId: 19366
+          revision: 2
+          datasource:
+            - name: DS_PROMETHEUS
+              value: Prometheus
         qbittorrent:
           # Ref: https://grafana.com/grafana/dashboards/15116-qbittorrent-dashboard/
           gnetId: 15116
@@ -783,25 +790,11 @@ spec:
           gnetId: 2842
           revision: 16
           datasource: Prometheus
-
-        # openwrt:
-        #   # Ref: https://grafana.com/grafana/dashboards/11147-openwrt/
-        #   gnetId: 11147
-        #   revision: 1
-        #   datasource: Prometheus
-
         gitea:
           # Ref: https://grafana.com/grafana/dashboards/13192-gitea/
           gnetId: 13192
           revision: 1
           datasource: Prometheus
-
-        # isp-monitoring:
-        #   # Ref: https://grafana.com/grafana/dashboards/14206-isp-monitoring/
-        #   gnetId: 14206
-        #   revision: 1
-        #   datasource: Prometheus
-
         speedtest-exporter:
           # Ref: https://grafana.com/grafana/dashboards/13665-speedtest-exporter-dashboard/
           gnetId: 13665

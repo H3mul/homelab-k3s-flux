@@ -18,7 +18,9 @@ data:
 
   B2_VOLSYNC_BUCKET: k8s-volsync-backup
 
+  OPNSENSE_ROUTER: 10.1.1.1
   OPENWRT_ROUTER: 10.1.1.2
+
   ROUTER_BGP_ASN: "64501"
   # Must be unique on the network
   LOCAL_BGP_ASN: "64502"
