@@ -17,22 +17,22 @@ spec:
   releaseName: jellyfin
   values:
     image:
-      repository: linuxserver/jellyfin
-      tag: 10.8.13
+      repository: jellyfin/jellyfin
+      tag: 10.8.13-1
 
-    # podSecurityContext:
-    #   runAsUser: 
-    #   runAsGroup: ${FILESHARE_GROUP_ID}
-    #   fsGroup: ${FILESHARE_GROUP_ID}
-    #   fsGroupChangePolicy: "OnRootMismatch"
-    #   supplementalGroups:
-    #     - 65539
+    podSecurityContext:
+      runAsUser: ${FILESHARE_USER_ID}
+      runAsGroup: ${FILESHARE_GROUP_ID}
+      fsGroup: ${FILESHARE_GROUP_ID}
+      fsGroupChangePolicy: "OnRootMismatch"
 
     env:
-      PUID: ${FILESHARE_USER_ID}
-      PGID: ${FILESHARE_GROUP_ID}
       TZ: ${TIMEZONE}
+      DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
       JELLYFIN_PublishedServerUrl: https://jellyfin.${CLUSTER_DOMAIN}
+      JELLYFIN_FFmpeg__probesize: 50000000
+      JELLYFIN_FFmpeg__analyzeduration: 50000000
+
     service:
       main:
         ports:
@@ -72,3 +72,13 @@ spec:
         enabled: true
         existingClaim: qbittorrent-download
         mountPath: /data
+
+      transcode:
+        enabled: true
+        type: emptyDir
+        mountPath: /transcode
+
+      cache:
+        enabled: true
+        type: emptyDir
+        mountPath: /cache
