@@ -5,9 +5,9 @@ metadata:
   namespace: flux-system
 data:
   TIMEZONE: America/Vancouver
-  FILESHARE_USER_ID: "100"
-  FILESHARE_GROUP_ID: "101"
-  FILESHARE_FS_GROUP: "101"
+  FILESHARE_USER_ID: "1000"
+  FILESHARE_GROUP_ID: "1000"
+  FILESHARE_FS_GROUP: "1000"
 
   CLUSTER_DOMAIN: "hemul.net"
   CLUSTER_DOMAIN_DNS_ZONE: "hemul.net"
@@ -20,6 +20,8 @@ data:
 
   OPNSENSE_ROUTER: 10.1.1.1
   OPENWRT_ROUTER: 10.1.1.2
+
+  NAS_HOST: truenas.hemul.net
 
   ROUTER_BGP_ASN: "64501"
   # Must be unique on the network

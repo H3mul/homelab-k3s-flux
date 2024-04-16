@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: qbittorrent-download
+  name: syncthing-data
   namespace: media
 spec:
   resources:
@@ -9,17 +9,17 @@ spec:
       storage: 1Mi
   accessModes:
   - ReadWriteMany
-  storageClassName: nfs-media-downloads
+  storageClassName: nfs-media-sync
 
 ---
 
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs-downloads-pv
+  name: nfs-sync-pv
   namespace: media
 spec:
-  storageClassName: nfs-media-downloads
+  storageClassName: nfs-media-sync
   capacity:
     storage: 1Mi
   accessModes:
@@ -27,7 +27,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: ${NAS_HOST}
-    path: /mnt/hdd-unreplicated/Media/Torrent
+    path: /mnt/hdd-unreplicated/Media/Sync
   # mountOptions:
   # - nfsvers=3
   # - tcp

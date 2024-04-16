@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: qbittorrent-download
+  name: calibre-books
   namespace: media
 spec:
   resources:
@@ -9,17 +9,17 @@ spec:
       storage: 1Mi
   accessModes:
   - ReadWriteMany
-  storageClassName: nfs-media-downloads
+  storageClassName: nfs-media-books
 
 ---
 
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs-downloads-pv
+  name: nfs-books-pv
   namespace: media
 spec:
-  storageClassName: nfs-media-downloads
+  storageClassName: nfs-media-books
   capacity:
     storage: 1Mi
   accessModes:
@@ -27,7 +27,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: ${NAS_HOST}
-    path: /mnt/hdd-unreplicated/Media/Torrent
+    path: /mnt/hdd-unreplicated/Media/Books/Calibre Library
   # mountOptions:
   # - nfsvers=3
   # - tcp

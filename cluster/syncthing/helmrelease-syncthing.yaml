@@ -74,9 +74,6 @@ spec:
 
       data:
         enabled: true
-        type: persistentVolumeClaim
-        size: 50Gi
+        existingClaim: syncthing-data
         globalMounts:
           - path: /var/syncthing/sync
-        accessMode: ReadWriteMany
-        storageClass: ceph-filesystem

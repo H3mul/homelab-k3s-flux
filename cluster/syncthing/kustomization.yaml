@@ -5,3 +5,4 @@ resources:
   - helmrelease-syncthing.yaml
   - kustomization-syncthing-config-restic.yaml
   - replication-source-b2-syncthing-config.yaml
+  - persistent-volume-claim-syncthing-data.yaml

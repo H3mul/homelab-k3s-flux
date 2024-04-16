@@ -75,12 +75,9 @@ spec:
     persistence:
       books:
         enabled: true
-        type: persistentVolumeClaim
-        size: 10Gi
+        existingClaim: calibre-books
         globalMounts:
           - path: /books
-        accessMode: ReadWriteMany
-        storageClass: ceph-filesystem
           
       config:
         enabled: true

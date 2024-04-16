@@ -5,3 +5,4 @@ resources:
   - helmrelease-calibre-web.yaml
   - kustomization-calibre-config-restic.yaml
   - replication-source-b2-calibre-web-config.yaml
+  - persistent-volume-claim-calibre-books.yaml
