@@ -17,16 +17,18 @@ spec:
   releaseName: jellyfin
   values:
     image:
-      repository: jellyfin/jellyfin
-      tag: 10.8.13-1
+      repository: linuxserver/jellyfin
+      tag: 10.8.13
 
-    podSecurityContext:
-      runAsUser: ${FILESHARE_USER_ID}
-      runAsGroup: ${FILESHARE_GROUP_ID}
-      fsGroup: ${FILESHARE_GROUP_ID}
-      fsGroupChangePolicy: "OnRootMismatch"
+    # podSecurityContext:
+    #   runAsUser: ${FILESHARE_USER_ID}
+    #   runAsGroup: ${FILESHARE_GROUP_ID}
+    #   fsGroup: ${FILESHARE_GROUP_ID}
+    #   fsGroupChangePolicy: "OnRootMismatch"
 
     env:
+      PUID: ${FILESHARE_USER_ID}
+      PGID: ${FILESHARE_GROUP_ID}
       TZ: ${TIMEZONE}
       DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
       JELLYFIN_PublishedServerUrl: https://jellyfin.${CLUSTER_DOMAIN}
