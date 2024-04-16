@@ -62,9 +62,9 @@ spec:
             conditional:
               mapping:
                 # ${DOMAIN}: tcp+udp:${K8S_GATEWAY_IP}
-                # milkyway: tcp+udp:${ROUTER_IP}
+                # milkyway: tcp+udp:${OPNSENSE_ROUTER}
             clientLookup:
-              upstream: tcp+udp:${ROUTER_IP}
+              upstream: tcp+udp:${OPNSENSE_ROUTER}
             blocking:
               blackLists:
                 ads:
