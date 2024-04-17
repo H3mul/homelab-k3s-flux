@@ -20,6 +20,7 @@ data:
 
   OPNSENSE_ROUTER: 10.1.1.1
   OPENWRT_ROUTER: 10.1.1.2
+  ROUTER_NET: 10.1.1.0/24
 
   NAS_HOST: truenas.hemul.net
 
