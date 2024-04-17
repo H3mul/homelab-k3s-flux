@@ -78,6 +78,12 @@ sops -d provision/sops-sealed-secret-keys.yaml | kubectl apply -f -
 kubectl rollout restart -n sealed-secrets deployment sealed-secrets
 ```
 
+Note: sealed-secrets automatically refreshes the cert - to fetch the latest one, use this command and commit the updated `sealed-secrets.pem`:
+
+```
+kubeseal --fetch-cert --controller-name=sealed-secrets --controller-namespace=sealed-secrets > sealed-secrets.pem
+```
+
 ## Troubleshoot
 
 ### Generate new Sealed-Secret keys
