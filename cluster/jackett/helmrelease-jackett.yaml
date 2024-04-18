@@ -57,17 +57,3 @@ spec:
         enabled: true
         mountPath: /config
         existingClaim: jackett-config
-
-    # podSecurityContext:
-    #   runAsUser: ${FILESHARE_USER_ID}
-    #   runAsGroup:  ${FILESHARE_GROUP_ID}
-    #   fsGroup: ${FILESHARE_GROUP_ID}
-    #   supplementalGroups:
-    #   - 65536
-
-    # resources:
-    #   requests:
-    #     memory: 250Mi
-    #     cpu: 500m
-    #   limits:
-    #     memory: 6000Mi

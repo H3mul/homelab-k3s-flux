@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: jackett
+resources:
+  - helmrelease-jackett.yaml
+  - kustomization-jackett-config-restic.yaml
+  - replication-source-jackett-config.yaml
+  - persistent-volume-claim-jackett-config.yaml

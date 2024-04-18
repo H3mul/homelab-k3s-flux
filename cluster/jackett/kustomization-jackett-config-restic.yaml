@@ -8,7 +8,7 @@ spec:
   interval: 5m
   wait: true
   prune: true
-  path: ./cluster/jackett-volsync
+  path: ./cluster/jackett/volsync
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -18,10 +18,6 @@ spec:
     substituteFrom:
       - kind: Secret
         name: restic-password
-    #   - kind: ConfigMap
-    #     name: volsync-jackett-config-bucket
-    #   - kind: Secret
-    #     name: volsync-jackett-config-bucket
       - kind: Secret
         name: b2-volsync-bucket-credentials
     substitute:
