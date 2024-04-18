@@ -68,7 +68,7 @@ spec:
         type: pvc
         size: 5Gi
         mountPath: /config
-        storageClass: ceph-block
+        storageClass: truenas-ssd-iscsi
 
       media:
         enabled: true
