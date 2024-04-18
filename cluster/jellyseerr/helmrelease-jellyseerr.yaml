@@ -55,4 +55,4 @@ spec:
         type: pvc
         size: 1Gi
         mountPath: /app/config
-        storageClass: ceph-block
+        storageClass: truenas-ssd-iscsi
