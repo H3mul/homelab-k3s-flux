@@ -24,6 +24,19 @@ spec:
     # This is a YAML-formatted file.
     # Declare variables to be passed into your templates.
 
+    node:
+      driver:
+        # Important: Talos uses iscsi-tools system extension, which has different paths than default iscsi install
+        # From: https://github.com/ishioni/homelab-ops/blob/7a3c3c7f7125c69e8ecac16027e24b438eeeaa42/kubernetes/talos/apps/storage/democratic-csi/iscsi/helmrelease.yaml
+        extraEnv:
+          - name: ISCSIADM_HOST_STRATEGY
+            value: nsenter
+          - name: ISCSIADM_HOST_PATH
+            value: /usr/local/sbin/iscsiadm
+        iscsiDirHostPath: /usr/local/etc/iscsi
+        iscsiDirHostPathType: ""
+      priorityClassName: system-node-critical
+
     # https://kubernetes-csi.github.io/docs/csi-driver-object.html
     csiDriver:
       # should be globally unique for a given cluster
