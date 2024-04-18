@@ -8,7 +8,7 @@ spec:
   interval: 5m
   wait: true
   prune: true
-  path: ./cluster/qbittorrent-volsync
+  path: ./cluster/qbittorrent/volsync
   sourceRef:
     kind: GitRepository
     name: flux-system

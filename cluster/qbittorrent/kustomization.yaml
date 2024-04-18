@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: media
+resources:
+  - helmrelease-qbittorrent.yaml
+  - kustomization-qbittorrent-config-restic.yaml
+  - persistent-volume-claim-qbittorrent-config.yaml
+  - persistent-volume-claim-qbittorrent-download.yaml
+  - replication-source-qbittorrent-config.yaml

@@ -32,8 +32,8 @@ spec:
     repository: b2-qbittorrent-config-restic
 
     copyMethod: Snapshot
-    volumeSnapshotClassName: ceph-block
-    storageClassName: ceph-block
+    volumeSnapshotClassName: truenas-ssd-iscsi
+    storageClassName: truenas-ssd-iscsi
 
     pruneIntervalDays: 10
     cacheCapacity: 200Mi
@@ -47,39 +47,3 @@ spec:
       runAsUser: ${FILESHARE_USER_ID}
       runAsGroup:  ${FILESHARE_GROUP_ID}
       fsGroup: ${FILESHARE_GROUP_ID}
-
-# ---
-
-# apiVersion: volsync.backube/v1alpha1
-# kind: ReplicationSource
-# metadata:
-#   name: qbittorrent-config
-#   namespace: media
-# spec:
-#   sourcePVC: qbittorrent-config
-#   trigger:
-#     schedule: ${VOLSYNC_BACKUP_SCHEDULE}
-#   restic:
-#     repository: qbittorrent-config-restic
-
-#     copyMethod: Snapshot
-#     volumeSnapshotClassName: ceph-block
-#     storageClassName: ceph-block
-
-#     pruneIntervalDays: 10
-#     cacheCapacity: 200Mi
-#     retain:
-#       daily: 7
-#       weekly: 4
-#       monthly: 6
-#       within: 3d
-
-    # moverSecurityContext:
-    #   runAsUser: ${FILESHARE_USER_ID}
-    #   runAsGroup:  ${FILESHARE_GROUP_ID}
-    #   fsGroup: ${FILESHARE_GROUP_ID}
-
-    # moverSecurityContext:
-    #   runAsUser: 101
-    #   runAsGroup: 101
-    #   fsGroup: 101
