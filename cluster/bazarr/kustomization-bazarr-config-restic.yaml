@@ -8,7 +8,7 @@ spec:
   interval: 5m
   wait: true
   prune: true
-  path: ./cluster/bazarr-volsync
+  path: ./cluster/bazarr/volsync
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -58,7 +58,7 @@ spec:
         type: pvc
         size: 200Mi
         mountPath: /config
-        storageClass: ceph-block
+        storageClass: truenas-ssd-iscsi
 
       media:
         enabled: true
