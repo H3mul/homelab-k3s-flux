@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: media
+resources:
+  - helmrelease-radarr.yaml
+  - kustomization-radarr-config-restic.yaml
+  - replication-source-radarr-config.yaml
+  - sealed-secret-radarr-api-key.yaml
