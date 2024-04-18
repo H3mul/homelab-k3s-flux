@@ -8,7 +8,7 @@ spec:
   interval: 5m
   wait: true
   prune: true
-  path: ./cluster/sonarr-volsync
+  path: ./cluster/sonarr/volsync
   sourceRef:
     kind: GitRepository
     name: flux-system

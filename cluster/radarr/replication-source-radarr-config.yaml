@@ -15,7 +15,7 @@ spec:
     storageClassName: truenas-ssd-iscsi
 
     pruneIntervalDays: 10
-    cacheCapacity: 500Mi
+    cacheCapacity: 1Gi
     retain:
       daily: 7
       weekly: 4
