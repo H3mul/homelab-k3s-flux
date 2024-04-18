@@ -3,5 +3,6 @@ kind: Kustomization
 namespace: democratic-csi
 resources:
   - helmrelease-democratic-csi-nfs.yaml
+  - helmrelease-democratic-csi-iscsi.yaml
   - sealed-secret-truenas-api-key.yaml
   - kustomization-driver-config-secrets.yaml

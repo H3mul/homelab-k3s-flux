@@ -1,0 +1,95 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: democratic-csi-ssd-iscsi
+  namespace: democratic-csi
+spec:
+  chart:
+    spec:
+      # renovate: registryUrl=https://democratic-csi.github.io/charts/
+      chart: democratic-csi
+      version: 0.14.6
+      sourceRef:
+        kind: HelmRepository
+        name: democratic-csi-charts
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: democratic-csi-ssd-iscsi
+  values:
+    # Pasted from:
+    # https://github.com/democratic-csi/charts/blob/b08d58f079d3ac812a75454c4d992f10c830af04/stable/democratic-csi/values.yaml
+
+    # Default values for democratic-csi.
+    # This is a YAML-formatted file.
+    # Declare variables to be passed into your templates.
+
+    # https://kubernetes-csi.github.io/docs/csi-driver-object.html
+    csiDriver:
+      # should be globally unique for a given cluster
+      name: org.democratic-csi.ssd.iscsi
+
+    driver:
+      # see the driver-config-secret.yaml for syntax
+      # NOTE: if setting an existing secret you must still set `driver.config.driver`
+      # to the corresponding value that you place in the secret as the value is used
+      # by the chart for other purposes beyond secret creation
+      existingConfigSecret: democratic-csi-ssd-iscsi-driver-config
+      config:
+        driver: freenas-api-iscsi
+
+    storageClasses:
+    - name: truenas-ssd-iscsi
+      defaultClass: false
+      reclaimPolicy: Delete
+      volumeBindingMode: Immediate
+      allowVolumeExpansion: true
+      parameters:
+        # for block-based storage can be ext3, ext4, xfs
+        fsType: ext4
+        detachedVolumesFromSnapshots: true
+        detachedVolumesFromVolumes: true
+      mountOptions: []
+
+    #- name:
+    #  annotations: {}
+    #  labels: {}
+    #  defaultClass: false
+    #  reclaimPolicy: Delete
+    #  volumeBindingMode: Immediate
+    #  allowVolumeExpansion: true
+    #  parameters:
+    #    # for block-based storage can be ext3, ext4, xfs
+    #    # for nfs should be nfs
+    #    fsType:
+    #  mountOptions: []
+    #  secrets:
+    #    provisioner-secret:
+    #    controller-publish-secret:
+    #    node-stage-secret:
+    #      # any arbitrary iscsiadm entries can be add by creating keys starting with node-db.<entry.name>
+    #      # if doing CHAP
+    #      node-db.node.session.auth.authmethod: CHAP
+    #      node-db.node.session.auth.username: foo
+    #      node-db.node.session.auth.password: bar
+    #
+    #      # if doing mutual CHAP
+    #      node-db.node.session.auth.username_in: baz
+    #      node-db.node.session.auth.password_in: bar
+    #    node-publish-secret:
+    #    controller-expand-secret:
+
+    volumeSnapshotClasses:
+    - name: truenas-ssd-iscsi
+      driver: org.democratic-csi.ssd.iscsi
+      deletionPolicy: Delete
+      parameters:
+        detachedSnapshots: false
+
+    #- name:
+    #  annotations: {}
+    #  labels: {}
+    #  deletionPolicy: Delete | Retain
+    #  parameters:
+    #  secrets:
+    #    snapshotter-secret:
