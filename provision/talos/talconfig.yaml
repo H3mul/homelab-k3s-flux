@@ -1,7 +1,7 @@
 clusterName: homelab
 
-talosVersion: v1.5.5
-kubernetesVersion: 1.28.4
+talosVersion: v1.6.7
+kubernetesVersion: 1.29.3
 endpoint: "https://homelab.hemul.net:6443"
 
 allowSchedulingOnMasters: true
@@ -38,6 +38,11 @@ nodes:
       busPath: /pci0000:00/0000:00:17.0/ata2/host1/target1:0:0/1:0:0:0/
 
 controlPlane:
+  schematic:
+    customization:
+      systemExtensions:
+        officialExtensions:
+          - siderolabs/iscsi-tools
   patches:
     - |-
       - op: add
