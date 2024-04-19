@@ -9,4 +9,4 @@ spec:
       storage: "5Gi"
   accessModes:
   - ReadWriteOnce
-  storageClassName: ceph-block
+  storageClassName: truenas-ssd-iscsi

@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: red-discord-bot
+resources:
+- helmrelease-dunkbot.yaml
+- persistent-volume-claim-dunkbot-data.yaml
+- kustomization-dunkbot-data-restic.yaml
+- replication-source-dunkbot-data.yaml
+- sealed-secret-dunkbot-discord-token.yaml
