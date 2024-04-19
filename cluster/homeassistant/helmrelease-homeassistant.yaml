@@ -56,15 +56,4 @@ spec:
         type: pvc
         size: 6Gi
         mountPath: /config
-        storageClass: ceph-block
-
-    # envFrom:
-    #   - secretRef:
-    #       name: homeassistant-secret
-
-    # env:
-    #   postgresql_uri:
-    #     valueFrom:
-    #       secretKeyRef:
-    #         name: pgo-cluster-pguser-homeassistant
-    #         key: uri
+        storageClass: truenas-ssd-iscsi
