@@ -29,21 +29,34 @@ spec:
                     - name: init-db
                       image: ghcr.io/onedr0p/postgres-init:16.2
                       env:
-                        - name: POSTGRES_HOST
+                        - name: INIT_POSTGRES_HOST
                           value: postgres-cluster-rw.cloudnative-pg.svc.cluster.local
-                        - name: POSTGRES_SUPER_USER
+                        - name: INIT_POSTGRES_SUPER_USER
                           valueFrom:
                             secretKeyRef:
                               name: postgres-cluster-superuser
                               key: username
-                        - name: POSTGRES_SUPER_PASS
+                        - name: INIT_POSTGRES_SUPER_PASS
                           valueFrom:
                             secretKeyRef:
                               name: postgres-cluster-superuser
                               key: password
-                      envFrom:
-                        - secretRef:
-                            name: gitea-postgres-credentials
+                        - name: INIT_POSTGRES_DBNAME
+                          valueFrom:
+                            secretKeyRef:
+                              name: gitea-postgres-credentials
+                              key: POSTGRES_DB
+                        - name: INIT_POSTGRES_USER
+                          valueFrom:
+                            secretKeyRef:
+                              name: gitea-postgres-credentials
+                              key: POSTGRES_USER
+                        - name: INIT_POSTGRES_PASS
+                          valueFrom:
+                            secretKeyRef:
+                              name: gitea-postgres-credentials
+                              key: POSTGRES_PASS
+
   valuesFrom:
   - kind: Secret
     name: gitea-postgres-credentials

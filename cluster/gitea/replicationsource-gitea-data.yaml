@@ -11,11 +11,11 @@ spec:
     repository: b2-gitea-data-restic
 
     copyMethod: Snapshot
-    volumeSnapshotClassName: ceph-block
-    storageClassName: ceph-block
+    volumeSnapshotClassName: truenas-ssd-iscsi
+    storageClassName: truenas-ssd-iscsi
 
     pruneIntervalDays: 10
-    cacheCapacity: 20Gi
+    cacheCapacity: 10Gi
     retain:
       daily: 7
       weekly: 4

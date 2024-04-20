@@ -5,3 +5,5 @@ resources:
   - helmrelease-gitea.yaml
   - kustomization-gitea-data-restic.yaml
   - replicationsource-gitea-data.yaml
+  - sealed-secret-gitea-admin-secret.yaml
+  - sealed-secret-gitea-postgres-credentials.yaml
