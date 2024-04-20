@@ -18,21 +18,21 @@ spec:
   superuserSecret:
     name: postgres-cluster-superuser
 
-  backup:
-    retentionPolicy: 30d
-    barmanObjectStore: &backupObjStore
-      wal:
-        compression: gzip
-      destinationPath: s3://cloudnative-pg-backup/
-      endpointURL: https://s3.us-east-005.backblazeb2.com
-      serverName: postgres-cluster-backup-v2
-      s3Credentials:
-        accessKeyId:
-          name: b2-cloudnative-pg-bucket-credentials
-          key: B2_ACCOUNT_ID
-        secretAccessKey:
-          name: b2-cloudnative-pg-bucket-credentials
-          key: B2_ACCOUNT_KEY
+  # backup:
+  #   retentionPolicy: 30d
+  #   barmanObjectStore: &backupObjStore
+  #     wal:
+  #       compression: gzip
+  #     destinationPath: s3://cloudnative-pg-backup/
+  #     endpointURL: https://s3.us-east-005.backblazeb2.com
+  #     serverName: postgres-cluster-backup-v2
+  #     s3Credentials:
+  #       accessKeyId:
+  #         name: b2-cloudnative-pg-bucket-credentials
+  #         key: B2_ACCOUNT_ID
+  #       secretAccessKey:
+  #         name: b2-cloudnative-pg-bucket-credentials
+  #         key: B2_ACCOUNT_KEY
 
   bootstrap:
     recovery:
@@ -41,5 +41,15 @@ spec:
   externalClusters:
     - name: clusterBackup
       barmanObjectStore:
-        <<: *backupObjStore
-        serverName: postgres-cluster-backup-v1
+        wal:
+          compression: gzip
+        destinationPath: s3://cloudnative-pg-backup/
+        endpointURL: https://s3.us-east-005.backblazeb2.com
+        serverName: postgres-cluster-backup-v2
+        s3Credentials:
+          accessKeyId:
+            name: b2-cloudnative-pg-bucket-credentials
+            key: B2_ACCOUNT_ID
+          secretAccessKey:
+            name: b2-cloudnative-pg-bucket-credentials
+            key: B2_ACCOUNT_KEY
