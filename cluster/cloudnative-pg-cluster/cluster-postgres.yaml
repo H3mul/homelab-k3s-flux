@@ -10,7 +10,7 @@ spec:
 
   storage:
     size: 10Gi
-    storageClass: ceph-block
+    storageClass: truenas-ssd-iscsi
 
   monitoring:
     enablePodMonitor: true
