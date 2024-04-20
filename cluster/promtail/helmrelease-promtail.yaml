@@ -16,9 +16,6 @@ spec:
   timeout: 5m
   releaseName: promtail
   values:
-    image:
-      repository: grafana/promtail
-      tag: 2.9.7
     serviceMonitor:
       enabled: true
     config:
