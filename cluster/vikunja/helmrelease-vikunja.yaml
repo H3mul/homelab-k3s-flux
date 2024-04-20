@@ -33,9 +33,21 @@ spec:
               secretKeyRef:
                 name: postgres-cluster-superuser
                 key: password
-        envFrom:
-          - secretRef:
-              name: vikunja-postgres-credentials
+          - name: INIT_POSTGRES_DBNAME
+            valueFrom:
+              secretKeyRef:
+                name: vikunja-postgres-credentials
+                key: POSTGRES_DB
+          - name: INIT_POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: vikunja-postgres-credentials
+                key: POSTGRES_USER
+          - name: INIT_POSTGRES_PASS
+            valueFrom:
+              secretKeyRef:
+                name: vikunja-postgres-credentials
+                key: POSTGRES_PASS
 
     image:
       repository: caddy
