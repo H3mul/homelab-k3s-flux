@@ -27,7 +27,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: ${NAS_HOST}
-    path: /mnt/hdd-unreplicated/Media/Books/Calibre Library
+    path: /mnt/hdd-replicated/Storage/Books/Calibre Library
   # mountOptions:
   # - nfsvers=3
   # - tcp
