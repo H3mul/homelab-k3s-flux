@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: 51.10.x
+      version: 58.x.x
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
@@ -3261,7 +3261,7 @@ spec:
         ##
           volumeClaimTemplate:
             spec:
-              storageClassName: ceph-block
+              storageClassName: truenas-ssd-iscsi
               accessModes: ["ReadWriteOnce"]
               resources:
                 requests:
