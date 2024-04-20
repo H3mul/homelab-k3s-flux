@@ -56,7 +56,7 @@ tasks:
           -e POSTGRES_DB="{{.dbname}}" \
           -e POSTGRES_USER="{{.dbuser}}" \
           -e POSTGRES_PASS="{{.dbpass}}" \
-          ghcr.io/onedr0p/postgres-initdb:14.7
+          ghcr.io/onedr0p/postgres-init:16.2
 
   k-init-mysql:
     desc: Manually initialize postgres-cluster using onedr0p/postgres-initdb
