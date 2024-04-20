@@ -14,82 +14,17 @@ spec:
         namespace: flux-system
   interval: 15m
   timeout: 5m
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
   values:
-    # Pasted from:
-    # https://github.com/piraeusdatastore/helm-charts/blob/7a96fea9f043f530635be4037d3a24380215ff84/charts/snapshot-controller/values.yaml
-
-    replicaCount: 1
-
-    args:
-      leaderElection: true
-      leaderElectionNamespace: "$(NAMESPACE)"
-      httpEndpoint: ":8080"
-
-    image:
-      repository: registry.k8s.io/sig-storage/snapshot-controller
-      pullPolicy: IfNotPresent
-      # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
-
-    imagePullSecrets: []
-
-    podAnnotations: {}
-
-    podLabels: {}
-
-    podSecurityContext: {}
-      # fsGroup: 2000
-
-    securityContext:
-      capabilities:
-        drop:
-        - ALL
-      readOnlyRootFilesystem: true
-      runAsNonRoot: true
-      runAsUser: 1000
-
-    resources: {}
-
-    nodeSelector: {}
-
-    tolerations: []
-
-    affinity: {}
-
-    pdb: {}
-
-    topologySpreadConstraints: []
-
-    rbac:
-      # Specifies whether RBAC resources should be created
-      create: true
-
-    serviceAccount:
-      # Specifies whether a ServiceAccount should be created
-      create: true
-      name: ""
-
-    serviceMonitor:
-      # Specifies whether a ServiceMonitor should be created
-      create: false
-
-    volumeSnapshotClasses: 
-    - name: ceph-block
-      driver: rook-ceph.rbd.csi.ceph.com
-      annotations:
-        snapshot.storage.kubernetes.io/is-default-class: "true"
-      parameters:
-        clusterID: rook-ceph
-        csi.storage.k8s.io/snapshotter-secret-name: rook-csi-rbd-provisioner
-        csi.storage.k8s.io/snapshotter-secret-namespace: rook-ceph
-      deletionPolicy: Delete
-
-    - name: ceph-filesystem
-      driver: rook-ceph.cephfs.csi.ceph.com
-      annotations:
-        snapshot.storage.kubernetes.io/is-default-class: "true"
-      parameters:
-        clusterID: rook-ceph
-        csi.storage.k8s.io/snapshotter-secret-name: rook-csi-cephfs-provisioner
-        csi.storage.k8s.io/snapshotter-secret-namespace: rook-ceph
-      deletionPolicy: Delete
+    controller:
+      serviceMonitor:
+        create: true
+    webhook:
+      enabled: true
+      tls:
+        certManagerIssuerRef:
+          name: snapshot-controller-webhook-ca
+          kind: Issuer
