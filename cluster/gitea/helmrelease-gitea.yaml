@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: gitea
-      version: 9.6.x
+      version: 10.1.x
       sourceRef:
         kind: HelmRepository
         name: gitea-charts
@@ -331,7 +331,7 @@ spec:
       accessModes:
         - ReadWriteOnce
       labels: {}
-      storageClass: ceph-block
+      storageClass: truenas-ssd-iscsi
       subPath:
       volumeName: ""
       annotations:
