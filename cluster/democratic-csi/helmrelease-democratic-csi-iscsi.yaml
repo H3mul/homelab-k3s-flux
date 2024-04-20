@@ -62,6 +62,8 @@ spec:
       parameters:
         # for block-based storage can be ext3, ext4, xfs
         fsType: ext4
+        detachedVolumesFromSnapshots: true
+        detachedVolumesFromVolumes: true
       mountOptions: []
 
     #- name:
@@ -95,6 +97,9 @@ spec:
     volumeSnapshotClasses:
     - name: truenas-ssd-iscsi
       driver: org.democratic-csi.ssd.iscsi
+      deletionPolicy: Delete
+      parameters:
+        detachedSnapshots: false
 
     #- name:
     #  annotations: {}
