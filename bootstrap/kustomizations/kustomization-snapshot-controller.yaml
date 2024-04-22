@@ -17,7 +17,3 @@ spec:
       kind: Deployment
       name: snapshot-controller
       namespace: kube-system
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: snapshot-validation-webhook
-      namespace: kube-system
