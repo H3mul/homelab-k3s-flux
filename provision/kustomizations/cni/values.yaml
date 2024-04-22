@@ -1,9 +1,5 @@
 ---
 autoDirectNodeRoutes: true
-bgp:
-  announce:
-    loadbalancerIP: true
-  enabled: false
 containerRuntime:
   integration: containerd
 endpointRoutes:
@@ -25,4 +21,4 @@ operator:
 rollOutCiliumPods: true
 securityContext:
   privileged: true
-tunnel: disabled
+routingMode: native
