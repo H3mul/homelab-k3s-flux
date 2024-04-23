@@ -743,10 +743,6 @@ data:
 
     dashboards:
       default:
-        truenas:
-          # Ref: https://grafana.com/grafana/dashboards/12921-truenas/
-          gnetId: 12921
-          datasource: InfluxDB
         opnsense:
           # Ref: https://grafana.com/grafana/dashboards/19366-opnsense/
           gnetId: 19366
