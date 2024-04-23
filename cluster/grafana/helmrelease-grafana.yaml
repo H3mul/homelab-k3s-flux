@@ -19,7 +19,11 @@ spec:
   - kind: ConfigMap
     name: helmrelease-grafana-values
     valuesKey: values.yaml
-  - targetPath: datasources.datasources\.yaml.datasources[2].secureJsonData.token
+  - targetPath: datasources.datasources\.yaml.datasources[2].user
     kind: Secret
     name: influxdb-auth
-    valuesKey: admin-token
+    valuesKey: influxdb-user
+  - targetPath: datasources.datasources\.yaml.datasources[2].secureJsonData.password
+    kind: Secret
+    name: influxdb-auth
+    valuesKey: influxdb-password

@@ -6,8 +6,8 @@ metadata:
 spec:
   chart:
     spec:
-      chart: influxdb2
-      version: 2.1.x
+      chart: influxdb
+      version: 4.12.x
       sourceRef:
         kind: HelmRepository
         name: influxdata-charts
@@ -16,25 +16,38 @@ spec:
   timeout: 5m
   releaseName: influxdb
   values:
-    pdb:
-      create: false
-
-    adminUser:
-      organization: "homelab"
-      user: "admin"
-      retention_policy: "30d"
-      bucket: "default"
-      existingSecret: influxdb-auth
-
+    service:
+      type: LoadBalancer
+      annotations:
+        external-dns.alpha.kubernetes.io/hostname: graphite.${CLUSTER_DOMAIN}
     persistence:
       enabled: true
       size: 20Gi
       storageClass: truenas-ssd-iscsi
-
-    ingress:
+    livenessProbe:
+      timeoutSeconds: 10
+    readinessProbe:
+      timeoutSeconds: 10
+    startupProbe:
       enabled: true
-      path: /
-      className: nginx
-      hostname: influx.${CLUSTER_DOMAIN}
-      tls: true
-      secretName: letsencrypt-wildcard-cert-prod
+      failureThreshold: 10
+      periodSeconds: 10
+    config:
+      graphite:
+        enabled: true
+        database: graphitedb
+        retention-policy: "30d"
+        bind-address: ":2003"
+        protocol: tcp
+        consistency-lvel: one
+        templates:
+        - "*.app env.service.resource.measurement"
+        - "servers.* .host.resource.measurement.field*"
+
+    # ingress:
+    #   enabled: true
+    #   path: /
+    #   className: nginx
+    #   hostname: influx.${CLUSTER_DOMAIN}
+    #   tls: true
+    #   secretName: letsencrypt-wildcard-cert-prod

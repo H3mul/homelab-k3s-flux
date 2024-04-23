@@ -15,7 +15,11 @@ spec:
   healthChecks:
     - apiVersion: apps/v1
       kind: StatefulSet
-      name: influxdb-influxdb2
+      name: influxdb2
+      namespace: monitoring
+    - apiVersion: apps/v1
+      kind: StatefulSet
+      name: influxdb
       namespace: monitoring
   postBuild:
     substituteFrom:

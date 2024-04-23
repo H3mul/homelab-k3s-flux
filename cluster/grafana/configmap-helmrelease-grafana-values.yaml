@@ -614,13 +614,12 @@ data:
 
         - name: InfluxDB
           type: influxdb
-          url: http://influxdb-influxdb2.monitoring.svc.cluster.local:80
+          url: http://influxdb.monitoring.svc.cluster.local:8086
           access: proxy
+          user: admin
           jsonData:
-            version: Flux
-            organization: homelab
-            defaultBucket: default
-            tlsSkipVerify: true
+            dbName: graphitedb
+            httpMode: GET
 
     #    - name: CloudWatch
     #      type: cloudwatch
