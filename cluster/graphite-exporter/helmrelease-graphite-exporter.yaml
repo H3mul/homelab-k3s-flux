@@ -23,7 +23,7 @@ spec:
             args:
               - "--graphite.mapping-config=/config/graphite_mapping.conf"
               - "--graphite.listen-address=:2003"
-              # - "--log.level=debug"
+              - "--log.level=debug"
             image:
               repository: docker.io/prom/graphite-exporter
               tag: v0.15.1
