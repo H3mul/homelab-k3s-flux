@@ -14,7 +14,7 @@ data:
 
   DNS_EMAIL: phil.d324@gmail.com
 
-  VOLSYNC_BACKUP_SCHEDULE: "0 0 * * *"
+  VOLSYNC_BACKUP_SCHEDULE: "0 0 * * 0" # Weekly
 
   B2_VOLSYNC_BUCKET: k8s-volsync-backup
 
