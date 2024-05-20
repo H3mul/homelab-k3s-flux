@@ -129,7 +129,7 @@ spec:
 
     # For the Community Edition
     faasnetes:
-      image: ghcr.io/openfaas/faas-netes:0.17.6
+      image: ghcr.io/openfaas/faas-netes:0.18.5
       resources:
         requests:
           memory: "120Mi"
