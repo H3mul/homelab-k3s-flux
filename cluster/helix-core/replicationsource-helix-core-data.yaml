@@ -1,0 +1,28 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: b2-helix-core-data
+  namespace: perforce
+spec:
+  sourcePVC: helix-core-data
+  trigger:
+    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+  restic:
+    repository: b2-helix-core-data-restic
+
+    copyMethod: Snapshot
+    volumeSnapshotClassName: truenas-ssd-iscsi
+    storageClassName: truenas-ssd-iscsi
+
+    pruneIntervalDays: 10
+    cacheCapacity: 50Gi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 6
+      within: 3d
+
+    moverSecurityContext:
+      runAsUser: 101
+      runAsGroup: 101
+      fsGroup: 101
