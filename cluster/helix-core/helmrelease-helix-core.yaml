@@ -1,0 +1,51 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: helix-core
+  namespace: perforce
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 3.2.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: helix-core
+  values:
+    controllers:
+      helix-core:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/h3mul/helix-core
+              tag: 2024.1-2596294
+            env:
+              P4PORT: &port 1666
+              P4ROOT: /opt/perforce/servers/master
+            envFrom:
+              - secretRef:
+                  name: helix-core-credentials
+    service:
+      app:
+        controller: helix-core
+        type: LoadBalancer
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: p4.${CLUSTER_DOMAIN}
+        ports:
+          http:
+            port: *port
+
+
+    persistence:
+      data:
+        enabled: true
+        type: persistentVolumeClaim
+        size: 50Gi
+        storageClass: truenas-ssd-iscsi
+        accessMode: ReadWriteOnce
+        globalMounts:
+          - path: /opt/perforce/servers/master
