@@ -1,10 +1,8 @@
-# K3S Cluster FluxCD Repository
+# Talos K8 Cluster FluxCD Repository
 
 Based on the guide in
 
 https://geek-cookbook.funkypenguin.co.nz/kubernetes/
-
-Bootstrap commands (for fresh k3s install)
 
 ## Install local administration tools
 
