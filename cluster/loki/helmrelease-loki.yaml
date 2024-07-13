@@ -53,6 +53,16 @@ spec:
       analytics:
         reporting_enabled: false
 
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      hosts:
+        - loki.${CLUSTER_DOMAIN}
+      tls:
+       - secretName: letsencrypt-wildcard-cert-prod
+         hosts:
+           - loki.${CLUSTER_DOMAIN}
+
     singleBinary:
       replicas: 1
       persistence:
