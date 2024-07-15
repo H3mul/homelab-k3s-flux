@@ -35,17 +35,17 @@ spec:
               fsGroup: 568
               fsGroupChangePolicy: OnRootMismatch
 
-        initContainers:
-          chown:
-            image:
-              repository: alpine
-              tag: 3.20
-            command:
-              - chown
-            args:
-              - 568:568
-              - -R
-              - /config
+        # initContainers:
+        #   chown:
+        #     image:
+        #       repository: alpine
+        #       tag: 3.20
+        #     command:
+        #       - chown
+        #     args:
+        #       - 568:568
+        #       - -R
+        #       - /config
 
     service:
       main:
