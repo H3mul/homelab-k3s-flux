@@ -19,35 +19,39 @@ spec:
     global:
       nameOverride: homeassistant
     controllers:
-      containers:
+      homeassistant:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/onedr0p/home-assistant
+              tag: 2024.7.2
+            env:
+              TZ: ${TIMEZONE}
+              HOME_ASSISTANT__HACS_INSTALL: true
+
         initContainers:
           chown:
-            image: alpine
-            tag: 3.20
+            image:
+              repository: alpine
+              tag: 3.20
             command:
               - chown
-            commandArgs:
+            args:
               - nobody:nogroup
               - -R
               - /config
 
-        main:
-          image:
-            repository: ghcr.io/onedr0p/home-assistant
-            tag: 2024.7.2
-          env:
-            TZ: ${TIMEZONE}
-            HOME_ASSISTANT__HACS_INSTALL: true
-          service:
-            main:
-              ports:
-                http:
-                  port: 8123
+    service:
+      main:
+        controller: homeassistant
+        ports:
+          http:
+            port: 8123
 
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        className: nginx
         annotations:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_set_header Host $http_host;
@@ -56,6 +60,10 @@ spec:
           - host: &host hass.${CLUSTER_DOMAIN}
             paths:
               - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
         tls:
         - secretName: letsencrypt-wildcard-cert-prod
           hosts:
@@ -67,5 +75,6 @@ spec:
         type: persistentVolumeClaim
         size: 6Gi
         storageClass: truenas-ssd-iscsi
+        accessMode: ReadWriteOnce
         globalMounts:
-          path: /config
+          - path: /config
