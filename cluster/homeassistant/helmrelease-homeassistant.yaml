@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.x
+      version: 3.2.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -18,17 +18,31 @@ spec:
   values:
     global:
       nameOverride: homeassistant
-    image:
-      repository: ghcr.io/onedr0p/home-assistant
-      tag: 2024.7.2
-    env:
-      TZ: ${TIMEZONE}
-      HOME_ASSISTANT__HACS_INSTALL: true
-    service:
-      main:
-        ports:
-          http:
-            port: 8123
+    controllers:
+      containers:
+        initContainers:
+          chown:
+            image: alpine
+            tag: 3.20
+            command:
+              - chown
+            commandArgs:
+              - nobody:nogroup
+              - -R
+              - /config
+
+        main:
+          image:
+            repository: ghcr.io/onedr0p/home-assistant
+            tag: 2024.7.2
+          env:
+            TZ: ${TIMEZONE}
+            HOME_ASSISTANT__HACS_INSTALL: true
+          service:
+            main:
+              ports:
+                http:
+                  port: 8123
 
     ingress:
       main:
@@ -47,16 +61,11 @@ spec:
           hosts:
           - *host
 
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: OnRootMismatch
-
     persistence:
       config:
         enabled: true
-        type: pvc
+        type: persistentVolumeClaim
         size: 6Gi
-        mountPath: /config
         storageClass: truenas-ssd-iscsi
+        globalMounts:
+          path: /config
