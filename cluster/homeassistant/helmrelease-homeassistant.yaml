@@ -29,6 +29,12 @@ spec:
               TZ: ${TIMEZONE}
               HOME_ASSISTANT__HACS_INSTALL: true
 
+            securityContext:
+              runAsUser: 568
+              runAsGroup: 568
+              fsGroup: 568
+              fsGroupChangePolicy: OnRootMismatch
+
         initContainers:
           chown:
             image:
@@ -37,7 +43,7 @@ spec:
             command:
               - chown
             args:
-              - nobody:nogroup
+              - 568:568
               - -R
               - /config
 
