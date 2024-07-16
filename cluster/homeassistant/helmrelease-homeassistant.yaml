@@ -27,6 +27,7 @@ spec:
               tag: 2024.3.0 # renovate: ignore
             env:
               TZ: ${TIMEZONE}
+              LD_LIBRARY_PATH: /usr/lib
               HOME_ASSISTANT__HACS_INSTALL: true
 
             securityContext:
