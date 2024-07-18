@@ -23,7 +23,7 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/onedr0p/home-assistant
+              repository: ghcr.io/h3mul/home-assistant
               tag: 2024.7.2 # renovate: ignore
             env:
               TZ: ${TIMEZONE}
