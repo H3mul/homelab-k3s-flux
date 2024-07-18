@@ -10,7 +10,7 @@ spec:
   restic:
     repository: b2-mongo-dump-restic
 
-    copyMethod: Snapshot
+    copyMethod: Clone
     volumeSnapshotClassName: ceph-block
     storageClassName: ceph-block
 

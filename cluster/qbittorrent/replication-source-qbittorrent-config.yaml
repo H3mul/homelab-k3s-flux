@@ -31,7 +31,7 @@ spec:
   restic:
     repository: b2-qbittorrent-config-restic
 
-    copyMethod: Snapshot
+    copyMethod: Clone
     volumeSnapshotClassName: truenas-ssd-iscsi
     storageClassName: truenas-ssd-iscsi
 
