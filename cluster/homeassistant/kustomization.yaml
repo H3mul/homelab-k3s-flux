@@ -6,3 +6,4 @@ resources:
   - kustomization-homeassistant-config-restic.yaml
   - replication-source-homeassistant-config.yaml
   - sealed-secret-code-server-password.yaml
+  - sealed-secret-hass-prometheus-token.yaml

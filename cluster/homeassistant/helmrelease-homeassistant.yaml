@@ -85,6 +85,20 @@ spec:
           http:
             port: *codeServerPort
 
+    serviceMonitor:
+      main:
+        enabled: true
+        serviceName: homeassistant-main
+        endpoints:
+          - port: http
+            scheme: http
+            path: /api/prometheus
+            authorization:
+              type: Bearer
+              credentials:
+                name: hass-prometheus-token
+                key: TOKEN
+
     ingress:
       main:
         enabled: true
