@@ -3300,6 +3300,10 @@ spec:
           - job_name: opnsense
             static_configs:
               - targets: [ '${OPNSENSE_ROUTER}:9100' ]
+              
+          - job_name: octoprint
+            static_configs:
+              - targets: [ '${OCTOPRINT_ADDRESS}:9100' ]
 
         # - job_name: kube-etcd
         #   kubernetes_sd_configs:
