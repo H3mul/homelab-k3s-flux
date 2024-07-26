@@ -10,7 +10,7 @@ spec:
   restic:
     repository: b2-bazarr-config-restic
 
-    copyMethod: Clone
+    copyMethod: Snapshot
     volumeSnapshotClassName: truenas-ssd-iscsi
     storageClassName: truenas-ssd-iscsi
 

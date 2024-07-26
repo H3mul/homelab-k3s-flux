@@ -10,7 +10,7 @@ spec:
   restic:
     repository: b2-syncthing-config-restic
 
-    copyMethod: Clone
+    copyMethod: Snapshot
     volumeSnapshotClassName: ceph-block
     storageClassName: ceph-block
 
