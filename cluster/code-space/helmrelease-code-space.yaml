@@ -24,6 +24,13 @@ spec:
               repository: ghcr.io/h3mul/code-space
               tag: 1.0.0
               pullPolicy: Always
+            env:
+              USERNAME: hemul
+              VS_SERVER_USER: hemul
+              CHEZMOI_GH_USER: h3mul
+            envFrom:
+              - secretRef:
+                  name: code-server-password 
            
     service:
       code-server:
@@ -63,5 +70,43 @@ spec:
         size: 50Gi
         storageClass: truenas-ssd-iscsi
         accessMode: ReadWriteOnce
-        globalMounts:
-          - path: /home/hemul
+        advancedMounts:
+          code-space:
+            main:
+              - path: /home/hemul
+
+      ssh-host-keys:
+        enabled: true
+        type: secret
+        name: code-space-ssh-host-keys
+        defaultMode: 0600
+        advancedMounts:
+          code-space:
+            main:
+              - path: /etc/ssh/ssh_host_ecdsa_key
+                subPath: ssh_host_ecdsa_key
+                readOnly: true
+              - path: /etc/ssh/ssh_host_ed25519_key
+                subPath: ssh_host_ed25519_key
+                readOnly: true
+              - path: /etc/ssh/ssh_host_rsa_key
+                subPath: ssh_host_rsa_key
+                readOnly: true
+
+      ssh-host-pub-keys:
+        enabled: true
+        type: secret
+        name: code-space-ssh-host-keys
+        defaultMode: 0644
+        advancedMounts:
+          code-space:
+            main:
+              - path: /etc/ssh/ssh_host_ecdsa_key.pub
+                subPath: ssh_host_ecdsa_key.pub
+                readOnly: true
+              - path: /etc/ssh/ssh_host_ed25519_key.pub
+                subPath: ssh_host_ed25519_key.pub
+                readOnly: true
+              - path: /etc/ssh/ssh_host_rsa_key.pub
+                subPath: ssh_host_rsa_key.pub
+                readOnly: true
