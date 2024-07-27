@@ -1,0 +1,67 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: code-space
+  namespace: code-space
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 3.2.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: code-space
+  values:
+    controllers:
+      code-space:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/h3mul/code-space
+              tag: 1.0.0
+              pullPolicy: Always
+           
+    service:
+      code-server:
+        controller: code-space
+        ports:
+          http:
+            port: 8080
+
+      ssh:
+        controller: code-space
+        type: LoadBalancer
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: code.${CLUSTER_DOMAIN}
+        ports:
+          ssh:
+            port: 22
+
+    ingress:
+      code-server:
+        className: nginx
+        hosts:
+          - host: &code-host code-space.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: code-server
+                  port: http
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *code-host
+
+    persistence:
+      home:
+        enabled: true
+        type: persistentVolumeClaim
+        size: 50Gi
+        storageClass: truenas-ssd-iscsi
+        accessMode: ReadWriteOnce
+        globalMounts:
+          - path: /home/hemul
