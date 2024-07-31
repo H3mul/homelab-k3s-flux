@@ -5,3 +5,4 @@ secret-*.yaml
 !*secret-*-restic.yaml
 !*secret-unsealed*.yaml
 !*.sops.yaml
+provision/kustomizations/**/charts
