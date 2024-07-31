@@ -71,6 +71,10 @@ spec:
                   - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
                   - https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
                   - https://raw.githubusercontent.com/deathbybandaid/piholeparser/master/Subscribable-Lists/CountryCodesLists/Russia.txt
+                  - |
+                    # Block Tapo/TP Link
+                    n-device-api.tplinkcloud.com 
+                    security.iot.i.tplinknbu.com
               whiteLists:
                 ads:
                   - |
