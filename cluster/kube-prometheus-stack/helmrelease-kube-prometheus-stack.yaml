@@ -1937,7 +1937,7 @@ spec:
       podLabels:
         ## Add the 'node-exporter' label to be used by serviceMonitor to match standard common usage in rules and grafana dashboards
         ##
-        jobLabel: node-exporter
+        jobLabel: kube
       releaseLabel: true
       extraArgs:
         - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
