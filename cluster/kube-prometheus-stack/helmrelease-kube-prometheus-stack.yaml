@@ -3608,7 +3608,7 @@ spec:
         ## prometheus resource to be created with selectors based on values in the helm deployment,
         ## which will also match the PrometheusRule resources created
         ##
-        ruleSelectorNilUsesHelmValues: true
+        ruleSelectorNilUsesHelmValues: false
 
         ## PrometheusRules to be selected for target discovery.
         ## If {}, select all PrometheusRules
@@ -3656,7 +3656,7 @@ spec:
         ## prometheus resource to be created with selectors based on values in the helm deployment,
         ## which will also match the podmonitors created
         ##
-        podMonitorSelectorNilUsesHelmValues: true
+        podMonitorSelectorNilUsesHelmValues: false
 
         ## PodMonitors to be selected for target discovery.
         ## If {}, select all PodMonitors
@@ -3678,7 +3678,7 @@ spec:
         ## prometheus resource to be created with selectors based on values in the helm deployment,
         ## which will also match the probes created
         ##
-        probeSelectorNilUsesHelmValues: true
+        probeSelectorNilUsesHelmValues: false
 
         ## Probes to be selected for target discovery.
         ## If {}, select all Probes
