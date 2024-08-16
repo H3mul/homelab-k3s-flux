@@ -3630,7 +3630,7 @@ spec:
         ## prometheus resource to be created with selectors based on values in the helm deployment,
         ## which will also match the servicemonitors created
         ##
-        serviceMonitorSelectorNilUsesHelmValues: true
+        serviceMonitorSelectorNilUsesHelmValues: false
 
         ## ServiceMonitors to be selected for target discovery.
         ## If {}, select all ServiceMonitors
@@ -3697,7 +3697,7 @@ spec:
         ## prometheus resource to be created with selectors based on values in the helm deployment,
         ## which will also match the scrapeConfigs created
         ##
-        scrapeConfigSelectorNilUsesHelmValues: true
+        scrapeConfigSelectorNilUsesHelmValues: false
 
         ## scrapeConfigs to be selected for target discovery.
         ## If {}, select all scrapeConfigs
@@ -4520,7 +4520,7 @@ spec:
         ## prometheus resource to be created with selectors based on values in the helm deployment,
         ## which will also match the PrometheusRule resources created
         ##
-        ruleSelectorNilUsesHelmValues: true
+        ruleSelectorNilUsesHelmValues: false
 
         ## PrometheusRules to be selected for target discovery.
         ## If {}, select all PrometheusRules
