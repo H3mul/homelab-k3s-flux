@@ -3498,7 +3498,10 @@ spec:
 
         # EnableFeatures API enables access to Prometheus disabled features.
         # ref: https://prometheus.io/docs/prometheus/latest/disabled_features/
-        enableFeatures: []
+        enableFeatures:
+          - auto-gomaxprocs
+          - memory-snapshot-on-shutdown
+          - new-service-discovery-manager
         # - exemplar-storage
 
         ## Image of Prometheus.
