@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: drone-runner-docker
-      version: 0.6.x
+      version: 0.7.x
       sourceRef:
         kind: HelmRepository
         name: drone
