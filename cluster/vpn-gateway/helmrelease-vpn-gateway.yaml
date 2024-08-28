@@ -115,9 +115,12 @@ spec:
           value: "private internet access"
         - name:  VPN_INTERFACE
           value: tun0
+        - name:  OPENVPN_ENDPOINT_PORT
+          value: 1197
         - name:  OPENVPN_PROTOCOL
           value: udp
-        - name:  FIREWALL
+          # Make sure firewall is off, otherwise child pods cannot reach gateway pod.
+        - name:  FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT
           value: "off"
         - name:  DOT
           value: "off"
