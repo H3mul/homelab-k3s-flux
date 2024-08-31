@@ -971,7 +971,7 @@ spec:
         # -- The Docker registry
         registry: quay.io
         repository: kiwigrid/k8s-sidecar
-        tag: 1.27.5
+        tag: 1.27.6
         sha: ""
       imagePullPolicy: IfNotPresent
       resources: {}
