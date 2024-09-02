@@ -616,7 +616,7 @@ spec:
       image:
         registry: docker.io
         repository: bitnami/cainjector
-        tag: 1.15.3-debian-12-r0
+        tag: 1.15.3-debian-12-r1
         digest: ""
         ## Specify a imagePullPolicy
         ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
