@@ -22,7 +22,7 @@ spec:
           main:
             image:
               repository: linuxserver/librespeed
-              tag: 5.2.5
+              tag: 5.4.20240804
             env:
               TZ: "${TIMEZONE}"
               PUID: 1000
