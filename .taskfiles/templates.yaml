@@ -90,10 +90,11 @@ tasks:
     desc: generate an empty kubernetes secret
     vars:
       namespace: "{{.ns}}"
+      literal: "{{.literal}}"
     preconditions:
       - sh: "[ '{{.name}}' != '<no value>' ]"
         msg: "Variable .name is not set"
       - sh: "[ '{{.namespace}}' != '<no value>' ]"
         msg: "Variable .namespace is not set"
     cmds:
-      - kubectl -n {{.namespace}} create secret generic {{.name}} --from-literal=key=value --dry-run=client -o yaml
+      - kubectl -n {{.namespace}} create secret generic {{.name}} --from-literal={{.literal}} --dry-run=client -o yaml

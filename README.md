@@ -7,7 +7,7 @@ https://geek-cookbook.funkypenguin.co.nz/kubernetes/
 ## Install local administration tools
 
 ```
-yay -S kubectl kubeseal flux-bin talosctl talhelper
+yay -S kubectl kubeseal flux-bin talosctl talhelper sops go-task
 ```
 
 ## 1. Install Talos
