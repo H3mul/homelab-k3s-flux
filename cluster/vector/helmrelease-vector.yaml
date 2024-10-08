@@ -28,8 +28,10 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: vector.${CLUSTER_DOMAIN}
         ports:
-          http:
+          talos_service_log_input:
             port: 5170
+          talos_kernel_log_input:
+            port: 5171
 
     persistence:
       config:

@@ -8,36 +8,71 @@ data:
     # From: https://github.com/rgl/talos-vagrant/blob/caed35d76c4e495f5aad73199cec5472f114b30f/vector.yml
 
     sources:
-      talos_source:
+      talos_service_source:
         type: socket
         mode: tcp
         address: 0.0.0.0:5170
         decoding:
           codec: json
         host_key: __host
+        max_length: 102400
+
+      talos_kernel_source:
+        type: socket
+        mode: tcp
+        address: 0.0.0.0:5171
+        decoding:
+          codec: json
+        host_key: __host
+        max_length: 102400
+
     transforms:
-      talos_transform:
+      talos_service_transform:
         type: remap
         inputs:
-          - talos_source
+          - talos_service_source
         source: |
           .timestamp = del(."talos-time")
+
+      talos_kernel_transform:
+        type: remap
+        inputs:
+          - talos_service_source
+        source: |
+          .timestamp = del(."talos-time")
+
+
     sinks:
-      loki:
+      talos_service:
         type: loki
         inputs:
-          - talos_transform
+          - talos_service_transform
         endpoint: http://loki-gateway.monitoring.svc.cluster.local
         labels:
           job: talos
           host: '{{ __host }}'
           service: '{{ "talos-service" }}'
           level: '{{ "talos-level" }}'
+          namespace: "talos:service"
         encoding:
           codec: json
-          except_fields:
-            - __host
-            - '"talos-service"'
-            - '"talos-level"'
+          except_fields: [ "__host" ]
+        batch:
+          max_bytes: 1048576 # 1 MiB
+
+      talos_kernel:
+        type: loki
+        inputs:
+          - talos_kernel_transform
+        endpoint: http://loki-gateway.monitoring.svc.cluster.local
+        labels:
+          job: talos
+          host: '{{ __host }}'
+          facility: "{{ facility }}"
+          level: '{{ "talos-level" }}'
+          namespace: "talos:kernel"
+        encoding:
+          codec: json
+          except_fields: [ "__host" ]
         batch:
           max_bytes: 1048576 # 1 MiB
