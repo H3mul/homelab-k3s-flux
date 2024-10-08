@@ -82,6 +82,9 @@ controlPlane:
           destinations:
             - endpoint: tcp://vector.hemul.net:5170
               format: json_lines
+        install:
+          extraKernelArgs:
+            - talos.logging.kernel=tcp://vector.hemul.net:5170
 
     - |-
       cluster:
