@@ -132,9 +132,10 @@ spec:
               name: private-internet-access-openvpn
 
         securityContext:
-          capabilities:
-            add:
-              - NET_ADMIN
+          privileged: true
+          # capabilities:
+          #   add:
+          #     - NET_ADMIN
 
         livenessProbe:
           exec:
