@@ -3,6 +3,6 @@ kind: CiliumLoadBalancerIPPool
 metadata:
   name: default
 spec:
-  cidrs:
+  blocks:
     - cidr: ${LB_ADDRESS_POOL}
   disabled: false

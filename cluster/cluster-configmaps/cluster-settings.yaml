@@ -25,11 +25,11 @@ data:
 
   NAS_HOST: truenas.hemul.net
 
-  ROUTER_BGP_ASN: "64501"
   # Must be unique on the network
-  LOCAL_BGP_ASN: "64502"
+  ROUTER_BGP_ASN: "64503"
+  LOCAL_BGP_ASN: "64504"
 
   BLOCKY_IP: 10.1.2.51
-  LB_ADDRESS_POOL: 10.1.2.1-10.1.2.254
+  LB_ADDRESS_POOL: "10.1.2.0/24"
 
   BITTORRENT_PORT: "18289"
