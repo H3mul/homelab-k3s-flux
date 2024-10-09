@@ -1,0 +1,10 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeeringPolicy
+metadata:
+  name: opensense
+spec:
+  virtualRouters:
+    - localASN: ${LOCAL_BGP_ASN}
+      neighbors:
+        - peerASN: ${ROUTER_BGP_ASN}
+          peerAddress: ${OPNSENSE_ROUTER}
