@@ -1,26 +1,61 @@
 ---
+
+cluster:
+    id: 1
+    name: homelab
+k8sServiceHost: homelab.hemul.net
+k8sServicePort: 6443
+
+ipv4NativeRoutingCIDR: 10.244.0.0/16
+routingMode: native
+
+kubeProxyReplacement: true
 autoDirectNodeRoutes: true
+
 endpointRoutes:
   enabled: true
+
 hubble:
   enabled: false
 ipam:
   mode: kubernetes
-ipv4NativeRoutingCIDR: 10.244.0.0/16
-k8sServiceHost: homelab.hemul.net
-k8sServicePort: 6443
-kubeProxyReplacement: true
+
 l2announcements:
   enabled: true
+
+bgpControlPlane:
+  enabled: true
+
+bpf:
+  masquerade: true
+
 externalIPs:
   enabled: true
+
 loadBalancer:
   algorithm: maglev
   mode: dsr
+
 localRedirectPolicy: true
+
+rollOutCiliumPods: true
 operator:
   rollOutPods: true
-rollOutCiliumPods: true
+
 securityContext:
   privileged: true
-routingMode: native
+
+
+# cni:
+#   exclusive: true  # Different from guide
+
+# hubble:
+#   enabled: false
+
+# ipam:
+#   mode: kubernetes
+
+# encryption:
+#   enabled: false
+#   # type: wireguard
+#   # nodeEncryption: false
