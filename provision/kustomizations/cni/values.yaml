@@ -21,6 +21,7 @@ loadBalancer:
   algorithm: maglev
   mode: dsr
 localRedirectPolicy: true
+externalTrafficPolicy: Cluster
 operator:
   rollOutPods: true
 rollOutCiliumPods: true
