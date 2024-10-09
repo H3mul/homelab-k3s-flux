@@ -9,3 +9,6 @@ spec:
       neighbors:
         - peerASN: ${ROUTER_BGP_ASN}
           peerAddress: ${OPNSENSE_ROUTER}/32
+      serviceAdvertisements:
+        - LoadBalancerIP
+        - ExternalIP
