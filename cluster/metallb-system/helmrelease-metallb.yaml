@@ -17,7 +17,7 @@ spec:
   releaseName: metallb
   values:
     # Pasted from:
-    # https://github.com/metallb/metallb/blob/a8d532ed4422124414937e95f86e4e6b20f7b632/charts/metallb/values.yaml
+    # https://github.com/metallb/metallb/blob/80fa562f23fdf05b578329adbcfc4c5da534760f/charts/metallb/values.yaml
     # Default values for metallb.
     # This is a YAML-formatted file.
     # Declare variables to be passed into your templates.
@@ -268,6 +268,10 @@ spec:
         periodSeconds: 10
         successThreshold: 1
         timeoutSeconds: 1
+      tlsMinVersion: "VersionTLS12"
+      tlsCipherSuites: ""
+
+      extraContainers: []
 
     # speaker contains configuration specific to the MetalLB speaker
     # daemonset.
@@ -280,9 +284,13 @@ spec:
       memberlist:
         enabled: true
         mlBindPort: 7946
+        mlBindAddrOverride: ""
         mlSecretKeyPath: "/etc/ml_secret_key"
       excludeInterfaces:
         enabled: true
+      # ignore the exclude-from-external-loadbalancer label
+      ignoreExcludeLB: false
+
       image:
         repository: quay.io/metallb/speaker
         tag:
@@ -302,6 +310,7 @@ spec:
         # true, a name is generated using the fullname template
         name: ""
         annotations: {}
+      securityContext: {}
       ## Defines a secret name for the controller to generate a memberlist encryption secret
       ## By default secretName: {{ "metallb.fullname" }}-memberlist
       ##
@@ -339,10 +348,10 @@ spec:
       # frr contains configuration specific to the MetalLB FRR container,
       # for speaker running alongside FRR.
       frr:
-        enabled: false
+        enabled: true
         image:
           repository: quay.io/frrouting/frr
-          tag: 8.5.6
+          tag: 9.1.0
           pullPolicy:
         metricsPort: 7473
         resources: {}
@@ -351,12 +360,26 @@ spec:
         # expose the frr metrics via tls.
         # secureMetricsPort: 9121
 
+
       reloader:
         resources: {}
 
       frrMetrics:
         resources: {}
 
+      extraContainers: []
+
     crds:
       enabled: true
       validationFailurePolicy: Fail
+
+    # frrk8s contains the configuration related to using an frrk8s instance
+    # (github.com/metallb/frr-k8s) as the backend for the BGP implementation.
+    # This allows configuring additional frr parameters in combination to those
+    # applied by MetalLB.
+    frrk8s:
+      # if set, enables frrk8s as a backend. This is mutually exclusive to frr
+      # mode.
+      enabled: false
+      external: false
+      namespace: ""
