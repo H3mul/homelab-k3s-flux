@@ -1,7 +1,5 @@
 ---
 autoDirectNodeRoutes: true
-containerRuntime:
-  integration: containerd
 endpointRoutes:
   enabled: true
 hubble:
@@ -12,6 +10,10 @@ ipv4NativeRoutingCIDR: 10.244.0.0/16
 k8sServiceHost: homelab.hemul.net
 k8sServicePort: 6443
 kubeProxyReplacement: true
+l2announcements:
+  enabled: true
+externalIPs:
+  enabled: true
 loadBalancer:
   algorithm: maglev
   mode: dsr
