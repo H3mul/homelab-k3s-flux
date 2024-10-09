@@ -14,9 +14,10 @@ spec:
 
   healthChecks:
     - apiVersion: apps/v1
-      kind: Daemonset
+      kind: DaemonSet
       name: cilium
       namespace: kube-system
+
   postBuild:
     substituteFrom:
       - kind: ConfigMap
