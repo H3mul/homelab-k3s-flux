@@ -33,7 +33,8 @@ metadata:
   name: openwrt
   namespace: static-endpoint-ingress
   annotations:
-    ingress.kubernetes.io/protocol: https
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/proxy-ssl-verify: off
 spec:
   ingressClassName: nginx
   tls:
