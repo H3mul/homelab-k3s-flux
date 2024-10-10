@@ -75,7 +75,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: traefik
+        ingressClassName: nginx
 
         hosts:
           - host: &console-host "minio.${CLUSTER_DOMAIN}"
@@ -90,7 +90,7 @@ spec:
             secretName: letsencrypt-wildcard-cert-prod
       s3:
         enabled: true
-        ingressClassName: traefik
+        ingressClassName: nginx
         annotations:
           # nginx.ingress.kubernetes.io/proxy-connect-timeout: "180"
           # nginx.ingress.kubernetes.io/proxy-body-size: 1024m

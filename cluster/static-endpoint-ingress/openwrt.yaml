@@ -35,7 +35,7 @@ metadata:
   annotations:
     ingress.kubernetes.io/protocol: https
 spec:
-  ingressClassName: traefik
+  ingressClassName: nginx
   tls:
   - secretName: letsencrypt-wildcard-cert-prod
     hosts:

@@ -327,7 +327,7 @@ spec:
         hosts:
         - *host
       annotations:
-        kubernetes.io/ingress.class: traefik
+        kubernetes.io/ingress.class: nginx
 
       ## You can specify the ingress controller by using the ingressClassName
       #ingressClassName: nginx
