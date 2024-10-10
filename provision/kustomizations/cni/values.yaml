@@ -7,12 +7,30 @@ ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: 10.244.0.0/16
 routingMode: native
-# autoDirectNodeRoutes: true
+autoDirectNodeRoutes: true
 k8sServiceHost: homelab.hemul.net
 k8sServicePort: 6443
 kubeProxyReplacement: true
+kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
+bpf:
+  masquerade: false
+  tproxy: true
+cgroup:
+  automount:
+    enabled: false
+  hostRoot: /sys/fs/cgroup
+envoy:
+      enabled: false
+devices:
+  - eno1
 l2announcements:
   enabled: true
+bgp:
+  enabled: false
+  announce:
+    loadbalancerIP: true
+    podCIDR: false
+l7Proxy: true
 bgpControlPlane:
   enabled: true
 externalIPs:
@@ -21,9 +39,24 @@ loadBalancer:
   algorithm: maglev
   mode: dsr
 localRedirectPolicy: true
-externalTrafficPolicy: Cluster
 operator:
   rollOutPods: true
 rollOutCiliumPods: true
 securityContext:
-  privileged: true
+  capabilities:
+    ciliumAgent:
+      - CHOWN
+      - KILL
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    cleanCiliumState:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE

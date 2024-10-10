@@ -5,7 +5,10 @@ metadata:
 spec:
   virtualRouters:
     - localASN: ${LOCAL_BGP_ASN}
-      exportPodCIDR: true
+      exportPodCIDR: false
+      serviceSelector:
+        matchExpressions:
+          - { key: somekey, operator: NotIn, values: ["never-used-value"] }
       neighbors:
         - peerASN: ${ROUTER_BGP_ASN}
           peerAddress: ${OPNSENSE_ROUTER}/32
