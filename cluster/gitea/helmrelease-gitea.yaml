@@ -15,47 +15,46 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: gitea
-  # postRenderers:
-  #   - kustomize:
-  #       patchesStrategicMerge:
-  #         - kind: Deployment
-  #           apiVersion: apps/v1
-  #           metadata:
-  #             name: gitea
-  #           spec:
-  #             template:
-  #               spec:
-  #                 initContainers:
-  #                   - name: init-db
-  #                     image: ghcr.io/onedr0p/postgres-init:16.3
-  #                     env:
-  #                       - name: INIT_POSTGRES_HOST
-  #                         value: postgres-cluster-rw.cloudnative-pg.svc.cluster.local
-  #                       - name: INIT_POSTGRES_SUPER_USER
-  #                         valueFrom:
-  #                           secretKeyRef:
-  #                             name: postgres-cluster-superuser
-  #                             key: username
-  #                       - name: INIT_POSTGRES_SUPER_PASS
-  #                         valueFrom:
-  #                           secretKeyRef:
-  #                             name: postgres-cluster-superuser
-  #                             key: password
-  #                       - name: INIT_POSTGRES_DBNAME
-  #                         valueFrom:
-  #                           secretKeyRef:
-  #                             name: gitea-postgres-credentials
-  #                             key: POSTGRES_DB
-  #                       - name: INIT_POSTGRES_USER
-  #                         valueFrom:
-  #                           secretKeyRef:
-  #                             name: gitea-postgres-credentials
-  #                             key: POSTGRES_USER
-  #                       - name: INIT_POSTGRES_PASS
-  #                         valueFrom:
-  #                           secretKeyRef:
-  #                             name: gitea-postgres-credentials
-  #                             key: POSTGRES_PASS
+  postRenderers:
+    - kustomize:
+        patches:
+          - target: 
+              kind: Deployment
+              name: gitea
+            patch: |
+              - op: add
+                path: /spec/template/spec/initContainers/0
+                value:
+                  name: init-db
+                  image: ghcr.io/onedr0p/postgres-init:16.3
+                  env:
+                    - name: INIT_POSTGRES_HOST
+                      value: postgres-cluster-rw.cloudnative-pg.svc.cluster.local
+                    - name: INIT_POSTGRES_SUPER_USER
+                      valueFrom:
+                        secretKeyRef:
+                          name: postgres-cluster-superuser
+                          key: username
+                    - name: INIT_POSTGRES_SUPER_PASS
+                      valueFrom:
+                        secretKeyRef:
+                          name: postgres-cluster-superuser
+                          key: password
+                    - name: INIT_POSTGRES_DBNAME
+                      valueFrom:
+                        secretKeyRef:
+                          name: gitea-postgres-credentials
+                          key: POSTGRES_DB
+                    - name: INIT_POSTGRES_USER
+                      valueFrom:
+                        secretKeyRef:
+                          name: gitea-postgres-credentials
+                          key: POSTGRES_USER
+                    - name: INIT_POSTGRES_PASS
+                      valueFrom:
+                        secretKeyRef:
+                          name: gitea-postgres-credentials
+                          key: POSTGRES_PASS
 
   valuesFrom:
   - kind: Secret
@@ -569,7 +568,6 @@ spec:
     ## @param redis-cluster.usePassword Whether to use password authentication
     redis-cluster:
       enabled: false
-      usePassword: false
 
     ## @section postgresql-ha
     #
