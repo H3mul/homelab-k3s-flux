@@ -136,7 +136,7 @@ spec:
     # -- Create a default IngressClass for Traefik
     ingressClass:
       enabled: true
-      isDefaultClass: true
+      isDefaultClass: false
       # name: my-custom-class
 
     # Traefik experimental features

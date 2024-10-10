@@ -144,7 +144,7 @@ spec:
         # -- Is this ingressClass enabled or not
         enabled: true
         # -- Is this the default ingressClass for the cluster
-        default: false
+        default: true
         # -- Controller-value of the controller that is processing this ingressClass
         controllerValue: "k8s.io/ingress-nginx"
         # -- Parameters is a link to a custom resource containing additional
