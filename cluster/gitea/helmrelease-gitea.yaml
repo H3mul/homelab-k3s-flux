@@ -568,7 +568,7 @@ spec:
     ## @param redis-cluster.enabled Enable redis
     ## @param redis-cluster.usePassword Whether to use password authentication
     redis-cluster:
-      enabled: true
+      enabled: false
       usePassword: false
 
     ## @section postgresql-ha
