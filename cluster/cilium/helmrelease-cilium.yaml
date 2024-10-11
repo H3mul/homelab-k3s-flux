@@ -19,3 +19,34 @@ spec:
   valuesFrom:
     - kind: ConfigMap
       name: cilium-helm-values
+  values:
+    hubble:
+      enabled: true
+      metrics:
+        enabled:
+          - dns:query;ignoreAAAA
+          - drop
+          - tcp
+          - flow
+          - port-distribution
+          - icmp
+          - http
+        serviceMonitor:
+          enabled: true
+      relay:
+        enabled: true
+        rollOutPods: true
+      dashboards:
+        enabled: false
+      ui:
+        enabled: true
+        ingress:
+          enabled: true
+          className: nginx
+          hosts:
+            - &host hubble.${CLUSTER_DOMAIN}
+          tls:
+            - secretName: letsencrypt-wildcard-cert-prod
+              hosts:
+              - *host
+        rollOutPods: true

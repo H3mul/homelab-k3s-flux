@@ -20,7 +20,7 @@ cgroup:
     enabled: false
   hostRoot: /sys/fs/cgroup
 envoy:
-      enabled: false
+  enabled: false
 devices:
   - eno1
 l2announcements:
