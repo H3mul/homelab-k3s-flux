@@ -1,0 +1,26 @@
+{
+    "autodiscover": false,
+    "dryRun": null,
+    "printConfig": true,
+    "dependencyDashboardAutoclose": true,
+    "ignoreTests": true,
+    "platform": "github",
+    "repositories": ["H3mul/homelab-k3s-flux"],
+    "ignorePaths": ["disabled/**"],
+    "extends": [
+        "config:recommended",
+        ":automergeMinor",
+        ":automergePr",
+        ":disableRateLimiting",
+        ":docker"
+    ],
+    "flux": {
+        "fileMatch": ["\\.yaml$"]
+    },
+    "helm-values": {
+        "fileMatch": ["\\.yaml$"]
+    },
+    "docker-compose": {
+        "fileMatch": ["\\.yaml$"]
+    },
+}
