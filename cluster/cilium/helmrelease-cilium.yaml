@@ -33,6 +33,7 @@ spec:
           - http
         serviceMonitor:
           enabled: true
+          interval: 30s
       relay:
         enabled: true
         rollOutPods: true
