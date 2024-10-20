@@ -20,7 +20,7 @@ spec:
     name: postgres-cluster-superuser
 
   backup:
-    retentionPolicy: 30d
+    retentionPolicy: 4w
     barmanObjectStore: &backupObjStore
       wal:
         compression: gzip
