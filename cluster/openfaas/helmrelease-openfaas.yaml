@@ -265,7 +265,7 @@ spec:
         tokenExpiry: 2h
 
     prometheus:
-      image: prom/prometheus:v2.47.1
+      image: prom/prometheus:v2.55.0
       create: true
       resources:
         requests:
