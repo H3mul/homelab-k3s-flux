@@ -22,7 +22,7 @@ spec:
           main:
             image:
               repository: syncthing/syncthing
-              tag: 1.27.12
+              tag: 1.28.0
             env:
               PUID: ${FILESHARE_USER_ID}
               PGID: ${FILESHARE_GROUP_ID}
