@@ -1,13 +1,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: jellyfin
+  name: &app jellyfin
   namespace: media
 spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.x
+      version: 3.5.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -16,27 +16,26 @@ spec:
   timeout: 5m
   releaseName: jellyfin
   values:
-    image:
-      repository: linuxserver/jellyfin
-      tag: 10.10.1@sha256:9ac30e8797611c45b8fbb2b54beb7b35d92b89ea855017ee46ecfb86686bf9d9
+    controllers:
+      *app :
+        containers:
+          app:
+            image:
+              repository: ghcr.io/jellyfin/jellyfin
+              tag: 10.10.1@sha256:12b7aa2c8086e5566badc35370fab41b8cc8774dc3a80b07a1d6eb14f282b816
 
-    # podSecurityContext:
-    #   runAsUser: ${FILESHARE_USER_ID}
-    #   runAsGroup: ${FILESHARE_GROUP_ID}
-    #   fsGroup: ${FILESHARE_GROUP_ID}
-    #   fsGroupChangePolicy: "OnRootMismatch"
-
-    env:
-      PUID: ${FILESHARE_USER_ID}
-      PGID: ${FILESHARE_GROUP_ID}
-      TZ: ${TIMEZONE}
-      DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
-      JELLYFIN_PublishedServerUrl: https://jellyfin.${CLUSTER_DOMAIN}
-      JELLYFIN_FFmpeg__probesize: 50000000
-      JELLYFIN_FFmpeg__analyzeduration: 50000000
+            env:
+              PUID: ${FILESHARE_USER_ID}
+              PGID: ${FILESHARE_GROUP_ID}
+              TZ: ${TIMEZONE}
+              DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
+              JELLYFIN_PublishedServerUrl: https://jellyfin.${CLUSTER_DOMAIN}
+              JELLYFIN_FFmpeg__probesize: 50000000
+              JELLYFIN_FFmpeg__analyzeduration: 50000000
 
     service:
-      main:
+      app:
+        controller: *app
         ports:
           http:
             port: 8096
@@ -44,7 +43,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        className: nginx
         annotations:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_hide_header "x-webkit-csp";
@@ -57,6 +56,9 @@ spec:
           - host: &host jellyfin.${CLUSTER_DOMAIN}
             paths:
               - path: /
+                service:
+                  identifier: app
+                  port: http
         tls:
         - secretName: letsencrypt-wildcard-cert-prod
           hosts:
@@ -65,22 +67,26 @@ spec:
     persistence:
       config:
         enabled: true
-        type: pvc
+        type: persistentVolumeClaim
         size: 5Gi
-        mountPath: /config
+        globalMounts:
+          - path: /config
+        accessMode: ReadWriteOnce
         storageClass: truenas-ssd-iscsi
 
       media:
         enabled: true
         existingClaim: qbittorrent-download
-        mountPath: /data
+        globalMounts:
+          - path: /data
 
       transcode:
         enabled: true
         type: emptyDir
-        mountPath: /transcode
-
+        globalMounts:
+          - path: /transcode
       cache:
         enabled: true
         type: emptyDir
-        mountPath: /cache
+        globalMounts:
+          - path: /cache
