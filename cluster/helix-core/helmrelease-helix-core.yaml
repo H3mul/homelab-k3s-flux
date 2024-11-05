@@ -22,7 +22,7 @@ spec:
           app:
             image:
               repository: ghcr.io/h3mul/helix-core
-              tag: 2024.1-2596294
+              tag: 2024.1-2596294@sha256:16644b4ee35deaa0f0588eb3bde51e9c4381aff566429b07ca6a60e2712d45aa
             env:
               P4PORT: &port 1666
               P4ROOT: /opt/perforce/servers/master

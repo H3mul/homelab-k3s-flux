@@ -85,7 +85,7 @@ spec:
     image:
       registry: docker.io
       repository: bitnami/external-dns
-      tag: 0.15.0-debian-12-r3
+      tag: 0.15.0-debian-12-r3@sha256:22dafbf2469b2c5d4d92f8571193deedb0b6ecd8db8befebbab3f567f3db8c8a
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

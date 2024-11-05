@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: phasecorex/red-discordbot
-      tag: full
+      tag: full@sha256:668b932b97782cc0ca9ef7c2f359cf8fa5824e030c62d26168a5d86ddb11941b
       PullPolicy: IfNotPresent
 
     service:

@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: linuxserver/bazarr
-      tag: 1.4.5
+      tag: 1.4.5@sha256:81e922037f03d40c77220d20ed73591b0ef9995638d5c68ff2c5d82ae36eea8d
 
     env:
       PUID: ${FILESHARE_USER_ID}

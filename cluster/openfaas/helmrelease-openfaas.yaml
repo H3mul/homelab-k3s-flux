@@ -72,10 +72,10 @@ spec:
         failureThreshold: 3
 
     gatewayPro:
-      image: ghcr.io/openfaasltd/gateway:0.4.34
+      image: ghcr.io/openfaasltd/gateway:0.4.34@sha256:4714e4e533a30e950d60bb8269ae5e73c6f8f2ce9e86c549162b3c44d97251a0
 
     gateway:
-      image: ghcr.io/openfaas/gateway:0.27.9
+      image: ghcr.io/openfaas/gateway:0.27.9@sha256:25c0211362750d5927d3be1c42fd69f095f00afa329980f5c9cd7ca2b9dfca23
       readTimeout: "1m05s"
       writeTimeout: "1m05s"
       upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
@@ -117,7 +117,7 @@ spec:
 
     # For OpenFaaS Pro and the Function CRD
     operator:
-      image: ghcr.io/openfaasltd/faas-netes:0.5.53
+      image: ghcr.io/openfaasltd/faas-netes:0.5.53@sha256:e8fe50bb38e3b61b825636b7110cfe2fbfa3de4c97148eb5c5d0379c87eab690
       create: false
       resources:
         requests:
@@ -125,11 +125,11 @@ spec:
           cpu: "50m"
 
     faasnetesPro:
-      image: ghcr.io/openfaasltd/faas-netes:0.5.53
+      image: ghcr.io/openfaasltd/faas-netes:0.5.53@sha256:e8fe50bb38e3b61b825636b7110cfe2fbfa3de4c97148eb5c5d0379c87eab690
 
     # For the Community Edition
     faasnetes:
-      image: ghcr.io/openfaas/faas-netes:0.18.9
+      image: ghcr.io/openfaas/faas-netes:0.18.9@sha256:d0f709c95bc6801d169384a0aedee362c93d5a7b3ecce89c30eac4544351dddb
       resources:
         requests:
           memory: "120Mi"
@@ -140,7 +140,7 @@ spec:
     #  
     # Enable automatically when nats.queueMode is set to "jetstream"
     jetstreamQueueWorker:
-      image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.42
+      image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.42@sha256:5b25ce53959e8b6b63f2bea99e3ae2641b83392c084407b8fa2cef089cb40c6e
       durableName: "faas-workers"
       # Configure the max waiting pulls for the queue-worker JetStream consumer. 
       # The value should be at least max_inflight * replicas.
@@ -162,7 +162,7 @@ spec:
     #
     # Enabled automatically when openfaasPro is set to true
     queueWorkerPro:
-      image: ghcr.io/openfaasltd/queue-worker:0.4.0
+      image: ghcr.io/openfaasltd/queue-worker:0.4.0@sha256:69871687fe8c3c49c5f95320a1d5f12e692de6b37578f449ad3ae698f94a47cf
       maxRetryAttempts: "10"
       maxRetryWait: "120s"
       initialRetryWait: "10s"
@@ -182,7 +182,7 @@ spec:
     # Community Edition, maxInflight is 1
     # Name of shared queue is "faas-request"
     queueWorker:
-      image: ghcr.io/openfaas/queue-worker:0.14.1
+      image: ghcr.io/openfaas/queue-worker:0.14.1@sha256:978ed61fa5dbfb90b6fd00bdbf15965d03d49d7d5d720a653d1c180ca7740162
       # Control HA of queue-worker
       replicas: 1
       queueGroup: "faas"
@@ -196,7 +196,7 @@ spec:
     ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
     ## Includes: scale to zero
     autoscaler:
-      image: ghcr.io/openfaasltd/autoscaler:0.3.15
+      image: ghcr.io/openfaasltd/autoscaler:0.3.15@sha256:5869c51a205e7de175343be5024e977bc76a5885df9e84ad8eecd3d7e2687bbe
       replicas: 1
       enabled: true
       resources:
@@ -213,7 +213,7 @@ spec:
     ## To use with port-forwarding, set publicURL to 
     ## http://127.0.0.1
     dashboard:
-      image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.24
+      image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.24@sha256:ec14914b169bb226570b2e4601c8daa08f8d549bc859c7729b4bcbde5eeaff66
       publicURL: https://dashboard.example.com
       # Name of signing key secret for sessions.
       # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
@@ -232,7 +232,7 @@ spec:
     # OpenFaaS Enterprise (OpenFaaS IAM)
     # OIDC plugin for authentication on the OpenFaaS REST API
     oidcAuthPlugin:
-      image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.7
+      image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.7@sha256:26f18dd5285af38bcb10f75cbedbbb0aba9255154a22fe294313050249e90171
       insecureTLS: false
       verbose: true # debug setting
       replicas: 1
@@ -265,7 +265,7 @@ spec:
         tokenExpiry: 2h
 
     prometheus:
-      image: prom/prometheus:v2.55.0
+      image: prom/prometheus:v2.55.0@sha256:378f4e03703557d1c6419e6caccf922f96e6d88a530f7431d66a4c4f4b1000fe
       create: true
       resources:
         requests:
@@ -273,7 +273,7 @@ spec:
       annotations: {}
 
     alertmanager:
-      image: prom/alertmanager:v0.27.0
+      image: prom/alertmanager:v0.27.0@sha256:e13b6ed5cb929eeaee733479dce55e10eb3bc2e9c4586c705a4e8da41e5eacf5
       create: true
       resources:
         requests:
@@ -284,7 +284,7 @@ spec:
     stan:
       # Image used for the NATS Streaming when using the deprecated 
       # support in the Community Edition (CE)
-      image: nats-streaming:0.25.6
+      image: nats-streaming:0.25.6@sha256:0ad6861379c936d508e2aad174fb402c170ec0b28c8f634549dea4b09f0451cf
 
     # NATS (required for async)
     nats:
@@ -299,12 +299,12 @@ spec:
         host: ""
         port: ""
       # The version of NATS Core used with OpenFaaS Pro and JetStream
-      image: nats:2.10.22
+      image: nats:2.10.22@sha256:59e828e809e10453eae533e9899ecfe8223ca40dc9f36088b64b25787d7cfa2d
       enableMonitoring: false
       metrics:
         # Should stay off by default because the exporter is not multi-arch (yet)
         enabled: false
-        image: natsio/prometheus-nats-exporter:0.15.0
+        image: natsio/prometheus-nats-exporter:0.15.0@sha256:1f6787754b8b083f271adea4bb699b9c9e21279c89d903f1710f7647c604f145
       resources:
         requests:
           memory: "120Mi"
@@ -335,7 +335,7 @@ spec:
     # ingressOperator (optional) – component to have specific FQDN and TLS for Functions
     # https://github.com/openfaas-incubator/ingress-operator
     ingressOperator:
-      image: ghcr.io/openfaas/ingress-operator:0.8.2
+      image: ghcr.io/openfaas/ingress-operator:0.8.2@sha256:b26b73bf3385c280f9400212ab204e79d72bd9d97c8bcb8f9a3af140297e8b83
       replicas: 1
       create: false
       resources:
