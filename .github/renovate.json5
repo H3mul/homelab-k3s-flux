@@ -1,14 +1,15 @@
 {
     "autodiscover": false,
     "dryRun": null,
-    "printConfig": true,
+    "printConfig": false,
     "dependencyDashboardAutoclose": true,
     "ignoreTests": true,
     "platform": "github",
     "repositories": ["H3mul/homelab-k3s-flux"],
+    "baseBranches": ["main"],
     "ignorePaths": ["disabled/**"],
     "extends": [
-        "config:recommended",
+        "config:best-practices",
         ":automergeMinor",
         ":automergePr",
         ":disableRateLimiting",
