@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: linuxserver/jellyfin
-      tag: 10.10.1@sha256:9ac30e8797611c45b8fbb2b54beb7b35d92b89ea855017ee46ecfb86686bf9d9
+      tag: 2021.12.16@sha256:983e3cf314deaa76b0aa58c82d59c285b2ac2a3ef2f316b0361cb4c8bb58b79d
 
     # podSecurityContext:
     #   runAsUser: ${FILESHARE_USER_ID}
