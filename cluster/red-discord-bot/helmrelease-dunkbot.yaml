@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.x
+      version: 3.5.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -16,25 +16,26 @@ spec:
   timeout: 5m
   releaseName: dunkbot
   values:
-    image:
-      repository: phasecorex/red-discordbot
-      tag: full@sha256:668b932b97782cc0ca9ef7c2f359cf8fa5824e030c62d26168a5d86ddb11941b
-      PullPolicy: IfNotPresent
-
-    service:
+    controllers:
       main:
-        enabled: false
+        containers:
+          main:
+            image:
+              repository: phasecorex/red-discordbot
+              tag: full@sha256:668b932b97782cc0ca9ef7c2f359cf8fa5824e030c62d26168a5d86ddb11941b
+              pullPolicy: IfNotPresent
 
-    env:
-      TZ: ${TIMEZONE}
-      PREFIX: "!"
+            env:
+              TZ: ${TIMEZONE}
+              PREFIX: "!"
 
-    envFrom:
-      - secretRef:
-          name: dunkbot-discord-token
+            envFrom:
+              - secretRef:
+                  name: dunkbot-discord-token
 
     persistence:
       data:
         enabled: true
-        mountPath: /data
         existingClaim: dunkbot-data
+        globalMounts:
+          - path: /data
