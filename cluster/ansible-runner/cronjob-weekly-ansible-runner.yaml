@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
           - name: site
-            image: ghcr.io/h3mul/ansible-run:8.6.1@sha256:40cfcdbe1f2904fafd0eb374d16c14c13175ea1958e5d0a094741cc3f628465b
+            image: ghcr.io/h3mul/ansible-run:10.1.0@sha256:9ae3be20328ebe08d98154e3919fe33196470efb39cea4b88a72023b20afb39e
             imagePullPolicy: Always
 
             env:
