@@ -93,7 +93,7 @@ spec:
       image:
         registry: docker.io
         repository: bitnami/cert-manager
-        tag: 1.16.1-debian-12-r1
+        tag: 1.16.1-debian-12-r1@sha256:97fe9fde0a87f5d0c21b6d3fa4794654793764c058d263e5851b9e48db6f4aff
         digest: ""
         ## Specify a imagePullPolicy
         ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -124,7 +124,7 @@ spec:
         image:
           registry: docker.io
           repository: bitnami/acmesolver
-          tag: 1.16.1-debian-12-r1
+          tag: 1.16.1-debian-12-r1@sha256:3a305b62b29b1a3cac228c1115c4e7da0dda45c7eeb43d655d9590eb436e2691
           digest: ""
           ## Specify a imagePullPolicy
           ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -350,7 +350,7 @@ spec:
       image:
         registry: docker.io
         repository: bitnami/cert-manager-webhook
-        tag: 1.16.1-debian-12-r1
+        tag: 1.16.1-debian-12-r1@sha256:c83a0e1261e46e7d56ce7151aaaa930338da1603d3efaeefdd39b4e33deda391
         digest: ""
         ## Specify a imagePullPolicy
         ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -616,7 +616,7 @@ spec:
       image:
         registry: docker.io
         repository: bitnami/cainjector
-        tag: 1.16.1-debian-12-r1
+        tag: 1.16.1-debian-12-r1@sha256:d1a221aec9a7c42312cdfcc714272129530ed037e77df71a9c7ce9427cceffa8
         digest: ""
         ## Specify a imagePullPolicy
         ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

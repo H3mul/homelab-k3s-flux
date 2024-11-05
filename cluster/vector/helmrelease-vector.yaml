@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: timberio/vector
-      tag: 0.29.X-debian
+      tag: 0.29.X-debian@sha256:7c94922f8fa27d5709a335e12867f23d34187e12efd1ecb1e60c4729f7853200
 
     args: ["--config", "/etc/vector/vector.yaml"]
 

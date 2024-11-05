@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/theme-park
-      tag: 1.18.0
+      tag: 1.18.0@sha256:210d8f5d9466df493503184fb076bbf1fb9fbc2b42e273cd4516ac3fd1df7ba2
     env:
       TZ: "${TIMEZONE}"
     service:

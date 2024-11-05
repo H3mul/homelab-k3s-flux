@@ -139,7 +139,7 @@ spec:
         # -- The Docker registry
         registry: docker.io
         repository: bats/bats
-        tag: "1.11.0"
+        tag: "1.11.0@sha256:e8f18e0acd4ea933bf019130b85033be75e8ce081db299e93578de83d7874e33"
       imagePullPolicy: IfNotPresent
       securityContext: {}
       resources: {}
@@ -203,7 +203,7 @@ spec:
       # -- The Docker registry
       registry: docker.io
       repository: curlimages/curl
-      tag: 7.88.1
+      tag: 7.88.1@sha256:48318407b8d98e8c7d5bd4741c88e8e1a5442de660b47f63ba656e5c910bc3da
       sha: ""
       pullPolicy: IfNotPresent
 
@@ -436,7 +436,7 @@ spec:
         # -- The Docker registry
         registry: docker.io
         repository: library/busybox
-        tag: "1.37.0"
+        tag: "1.37.0@sha256:768e5c6f5cb6db0794eec98dc7a967f40631746c32232b78a3105fb946f3ab83"
         sha: ""
         pullPolicy: IfNotPresent
 
@@ -971,7 +971,7 @@ spec:
         # -- The Docker registry
         registry: quay.io
         repository: kiwigrid/k8s-sidecar
-        tag: 1.28.0
+        tag: 1.28.0@sha256:4166a019eeafd1f0fef4d867dc5f224f18d84ec8681dbb31f3ca258ecf07bcf2
         sha: ""
       imagePullPolicy: IfNotPresent
       resources: {}
@@ -1276,7 +1276,7 @@ spec:
         # image-renderer Image repository
         repository: grafana/grafana-image-renderer
         # image-renderer Image tag
-        tag: latest
+        tag: latest@sha256:c7af27f500676c96f8b957da30b2aae96b9e892366e2999ddaeff58a710b5a61
         # image-renderer Image sha (optional)
         sha: ""
         # image-renderer ImagePullPolicy

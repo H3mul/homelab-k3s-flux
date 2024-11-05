@@ -98,7 +98,7 @@
         definition:
           services:
             mongo:
-              image: mongo:7.0.15
+              image: mongo:7.0.15@sha256:7ba1f8fd37a86f52a99f484b1f3cb5a140472c0752ad0d3c52045f0a6cb88d37
               container_name: mongo
               networks:
                 - pritunl
@@ -110,7 +110,7 @@
               restart: unless-stopped
 
             pritunl:
-              image: ghcr.io/h3mul/pritunl:v1.32.3660.72
+              image: ghcr.io/h3mul/pritunl:v1.32.3660.72@sha256:69c77b9e209a2011671692aa51636048da180c8db95eb63289a36a7eec839c29
               container_name: pritunl
               networks:
                 - pritunl
@@ -143,7 +143,7 @@
                 traefik.http.routers.pritunl.tls.certresolver: "letsencryptresolver"
 
             traefik:
-              image: traefik:v3.2
+              image: traefik:v3.2@sha256:66e37237b371f2b25ce5f247cc371976929dcb18c041e05685f1de1df6422b72
               container_name: traefik
               ports:
                 - 80:80
@@ -178,7 +178,7 @@
                 # - --api.insecure=true
 
             wireguard:
-              image: linuxserver/wireguard:1.0.20210914
+              image: linuxserver/wireguard:1.0.20210914@sha256:ba7c3d5930d2eede8ae24a66ad79d33722012d231f1aed30d5c263a5e121ba1a
               container_name: wireguard
               environment:
                 LOG_CONFS: "true"
@@ -193,7 +193,7 @@
               restart: unless-stopped
 
             wireguard-ui:
-              image: ngoduykhanh/wireguard-ui:0.6.2
+              image: ngoduykhanh/wireguard-ui:0.6.2@sha256:5213a3a3248441c3934ac522ee2c76656367e2edc009b55bc5e881b9d6105b88
               container_name: wireguard-ui
               depends_on:
                 - wireguard

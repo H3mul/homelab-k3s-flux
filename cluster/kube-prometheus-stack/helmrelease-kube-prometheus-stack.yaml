@@ -675,7 +675,7 @@ spec:
         image:
           registry: quay.io
           repository: prometheus/alertmanager
-          tag: v0.27.0
+          tag: v0.27.0@sha256:e13b6ed5cb929eeaee733479dce55e10eb3bc2e9c4586c705a4e8da41e5eacf5
           sha: ""
 
         ## If true then the user will be responsible to provide a secret with alertmanager configuration
@@ -2510,7 +2510,7 @@ spec:
           image:
             registry: registry.k8s.io
             repository: ingress-nginx/kube-webhook-certgen
-            tag: v20221220-controller-v1.5.1-58-g787ea74b6
+            tag: v20221220-controller-v1.5.1-58-g787ea74b6@sha256:4d99688e557396f5baa150e019ff7d5b7334f9b9f9a8dab64038c5c2a006f6b5
             sha: ""
             pullPolicy: IfNotPresent
           resources: {}
@@ -2916,7 +2916,7 @@ spec:
       thanosImage:
         registry: quay.io
         repository: thanos/thanos
-        tag: v0.36.1
+        tag: v0.36.1@sha256:e542959e1b36d5046083d1b64a7049c356b68a44a173c58b3ae7c0c9ada932d5
         sha: ""
 
       ## Set a Label Selector to filter watched prometheus and prometheusAgent
@@ -3509,7 +3509,7 @@ spec:
         image:
           registry: quay.io
           repository: prometheus/prometheus
-          tag: v2.55.0
+          tag: v2.55.0@sha256:378f4e03703557d1c6419e6caccf922f96e6d88a530f7431d66a4c4f4b1000fe
           sha: ""
 
         ## Tolerations for use with node taints
@@ -4510,7 +4510,7 @@ spec:
         image:
           registry: quay.io
           repository: thanos/thanos
-          tag: v0.36.1
+          tag: v0.36.1@sha256:e542959e1b36d5046083d1b64a7049c356b68a44a173c58b3ae7c0c9ada932d5
           sha: ""
 
         ## Namespaces to be selected for PrometheusRules discovery.

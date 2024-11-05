@@ -22,7 +22,7 @@ spec:
           main:
             image:
               repository: ghcr.io/h3mul/code-space
-              tag: 1.0.0
+              tag: 1.0.0@sha256:e534105e73d1be904ac1740145d76edc89db8e78de3de0175b4e3803887122b5
               pullPolicy: Always
             env:
             envFrom:
