@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.x
+      version: 3.5.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -16,41 +16,60 @@ spec:
   timeout: 5m
   releaseName: qbittorrent
   values:
-    podAnnotations:
-      setGateway: "true"
-    image:
-      repository: ghcr.io/onedr0p/qbittorrent
-      tag: 5.0.1@sha256:7fc5af4f7f9c8e4998aaa18b5e2e634757c55f70c23b9bd46b40e09a4c7acda5
+    controllers:
+      qbittorrent:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/qbittorrent
+              tag: 5.0.1@sha256:7fc5af4f7f9c8e4998aaa18b5e2e634757c55f70c23b9bd46b40e09a4c7acda5
+            env:
+              TZ: "${TIMEZONE}"
+              QBITTORRENT__PORT: &appport 8080
+              QBITTORRENT__BT_PORT: "${BITTORRENT_PORT}"
 
-    hostname: qbittorrent # needed for an static IP
+          exporter:
+            image:
+              repository: ghcr.io/esanchezm/prometheus-qbittorrent-exporter
+              tag: v1.6.0@sha256:b987d19693a5b2fe7314b22009c6302e084ec801fcf96afaf14065b4cdafc842
+            env:
+              QBITTORRENT_HOST: localhost
+              QBITTORRENT_PORT: *appport
+              EXPORTER_PORT: &metricsport 17871
 
-    env:
-      TZ: "${TIMEZONE}"
-      QBITTORRENT__PORT: 8080
-      QBITTORRENT__BT_PORT: "${BITTORRENT_PORT}"
+    defaultPodOptions:
+      # annotations:
+      #   setGateway: "true"
+      securityContext:
+        runAsUser: ${FILESHARE_USER_ID}
+        runAsGroup:  ${FILESHARE_GROUP_ID}
+        fsGroup: ${FILESHARE_GROUP_ID}
+        supplementalGroups:
+          - 65536
 
     service:
-      main:
+      app:
+        controller: qbittorrent
         ports:
           http:
-            port: 8080
+            port: *appport
           metrics:
-            enabled: true
-            port: &metricsport 17871
+            port: *metricsport
       bittorrent:
-        enabled: true
+        controller: qbittorrent
         type: ClusterIP
         ports:
-          bittorrent:
-            enabled: true
+          bittorrent-tcp:
             port: ${BITTORRENT_PORT}
             protocol: TCP
-            targetPort: ${BITTORRENT_PORT}
+          bittorrent-udp:
+            port: ${BITTORRENT_PORT}
+            protocol: UDP
 
     ingress:
-      main:
+      app:
         enabled: true
-        ingressClassName: nginx
+        className: nginx
         annotations:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_hide_header "x-webkit-csp";
@@ -64,22 +83,18 @@ spec:
           paths:
           - path: /
             pathType: Prefix
+            service:
+              identifier: app
+              port: http
         tls:
         - secretName: letsencrypt-wildcard-cert-prod
           hosts:
           - *host
 
-    sidecars:
-      exporter:
-        image: caseyscarborough/qbittorrent-exporter:v1.3.5@sha256:5e2dc3df1fc3d4cb2d1290d41b7189fc481821c5261ce16a018e8bbfa1354c42
-        imagePullPolicy: IfNotPresent
-        env:
-          - name: QBITTORRENT_BASE_URL
-            value: http://localhost:8080
-
     serviceMonitor:
-      main:
+      app:
         enabled: true
+        serviceName: qbittorrent-app
         endpoints:
         - port: metrics
           scheme: http
@@ -87,31 +102,15 @@ spec:
           interval: 30s
           scrapeTimeout: 10s
 
-    # secrets:
-    #   config-restic:
-    #     enabled: true
-
     persistence:
       config:
         enabled: true
-        mountPath: /config
+        globalMounts:
+          - path: /config
         existingClaim: qbittorrent-config
 
       downloads:
         enabled: true
-        mountPath: /downloads
+        globalMounts:
+          - path: /downloads
         existingClaim: qbittorrent-download
-
-    podSecurityContext:
-      runAsUser: ${FILESHARE_USER_ID}
-      runAsGroup:  ${FILESHARE_GROUP_ID}
-      fsGroup: ${FILESHARE_GROUP_ID}
-      supplementalGroups:
-      - 65536
-
-    # resources:
-    #   requests:
-    #     memory: 250Mi
-    #     cpu: 500m
-    #   limits:
-    #     memory: 6000Mi
