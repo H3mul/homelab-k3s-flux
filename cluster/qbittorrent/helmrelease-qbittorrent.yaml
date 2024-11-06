@@ -38,8 +38,8 @@ spec:
               EXPORTER_PORT: &metricsport 17871
 
     defaultPodOptions:
-      # annotations:
-      #   setGateway: "true"
+      annotations:
+        setGateway: "true"
       securityContext:
         runAsUser: ${FILESHARE_USER_ID}
         runAsGroup:  ${FILESHARE_GROUP_ID}
