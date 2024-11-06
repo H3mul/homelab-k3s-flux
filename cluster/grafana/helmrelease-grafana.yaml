@@ -786,9 +786,12 @@ spec:
               value: Prometheus
         qbittorrent:
           # Ref: https://grafana.com/grafana/dashboards/15116-qbittorrent-dashboard/
-          gnetId: 15116
-          revision: 4
-          datasource: Prometheus
+          # gnetId: 15116
+          # revision: 4
+          url: https://raw.githubusercontent.com/esanchezm/prometheus-qbittorrent-exporter/master/grafana/dashboard.json
+          datasource:
+            - name: DS_PROMETHEUS
+              value: Prometheus
         # minio:
         #   # Ref: https://grafana.com/grafana/dashboards/13502-minio-dashboard/
         #   gnetId: 13502
