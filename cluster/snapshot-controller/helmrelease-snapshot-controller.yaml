@@ -19,6 +19,9 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
+    # Values:
+    # https://github.com/piraeusdatastore/helm-charts/blob/79c15f2317860baf58fa70d00ff355a631a77206/charts/snapshot-controller/values.yaml
+
     controller:
       serviceMonitor:
         create: true
