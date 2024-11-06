@@ -18,7 +18,7 @@ spec:
   values:
     initContainers:
       init-db:
-        image: ghcr.io/h3mul/mysql-init:10.11.7@sha256:25b32ce77a6ad429b796b84d220c6fb5c66877d584cd9de5f9460312bbe182f5
+        image: ghcr.io/h3mul/mysql-init:11.4.2@sha256:9826276e6134c391059343acb2b0762581a8d756d7c089db39513a5fc753d4a9
         imagePullPolicy: IfNotPresent
         env:
           - name: INIT_MYSQL_HOST
