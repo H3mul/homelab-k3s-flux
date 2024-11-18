@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: telegraf
-      tag: 1.32-alpine@sha256:faf74a3d0023e352482a8e233fc72dbe97731034d6b54a15054950edee0c794c
+      tag: 1.32-alpine@sha256:efbcdf0e7ab69d3435ea0f461fd6eafbcc78218a56967c5a4a716243fcd5b8f1
       PullPolicy: IfNotPresent
 
     service:
