@@ -66,14 +66,15 @@ metadata:
   name: octoprint
   namespace: static-endpoint-ingress
   annotations:
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
     nginx.ingress.kubernetes.io/proxy-body-size: 0
     nginx.ingress.kubernetes.io/configuration-snippet: |
-      proxy_set_header Host $http_host;
+      proxy_set_header Host $host;
       proxy_set_header Upgrade $http_upgrade;
       proxy_set_header Connection "upgrade";
-      proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header X-Scheme $scheme;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Real-IP $remote_addr;
 
 spec:
   ingressClassName: nginx
