@@ -117,7 +117,7 @@ spec:
 
     # For OpenFaaS Pro and the Function CRD
     operator:
-      image: ghcr.io/openfaasltd/faas-netes:0.5.53@sha256:e8fe50bb38e3b61b825636b7110cfe2fbfa3de4c97148eb5c5d0379c87eab690
+      image: ghcr.io/openfaasltd/faas-netes:0.5.58@sha256:8c749a21bfadb3f13084190767ba1c807dc9f11eccd3cb2a38f5c169359afc8c
       create: false
       resources:
         requests:
@@ -125,7 +125,7 @@ spec:
           cpu: "50m"
 
     faasnetesPro:
-      image: ghcr.io/openfaasltd/faas-netes:0.5.53@sha256:e8fe50bb38e3b61b825636b7110cfe2fbfa3de4c97148eb5c5d0379c87eab690
+      image: ghcr.io/openfaasltd/faas-netes:0.5.58@sha256:8c749a21bfadb3f13084190767ba1c807dc9f11eccd3cb2a38f5c169359afc8c
 
     # For the Community Edition
     faasnetes:
