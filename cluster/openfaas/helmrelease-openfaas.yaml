@@ -182,7 +182,7 @@ spec:
     # Community Edition, maxInflight is 1
     # Name of shared queue is "faas-request"
     queueWorker:
-      image: ghcr.io/openfaas/queue-worker:0.14.1@sha256:978ed61fa5dbfb90b6fd00bdbf15965d03d49d7d5d720a653d1c180ca7740162
+      image: ghcr.io/openfaas/queue-worker:0.14.2@sha256:c18da04d70f65fb82ad2c62c560eded2051cac61c34d88e65a54fb943868417f
       # Control HA of queue-worker
       replicas: 1
       queueGroup: "faas"
