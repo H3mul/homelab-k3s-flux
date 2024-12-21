@@ -140,7 +140,7 @@ spec:
     #  
     # Enable automatically when nats.queueMode is set to "jetstream"
     jetstreamQueueWorker:
-      image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.44@sha256:85bb9d35bac75576f2f0a145f1c14c41e46eb14df721e0a65efd8d95965059a6
+      image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.45@sha256:60b32b1d927901ea32ddbb6011d77cb31d5648151613f0d38a5a9d9e1f9ca746
       durableName: "faas-workers"
       # Configure the max waiting pulls for the queue-worker JetStream consumer. 
       # The value should be at least max_inflight * replicas.
