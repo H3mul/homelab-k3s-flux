@@ -143,7 +143,7 @@
                 traefik.http.routers.pritunl.tls.certresolver: "letsencryptresolver"
 
             traefik:
-              image: traefik:v3.2@sha256:efb87236c8c92599bcd3a67a7a8a55e0f255665f4719722bf398935aa9b92270
+              image: traefik:v3.2@sha256:2daee871f3e3e6fd28968136a53fdfb516fc9c7b1a1644af4ac021c56a68f68e
               container_name: traefik
               ports:
                 - 80:80
