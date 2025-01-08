@@ -25,33 +25,33 @@ spec:
       repository: quay.io/backube/volsync
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      # tag: ""
       # Directly specifies the SHA hash of the container image to deploy
       image: ""
     rclone:
       repository: quay.io/backube/volsync
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      # tag: ""
       image: ""
     restic:
       repository: quay.io/backube/volsync
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      # tag: ""
       image: ""
     rsync:
       repository: quay.io/backube/volsync
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      # tag: ""
       image: ""
     rsync-tls:
       repository: quay.io/backube/volsync
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      # tag: ""
       image: ""
     syncthing:
       repository: quay.io/backube/volsync
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      # tag: ""
       image: ""
 
     manageCRDs: true

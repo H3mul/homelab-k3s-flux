@@ -28,24 +28,24 @@ spec:
       repository: docker.io/bitpoke/mysql-operator
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      # tag: ""
 
     sidecar57:
       image:
         repository: docker.io/bitpoke/mysql-operator-sidecar-5.7
         # Overrides the image tag whose default is the chart appVersion.
-        tag: ""
+        # tag: ""
 
     sidecar80:
       image:
         repository: docker.io/bitpoke/mysql-operator-sidecar-8.0
         # Overrides the image tag whose default is the chart appVersion.
-        tag: ""
+        # tag: ""
 
     metricsExporter:
       image:
         repository: docker.io/prom/mysqld-exporter
-        tag: ""
+        # tag: ""
 
     imagePullSecrets: []
     nameOverride: ""
@@ -158,7 +158,7 @@ spec:
         repository: docker.io/bitpoke/mysql-operator-orchestrator
         pullPolicy: IfNotPresent
         # Overrides the image tag whose default is the chart appVersion.
-        tag: ""
+        # tag: ""
 
       securityContext: {}
         # capabilities:

@@ -121,7 +121,7 @@ spec:
       # -- Docker image repository
       repository: grafana/grafana
       # Overrides the Grafana image tag whose default is the chart appVersion
-      tag: ""
+      # tag: ""
       sha: ""
       pullPolicy: IfNotPresent
 
