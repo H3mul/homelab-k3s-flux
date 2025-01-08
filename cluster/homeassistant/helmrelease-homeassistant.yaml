@@ -24,8 +24,7 @@ spec:
           main:
             image:
               repository: ghcr.io/onedr0p/home-assistant
-              tag: 2024.11.3@sha256:f45f502b1738e46eb435fbc8947cdcc2574f3713b156c6738129ea2ea9b49018
-              pullPolicy: Always
+              tag: 2025.1.1
             env:
               TZ: ${TIMEZONE}
               LD_LIBRARY_PATH: /usr/lib
