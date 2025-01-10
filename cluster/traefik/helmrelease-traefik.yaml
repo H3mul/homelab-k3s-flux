@@ -26,7 +26,7 @@ spec:
       replicas: 1
     logs:
       general:
-        level: INFO
+        level: DEBUG
     ingressClass:
       enabled: true
       name: traefik
