@@ -19,6 +19,7 @@ spec:
     # Values
     # https://github.com/kubernetes-sigs/external-dns/blob/bf70e3f0acbfbf2fce0bc71a4ca2fd6850de4903/charts/external-dns/values.yaml
 
+    logLevel: debug
     provider: cloudflare
     domainFilters: 
       - "${CLUSTER_DOMAIN_DNS_ZONE}"
