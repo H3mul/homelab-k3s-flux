@@ -1,0 +1,39 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: restart-deployment
+  namespace: democratic-csi
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: restart-deployment
+  namespace: democratic-csi
+rules:
+  - apiGroups: 
+      - apps
+      - extensions
+    resources: 
+      - deployments
+    resourceNames: 
+      - democratic-csi-ssd-iscsi-controller
+      - democratic-csi-ssd-nfs-controller
+    verbs: ["get", "patch", "list", "watch"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: restart-deployment
+  namespace: democratic-csi
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: restart-deployment
+subjects:
+  - kind: ServiceAccount
+    name: restart-deployment
+    namespace: democratic-csi

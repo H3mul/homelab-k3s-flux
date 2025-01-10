@@ -6,3 +6,5 @@ resources:
   - helmrelease-democratic-csi-iscsi.yaml
   - sealed-secret-truenas-api-key.yaml
   - kustomization-driver-config-secrets.yaml
+  - cronjob-restart-deployments.yaml
+  - rbac-restart-deploy.yaml
