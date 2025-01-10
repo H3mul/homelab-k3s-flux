@@ -368,6 +368,8 @@ spec:
     ingress:
       enabled: true
       className: nginx
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-buffering: "on"
       hosts:
         - &host penpot.${CLUSTER_DOMAIN}
       tls:

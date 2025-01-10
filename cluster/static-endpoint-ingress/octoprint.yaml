@@ -66,8 +66,14 @@ metadata:
   name: octoprint
   namespace: static-endpoint-ingress
   annotations:
+    nginx.org/websocket-services: octoprint
+    nginx.ingress.kubernetes.io/websocket-services: octoprint
+    service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "0.0.0.0/0"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-buffering: "off"
     nginx.ingress.kubernetes.io/proxy-body-size: 0
+    nginx.org/client-max-body-size: 0
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header Host $host;
       proxy_set_header Upgrade $http_upgrade;
