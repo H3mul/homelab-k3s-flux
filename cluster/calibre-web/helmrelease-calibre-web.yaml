@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.x
+      version: 3.6.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -17,39 +17,32 @@ spec:
   releaseName: calibre-web
   values:
     controllers:
-      main:
-        # pod:
-        #   enableServiceLinks: false
-        #   securityContext:
-        #     runAsUser: ${FILESHARE_USER_ID}
-        #     runAsGroup:  ${FILESHARE_GROUP_ID}
-        #     fsGroup: ${FILESHARE_GROUP_ID}
-        #     fsGroupChangePolicy: "OnRootMismatch"
-        #     supplementalGroups:
-        #       - 65539
+      calibre-web:
+        pod:
+          securityContext:
+            runAsUser: ${FILESHARE_USER_ID}
+            runAsGroup: ${FILESHARE_GROUP_ID}
+            fsGroup: ${FILESHARE_GROUP_ID}
+            fsGroupChangePolicy: "OnRootMismatch"
 
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/bjw-s-labs/calibre-web
               tag: 0.6.24@sha256:130247a83b18307621967b9d4464a15cbf99970fdd1bedddaa0d4087f4e3b269
             env:
-              PUID: ${FILESHARE_USER_ID}
-              PGID: ${FILESHARE_GROUP_ID}
               TZ: ${TIMEZONE}
-              DOCKER_MODS: linuxserver/mods:universal-calibre
-            resources:
-              limits:
-                memory: 470M
+              CACHE_DIR: /cache
 
     service:
       main:
+        controller: calibre-web
         ports:
           http:
             port: 8083
 
     ingress:
-      main:
+      app:
         enabled: true
         className: nginx
         annotations:
@@ -64,8 +57,9 @@ spec:
           - host: &host calibre.${CLUSTER_DOMAIN}
             paths:
               - path: /
+                pathType: Prefix
                 service:
-                  name: main
+                  identifier: main
                   port: http
         tls:
         - secretName: letsencrypt-wildcard-cert-prod
@@ -82,8 +76,13 @@ spec:
       config:
         enabled: true
         type: persistentVolumeClaim
-        size: 1Gi
+        size: 5Gi
         globalMounts:
           - path: /config
         accessMode: ReadWriteOnce
         storageClass: truenas-ssd-iscsi
+
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /cache
