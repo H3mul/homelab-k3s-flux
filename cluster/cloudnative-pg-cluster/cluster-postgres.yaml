@@ -4,6 +4,18 @@ metadata:
   name: postgres-cluster
   namespace: cloudnative-pg
 spec:
+  managed:
+    roles:
+      - name: windmill_admin
+      - name: windmill_user
+      - name: windmill
+        login: true
+        passwordSecret:
+          name: windmill-postgres-credentials
+        inRoles:
+          - windmill_admin
+          - windmill_user
+
   instances: 1
   imageName: ghcr.io/cloudnative-pg/postgresql:15.2
   primaryUpdateStrategy: unsupervised

@@ -102,4 +102,4 @@ tasks:
         resources:
         EOL
 
-      - ls '{{.dir}}' | sed 's/^/ - /' >> '{{.kustomization_file}}'
+      - ls '{{.dir}}' -p | grep -v /$ | grep -v "kustomization.yaml" | sed 's/^/ - /' >> '{{.kustomization_file}}'

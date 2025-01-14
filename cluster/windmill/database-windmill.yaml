@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: windmill
+  namespace: cloudnative-pg
+spec:
+  name: windmill
+  owner: windmill
+  cluster:
+    name: postgres-cluster

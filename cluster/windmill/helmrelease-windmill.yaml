@@ -1,0 +1,50 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: windmill
+  namespace: windmill
+spec:
+  chart:
+    spec:
+      chart: windmill
+      version: 2.0.339
+      sourceRef:
+        kind: HelmRepository
+        name: windmill
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: windmill
+
+  valuesFrom:
+    - kind: Secret
+      name: windmill-postgres-credentials
+      valuesKey: uri
+      targetPath: windmill.databaseUrl
+
+  values:
+    windmill:
+      baseDomain: &host "windmill.${CLUSTER_DOMAIN}"
+      baseProtocol: https
+      databaseUrlSecretName: windmill-postgres-credentials
+      databaseUrlSecretKey: uri
+      appReplicas: 1
+      lspReplicas: 1
+      multiplayerReplicas: 1
+      workerGroups:
+        - name: default
+          replicas: 1
+        - name: native
+          replicas: 1
+
+    ingress:
+      enabled: true
+      annotations: {}
+      className: nginx
+      tls:
+      - secretName: letsencrypt-wildcard-cert-prod
+        hosts:
+        - *host
+
+    postgresql:
+      enabled: false
