@@ -64,7 +64,7 @@ spec:
           app:
             image:
               repository: ghcr.io/huginn/huginn
-              tag: a8b0802ef69cc93343b921cc1f25dde0feff0110
+              tag: a8b0802ef69cc93343b921cc1f25dde0feff0110@sha256:07192b118cc152501410f07885c2922d85f75421e0fa7db1aa0e70459d357c21
             env:
               - name: DATABASE_ADAPTER
                 value: postgresql
