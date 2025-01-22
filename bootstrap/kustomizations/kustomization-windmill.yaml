@@ -15,7 +15,7 @@ spec:
   healthChecks:
     - apiVersion: apps/v1
       kind: Deployment
-      name: windmill
+      name: windmill-app
       namespace: windmill
   postBuild:
     substituteFrom:
