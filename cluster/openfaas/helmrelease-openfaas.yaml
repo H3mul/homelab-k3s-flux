@@ -335,7 +335,7 @@ spec:
     # ingressOperator (optional) – component to have specific FQDN and TLS for Functions
     # https://github.com/openfaas-incubator/ingress-operator
     ingressOperator:
-      image: ghcr.io/openfaas/ingress-operator:0.8.2@sha256:b26b73bf3385c280f9400212ab204e79d72bd9d97c8bcb8f9a3af140297e8b83
+      image: ghcr.io/openfaas/ingress-operator:0.8.3@sha256:db051d49f5d80b45a87ac379e137fe61a3001526f7e11e91b837d79767ba88ac
       replicas: 1
       create: false
       resources:
