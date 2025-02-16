@@ -51,7 +51,7 @@ spec:
 
     image:
       repository: caddy
-      tag: 2.9-alpine@sha256:b1843ebe13997299e8639d208f1b94e5d849dd0f31047652e62ab56b1ec881a9
+      tag: 2.9-alpine@sha256:b6894cfcec924873db96df564b7dabc2dee938c79d4d87c05fec463b18b63aa2
       pullPolicy: IfNotPresent
     sidecars:
       frontend:
