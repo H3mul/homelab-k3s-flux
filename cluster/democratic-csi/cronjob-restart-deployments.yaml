@@ -18,14 +18,14 @@ spec:
           restartPolicy: Never
           containers:
             - name: restart-iscsi-deployment
-              image: bitnami/kubectl@sha256:ddae2364f2addae0524add6e973faf8890391bb642da5fa7e2f02d072559d3f8 
+              image: bitnami/kubectl@sha256:f479b58a7aacb1d3d2c2b00d1f346e08662a5006c1c4539e9a625ce0acd6eefc 
               command:
                 - 'kubectl'
                 - 'rollout'
                 - 'restart'
                 - 'deployment/democratic-csi-ssd-iscsi-controller'
             - name: restart-nfs-deployment
-              image: bitnami/kubectl@sha256:ddae2364f2addae0524add6e973faf8890391bb642da5fa7e2f02d072559d3f8 
+              image: bitnami/kubectl@sha256:f479b58a7aacb1d3d2c2b00d1f346e08662a5006c1c4539e9a625ce0acd6eefc 
               command:
                 - 'kubectl'
                 - 'rollout'
