@@ -1279,7 +1279,7 @@ spec:
         # image-renderer Image repository
         repository: grafana/grafana-image-renderer
         # image-renderer Image tag
-        tag: latest@sha256:474c9ccb781cebacd117d8b77913259a42286361133a11fa54d5e62d85bacc44
+        tag: latest@sha256:c84ab38e754a6e7477dc9a5fe8cb10f2cf1e4f3e3a6810418dfdbd3e6460bfe8
         # image-renderer Image sha (optional)
         sha: ""
         # image-renderer ImagePullPolicy
