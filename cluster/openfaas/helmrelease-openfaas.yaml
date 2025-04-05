@@ -213,7 +213,7 @@ spec:
     ## To use with port-forwarding, set publicURL to 
     ## http://127.0.0.1
     dashboard:
-      image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.29@sha256:9a4fee17c0d8f8791144ceddd0e9eb0aa309f198608e70d2efa106b4ce23be98
+      image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.31@sha256:b19a3280c2cc5b552799c77e6bb0a976527c2de679a8da15db23f9ba67ea34f2
       publicURL: https://dashboard.example.com
       # Name of signing key secret for sessions.
       # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
