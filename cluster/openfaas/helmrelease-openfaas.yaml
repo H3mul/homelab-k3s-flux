@@ -299,7 +299,7 @@ spec:
         host: ""
         port: ""
       # The version of NATS Core used with OpenFaaS Pro and JetStream
-      image: nats:2.10.27@sha256:8a808485b1a116d6908fa81e328be83b01bf0da6cf8bb95f34681dedf3d8d84c
+      image: nats:2.10.27@sha256:bf1e0b4ac72d34d861ef85e94857dd180ba5543b99544baa0c1b72176eb20731
       enableMonitoring: false
       metrics:
         # Should stay off by default because the exporter is not multi-arch (yet)
