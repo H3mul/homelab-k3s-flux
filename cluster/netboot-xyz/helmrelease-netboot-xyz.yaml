@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/h3mul/netboot-xyz
-      tag: 2.0.86@sha256:fe80e99b6fd0eb8cb92c9d5edd16660e44328232a20451efebadbf1177e38d10
+      tag: 2.0.86@sha256:042bc0386a66673553515743e07968cf9f20c8f6e8977f64a21677cd5653673c
 
     service:
       main:
