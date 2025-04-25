@@ -7,10 +7,7 @@ helmCharts:
     version: 1.2.7
     releaseName: kubelet-csr-approver
     namespace: kube-system
-    valuesInline:
-      providerRegex: |
-        ^(mimir|ofnir|pyrre|maliketh)$
-      bypassDnsResolution: true
+    valuesFile: values.yaml
 commonAnnotations:
   meta.helm.sh/release-name: kubelet-csr-approver
   meta.helm.sh/release-namespace: kube-system

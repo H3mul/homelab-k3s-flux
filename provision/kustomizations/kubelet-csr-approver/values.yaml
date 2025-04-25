@@ -1,0 +1,3 @@
+providerRegex: |
+  ^(mimir|ofnir|gemino|maliketh)$
+bypassDnsResolution: true

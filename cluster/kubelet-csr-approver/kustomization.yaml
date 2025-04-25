@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kube-system
+resources:
+  - helmrelease-kubelet-csr-approver.yaml
+configMapGenerator:
+  - name: kubelet-csr-approver-helm-values
+    files:
+      - values.yaml=../../provision/kustomizations/kubelet-csr-approver/values.yaml
+configurations:
+  - kustomizeconfig.yaml
