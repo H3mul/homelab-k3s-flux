@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: linuxserver/jackett
-      tag: 0.22.1800@sha256:d190f30ab11e57267c0c8260cad8cb7ca685e6dbfb3d792f6a02de875ab43201
+      tag: 0.22.1826@sha256:2ecd3fbf1ed04dd1acb72685253f9210285061dd7b4cd2b99830b4d9fde03d27
 
     env:
       TZ: "${TIMEZONE}"
