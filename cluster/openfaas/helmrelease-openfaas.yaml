@@ -72,7 +72,7 @@ spec:
         failureThreshold: 3
 
     gatewayPro:
-      image: ghcr.io/openfaasltd/gateway:0.4.39@sha256:31c8acf9f4152b6eea653449c5492fae11e3d49657dd2e8e84ef842fa209770d
+      image: ghcr.io/openfaasltd/gateway:0.4.40@sha256:c7c92bfe5837e62e4d79b8a23914816296a7133e9ceaa5058b91ee70b729e1a2
 
     gateway:
       image: ghcr.io/openfaas/gateway:0.27.12@sha256:fe62d9e15c4d8743f8049d83f5c2f82a28bd12ede7dd66e5c51261161adb5980
