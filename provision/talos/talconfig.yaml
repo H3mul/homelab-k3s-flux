@@ -35,7 +35,7 @@ nodes:
     ipAddress: 10.1.1.3
     controlPlane: true
     installDiskSelector:
-      busPath: /pci0000:00/0000:00:17.0/ata2/host1/target1:0:0/1:0:0:0/
+      wwid: naa.50026b738003833e
 
 controlPlane:
   schematic:
