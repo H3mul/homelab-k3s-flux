@@ -25,6 +25,13 @@ spec:
               - op: add
                 path: /spec/template/spec/containers/0/imagePullPolicy
                 value: Always
+
+              - op: add
+                path: /spec/template/spec/containers/0/env/-
+                value:
+                  name: DEFAULT_PARENT
+                  value: "kube"
+
   values:
     kumaIngressWatcher:
       ingressRoute:
