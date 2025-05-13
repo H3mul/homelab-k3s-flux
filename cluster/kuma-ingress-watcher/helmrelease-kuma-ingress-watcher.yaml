@@ -18,7 +18,7 @@ spec:
   values:
     kumaIngressWatcher:
       ingressRoute:
-        enabled: True
+        enabled: False
       ingress:
         enabled: True
 
