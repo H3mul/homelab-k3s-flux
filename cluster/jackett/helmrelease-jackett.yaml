@@ -35,6 +35,7 @@ spec:
         enabled: true
         ingressClassName: nginx
         annotations:
+          uptime-kuma.autodiscovery.probe.accepted-statuscodes: '["400-499"]'
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_hide_header "x-webkit-csp";
             proxy_hide_header "content-security-policy";
