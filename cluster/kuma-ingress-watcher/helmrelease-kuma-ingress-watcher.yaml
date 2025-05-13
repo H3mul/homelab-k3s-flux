@@ -15,6 +15,16 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: kuma-ingress-watcher
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: kuma-ingress-watcher
+            patch: |
+              - op: add
+                path: /spec/template/spec/containers/0/imagePullPolicy
+                value: Always
   values:
     kumaIngressWatcher:
       ingressRoute:
@@ -31,3 +41,8 @@ spec:
       limits:
         memory: "128Mi"
         cpu: "500m"
+
+    deployment:
+      image:
+        name: ghcr.io/h3mul/kuma-ingress-watcher
+        tag: latest
