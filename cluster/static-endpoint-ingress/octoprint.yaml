@@ -42,8 +42,6 @@ metadata:
   namespace: static-endpoint-ingress
 spec:
   ingressClassName: nginx
-  annotations:
-    uptime-kuma.autodiscovery.probe.enabled: "false"
   tls:
   - secretName: letsencrypt-wildcard-cert-prod
     hosts:
