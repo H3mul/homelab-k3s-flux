@@ -97,4 +97,4 @@ tasks:
       - sh: "[ '{{.namespace}}' != '<no value>' ]"
         msg: "Variable .namespace is not set"
     cmds:
-      - kubectl -n {{.namespace}} create secret generic {{.name}} --from-literal={{.literal}} --dry-run=client -o yaml
+      - kubectl -n {{.namespace}} create secret generic {{.name}} --from-literal=test=value --dry-run=client -o yaml

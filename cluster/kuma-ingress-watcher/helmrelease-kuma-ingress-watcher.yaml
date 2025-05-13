@@ -1,0 +1,33 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kuma-ingress-watcher
+  namespace: kuma
+spec:
+  chart:
+    spec:
+      chart: kuma-ingress-watcher
+      version: 1.4.0
+      sourceRef:
+        kind: HelmRepository
+        name: kuma-ingress-watcher
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: kuma-ingress-watcher
+  values:
+    kumaIngressWatcher:
+      ingressRoute:
+        enabled: True
+      ingress:
+        enabled: True
+
+    namespace: kuma
+    uptimeKuma:
+      url: "http://10.1.1.10:31050"
+      credentialsSecret: uptime-kuma-credentials
+
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
