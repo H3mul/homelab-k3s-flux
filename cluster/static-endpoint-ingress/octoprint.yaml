@@ -35,28 +35,28 @@ selector: {}
 
 ---
 
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: octoprint-cam
-  namespace: static-endpoint-ingress
-spec:
-  ingressClassName: nginx
-  tls:
-  - secretName: letsencrypt-wildcard-cert-prod
-    hosts:
-    - &host octoprint-cam.${CLUSTER_DOMAIN}
-  rules:
-  - host: *host
-    http:
-      paths:
-      - pathType: Prefix
-        path: /
-        backend:
-          service:
-            name: octoprint
-            port:
-              number: 8080
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: octoprint-cam
+#   namespace: static-endpoint-ingress
+# spec:
+#   ingressClassName: nginx
+#   tls:
+#   - secretName: letsencrypt-wildcard-cert-prod
+#     hosts:
+#     - &host octoprint-cam.${CLUSTER_DOMAIN}
+#   rules:
+#   - host: *host
+#     http:
+#       paths:
+#       - pathType: Prefix
+#         path: /
+#         backend:
+#           service:
+#             name: octoprint
+#             port:
+#               number: 8080
 
 ---
 
