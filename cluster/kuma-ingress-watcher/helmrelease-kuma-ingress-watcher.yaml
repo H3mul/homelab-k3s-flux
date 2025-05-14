@@ -21,11 +21,11 @@ spec:
           - target:
               kind: Deployment
               name: kuma-ingress-watcher
-            patch: |
-              - op: add
-                path: /spec/template/spec/containers/0/imagePullPolicy
-                value: Always
 
+              # - op: add
+              #   path: /spec/template/spec/containers/0/imagePullPolicy
+              #   value: Always
+            patch: |
               - op: add
                 path: /spec/template/spec/containers/0/env/-
                 value:
@@ -52,4 +52,4 @@ spec:
     deployment:
       image:
         name: ghcr.io/h3mul/kuma-ingress-watcher
-        tag: latest
+        tag: v1.7.1.1
