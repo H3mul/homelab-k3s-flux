@@ -41,7 +41,7 @@ spec:
 
     namespace: kuma
     uptimeKuma:
-      url: "http://10.1.1.10:31050"
+      url: "http://${UPTIME_KUMA_HOST}:${UPTIME_KUMA_PORT}"
       credentialsSecret: uptime-kuma-credentials
 
     resources:

@@ -5,9 +5,9 @@ metadata:
   namespace: static-endpoint-ingress
 subsets: 
   - addresses:
-      - ip: "10.1.1.10" 
+      - ip: ${UPTIME_KUMA_HOST} 
     ports:
-      - port: 31050
+      - port: ${UPTIME_KUMA_PORT}
         name: "http"
 
 ---
@@ -21,8 +21,8 @@ spec:
   ports:
   - name: http
     protocol: TCP
-    port: 31050
-    targetPort: 31050
+    port: ${UPTIME_KUMA_PORT}
+    targetPort: ${UPTIME_KUMA_PORT}
     nodePort: 0
 selector: {}
 ---
@@ -48,4 +48,4 @@ spec:
           service:
             name: uptime-kuma
             port:
-              number: 31050
+              number: ${UPTIME_KUMA_PORT}
