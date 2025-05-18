@@ -25,7 +25,7 @@ spec:
               tag: v1.62.0@sha256:e9bf07f15c36555f4c7d28df44f137d420d6188bab0a53eb7dfbdcb62238caa4
             env:
               AUTOBRR__HOST: 0.0.0.0
-              AUTOBRR__PORT: &port 80
+              AUTOBRR__PORT: &port 7474
               AUTOBRR__METRICS_ENABLED: true
               AUTOBRR__METRICS_HOST: 0.0.0.0
               AUTOBRR__METRICS_PORT: &metricsPort 9094
@@ -69,23 +69,22 @@ spec:
     ingress:
       app:
         className: nginx
-        annotations:
+        # annotations:
           # nginx setup:
           # https://autobrr.com/installation/reverse-proxy/nginx
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection $http_connection;
+          # nginx.ingress.kubernetes.io/configuration-snippet: |
+          #   proxy_set_header Host $host;
+          #   proxy_set_header X-Real-IP $remote_addr;
+          #   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          #   proxy_set_header Upgrade $http_upgrade;
+          #   proxy_set_header Connection $http_connection;
         hosts:
         - host: &host "autobrr.${CLUSTER_DOMAIN}"
           paths:
           - path: /
             pathType: Prefix
             service:
-              name: app
+              port: *port
         tls:
         - secretName: letsencrypt-wildcard-cert-prod
           hosts:
@@ -103,7 +102,7 @@ spec:
         type: persistentVolumeClaim
         size: 5Gi
         accessMode: ReadWriteOnce
-        storageClassName: truenas-ssd-iscsi
+        storageClass: truenas-ssd-iscsi
       config-log:
         type: emptyDir
         globalMounts:
