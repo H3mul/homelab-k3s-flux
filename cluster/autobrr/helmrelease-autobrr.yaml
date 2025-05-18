@@ -1,0 +1,112 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app autobrr
+  namespace: media
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 4.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: autobrr
+  values:
+    controllers:
+      *app :
+        containers:
+          app:
+            image:
+              repository: ghcr.io/autobrr/autobrr
+              tag: v1.62.0@sha256:e9bf07f15c36555f4c7d28df44f137d420d6188bab0a53eb7dfbdcb62238caa4
+            env:
+              AUTOBRR__HOST: 0.0.0.0
+              AUTOBRR__PORT: &port 80
+              AUTOBRR__METRICS_ENABLED: true
+              AUTOBRR__METRICS_HOST: 0.0.0.0
+              AUTOBRR__METRICS_PORT: &metricsPort 9094
+              AUTOBRR__DATABASE_TYPE: sqlite
+              AUTOBRR__CHECK_FOR_UPDATES: false
+              AUTOBRR__LOG_LEVEL: INFO
+            envFrom:
+              - secretRef:
+                  name: autobrr-credentials
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/healthz/liveness
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              limits:
+                memory: 512Mi
+
+    service:
+      app:
+        controller: *app
+        ports:
+          http:
+            port: *port
+          metrics:
+            port: *metricsPort
+
+    ingress:
+      app:
+        className: nginx
+        annotations:
+          # nginx setup:
+          # https://autobrr.com/installation/reverse-proxy/nginx
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $http_connection;
+        hosts:
+        - host: &host "autobrr.${CLUSTER_DOMAIN}"
+          paths:
+          - path: /
+            pathType: Prefix
+            service:
+              name: app
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *host
+
+    serviceMonitor:
+      app:
+        serviceName: autobrr
+        endpoints:
+          - port: metrics
+
+    persistence:
+      config:
+        enabled: true
+        type: persistentVolumeClaim
+        size: 5Gi
+        accessMode: ReadWriteOnce
+        storageClassName: truenas-ssd-iscsi
+      config-log:
+        type: emptyDir
+        globalMounts:
+          - path: /config/log
+      tmp:
+        type: emptyDir
