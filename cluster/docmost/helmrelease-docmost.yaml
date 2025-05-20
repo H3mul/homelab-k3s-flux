@@ -1,0 +1,88 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app docmost
+  namespace: docmost
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 4.0.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: docmost
+  values:
+    controllers:
+      docmost:
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: 17.5.0
+            envFrom: &envFrom
+              - secretRef:
+                  name: docmost-credentials
+            env:
+            - name: INIT_POSTGRES_SUPER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-superuser
+                  key: username
+            - name: INIT_POSTGRES_SUPER_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-superuser
+                  key: password
+
+        containers:
+          app:
+            image:
+              repository: docmost/docmost
+              tag: 0.20.4
+            env:
+              TZ: "${TIMEZONE}"
+              APP_URL: "https://docmost.${CLUSTER_DOMAIN}"
+              PORT: &port 3000
+              REDIS_URL: "redis://redis.redis.svc.cluster.local:26379"
+            envFrom: *envFrom
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+
+    service:
+      app:
+        controller: docmost
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      app:
+        enabled: true
+        className: nginx
+        hosts:
+          - host: &host "docmost.${CLUSTER_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      data:
+        type: persistentVolumeClaim
+        size: 10Gi
+        accessMode: ReadWriteOnce
+        storageClass: truenas-ssd-iscsi
+        globalMounts:
+          - path: /app/data/storage
