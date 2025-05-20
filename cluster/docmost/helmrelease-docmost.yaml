@@ -66,6 +66,11 @@ spec:
       app:
         enabled: true
         className: nginx
+        annotations:
+          uptime-kuma.autodiscovery.probe.enabled: "false"
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
         hosts:
           - host: &host "docmost.${CLUSTER_DOMAIN}"
             paths:
@@ -75,8 +80,9 @@ spec:
                   identifier: app
                   port: http
         tls:
-          - hosts:
-              - *host
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *host
 
     persistence:
       data:
