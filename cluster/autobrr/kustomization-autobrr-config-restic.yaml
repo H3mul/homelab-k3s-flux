@@ -1,14 +1,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: b2-${name}-config
-  namespace: ${namespace}
+  name: b2-autobrr-config
+  namespace: media
 
 spec:
   interval: 5m
   wait: true
   prune: true
-  path: ./cluster/${name}/volsync
+  path: ./cluster/autobrr/volsync
   sourceRef:
     kind: GitRepository
     name: flux-system

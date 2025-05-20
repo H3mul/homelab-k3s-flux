@@ -1,1 +1,1 @@
-/cluster/${name}-volsync/secret-${name}-config-restic.yaml
+/cluster/${name}/volsync/secret-${name}-config-restic.yaml

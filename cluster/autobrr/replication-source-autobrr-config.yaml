@@ -1,14 +1,14 @@
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: b2-${name}-config
-  namespace: ${namespace}
+  name: b2-autobrr-config
+  namespace: media
 spec:
-  sourcePVC: ${name}-config
+  sourcePVC: autobrr
   trigger:
     schedule: ${VOLSYNC_BACKUP_SCHEDULE}
   restic:
-    repository: b2-${name}-config-restic
+    repository: b2-autobrr-config-restic
 
     copyMethod: Snapshot
     volumeSnapshotClassName: truenas-ssd-iscsi
