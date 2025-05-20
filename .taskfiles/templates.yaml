@@ -122,4 +122,4 @@ tasks:
         resources:
         EOL
 
-      - ls '{{.dir}}' -p | grep -v /$ | grep -v "kustomization.yaml" | sed 's/^/ - /' >> '{{.kustomization_file}}'
+      - git ls-files -cmo --exclude-standard --deduplicate '{{.dir}}' | grep -v "{{.dir}}/[^/]*/" | grep -v /$ | grep -v "kustomization.yaml" | sed 's#{{.dir}}/##'  | sed 's/^/ - /' >> '{{.kustomization_file}}'
