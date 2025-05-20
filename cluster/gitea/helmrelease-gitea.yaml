@@ -26,7 +26,7 @@ spec:
                 path: /spec/template/spec/initContainers/0
                 value:
                   name: init-db
-                  image: ghcr.io/onedr0p/postgres-init:16.6
+                  image: ghcr.io/home-operations/postgres-init:17.5.0
                   env:
                     - name: INIT_POSTGRES_HOST
                       value: postgres-cluster-rw.cloudnative-pg.svc.cluster.local
