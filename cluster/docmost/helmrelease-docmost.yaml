@@ -47,7 +47,7 @@ spec:
               TZ: "${TIMEZONE}"
               APP_URL: "https://docmost.${CLUSTER_DOMAIN}"
               PORT: &port 3000
-              REDIS_URL: "redis://redis.redis.svc.cluster.local:26379"
+              REDIS_URL: "redis://redis-master.redis.svc.cluster.local:6379"
             envFrom: *envFrom
             probes:
               liveness:
