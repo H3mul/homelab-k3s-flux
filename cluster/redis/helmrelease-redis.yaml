@@ -1,0 +1,47 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: redis
+  namespace: redis
+spec:
+  chart:
+    spec:
+      chart: redis
+      version: 21.0.x
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami-charts
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: redis
+  values:
+    auth:
+      enabled: false
+      sentinel: false
+    master:
+      resourcesPreset: nano
+      persistence:
+        enabled: false
+    replica:
+      resourcesPreset: nano
+      replicaCount: 2
+      persistence:
+        enabled: false
+    sentinel:
+      enabled: true
+      masterSet: redis-master
+      resourcesPreset: nano
+      getMasterTimeout: 20
+      startupProbe:
+        enabled: false
+        #initialDelaySeconds: 60
+        #failureThreshold: 5
+      persistence:
+        enabled: false
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+    networkPolicy:
+      enabled: false
