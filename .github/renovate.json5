@@ -10,6 +10,7 @@
     "ignorePaths": ["disabled/**"],
     "extends": [
         "config:best-practices",
+        ":dependencyDashboard",
         ":automergeMinor",
         ":automergeDigest",
         ":automergePatch",
