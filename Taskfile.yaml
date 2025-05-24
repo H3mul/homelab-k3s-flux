@@ -41,7 +41,7 @@ tasks:
       - watch "kubectl -n {{.namespace}} get events --sort-by='{.lastTimestamp}' | tail -n 15"
 
   k-init-pg:
-    desc: Manually initialize postgres-cluster using onedr0p/postgres-initdb
+    desc: Manually initialize postgres-cluster using postgres-initdb
     vars:
       POSTGRES_SUPER_USER:
         sh: kubectl -n cloudnative-pg get secret postgres-cluster-superuser -o go-template="{{ "{{" }}.data.username | base64decode{{ "}}" }}"
@@ -59,7 +59,7 @@ tasks:
           ghcr.io/home-operations/postgres-init:17.5.0
 
   k-init-mysql:
-    desc: Manually initialize postgres-cluster using onedr0p/postgres-initdb
+    desc: Manually initialize postgres-cluster using mysql-init
     vars:
       MYSQL_SUPER_USER: root
       MYSQL_SUPER_PASS:

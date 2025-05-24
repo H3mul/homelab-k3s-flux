@@ -17,8 +17,8 @@ spec:
   releaseName: radarr
   values:
     image:
-      repository: ghcr.io/onedr0p/radarr
-      tag: 5.14.0.9383@sha256:e4ead782fd1d4842765e0ef96bb863fc2fef72ee3e87e2b2a51dc33fb3ebc32c
+      repository: ghcr.io/home-operations/radarr
+      tag: 5.23.3.9987
 
     env:
       RADARR__INSTANCE_NAME: Radarr

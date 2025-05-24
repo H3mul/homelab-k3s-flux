@@ -23,8 +23,8 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/onedr0p/home-assistant
-              tag: 2025.1.4@sha256:6389f9593b4acd80c74322f56c9229fae631e752a3bf49839be12442a153e0dc
+              repository: ghcr.io/home-operations/home-assistant
+              tag: 2025.5.3
             env:
               TZ: ${TIMEZONE}
               LD_LIBRARY_PATH: /usr/lib
