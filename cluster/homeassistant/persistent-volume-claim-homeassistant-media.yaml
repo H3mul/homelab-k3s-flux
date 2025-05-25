@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: homeassistant-media
+  namespace: homeassistant
+spec:
+  resources:
+    requests:
+      storage: 1Mi
+  accessModes:
+  - ReadWriteMany
+  storageClassName: nfs-homeassistant-media
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: homeassistant-media
+  namespace: homeassistant
+spec:
+  storageClassName: nfs-homeassistant-media
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: ${NAS_HOST}
+    path: /mnt/hdd-replicated/Storage/Sync/HomeAssistant
+  # mountOptions:
+  # - nfsvers=3
+  # - tcp
+  # - intr
+  # - hard
+  # - noatime
+  # - nodiratime
+---

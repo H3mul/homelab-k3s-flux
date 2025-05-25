@@ -31,10 +31,10 @@ spec:
               HOME_ASSISTANT__HACS_INSTALL: true
 
             securityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              fsGroup: 568
-              fsGroupChangePolicy: OnRootMismatch
+              runAsUser: ${FILESHARE_USER_ID}
+              runAsGroup: ${FILESHARE_GROUP_ID}
+              fsGroup: ${FILESHARE_GROUP_ID}
+              fsGroupChangePolicy: "OnRootMismatch"
 
           code-server:
             image:
@@ -55,10 +55,10 @@ spec:
               - /config
 
             securityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              fsGroup: 568
-              fsGroupChangePolicy: OnRootMismatch
+              runAsUser: ${FILESHARE_USER_ID}
+              runAsGroup: ${FILESHARE_GROUP_ID}
+              fsGroup: ${FILESHARE_GROUP_ID}
+              fsGroupChangePolicy: "OnRootMismatch"
 
     service:
       main:
@@ -168,6 +168,13 @@ spec:
         accessMode: ReadWriteMany
         globalMounts:
           - path: /config
+
+      media:
+        enabled: true
+        type: persistentVolumeClaim
+        existingClaim: homeassistant-media
+        globalMounts:
+          - path: /config/media
 
       config-yaml:
         enabled: true

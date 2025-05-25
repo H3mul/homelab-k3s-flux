@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rsync-volume
+  namespace: ${namespace}
+
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: volume-copy
+        image: alpinelinux/rsyncd
+        imagePullPolicy: IfNotPresent
+
+        command: [ "/bin/sh" ]
+        args:
+          - -c
+          - rsync -rltDvvvP --info=progress2 /volume1/ /volume2/
+
+        volumeMounts:
+          - name: volume1
+            mountPath: /volume1
+
+          - name: volume2
+            mountPath: /volume2
+
+      volumes:
+        - name: volume1
+          persistentVolumeClaim:
+            claimName: ${volume1}
+
+        - name: volume2
+          persistentVolumeClaim:
+            claimName: ${volume2}
