@@ -81,3 +81,20 @@ tasks:
     cmds:
       - kubectl kustomize --enable-helm ./provision/kustomizations | kubectl apply -f -
       - rm -r ./provision/kustomizations/*/charts
+
+  k-rsync-volume:
+    desc: Rsync one volume claim into another
+    vars:
+      namespace: "{{.ns}}"
+      volume1: "{{.volume1}}"
+      volume2: "{{.volume2}}"
+    preconditions:
+      - sh: "[ '{{.namespace}}' != '<no value>' ]"
+        msg: "Variable .namespace is not set"
+      - sh: "[ '{{.volume1}}' != '<no value>' ]"
+        msg: "Variable .volume1 is not set"
+      - sh: "[ '{{.volume2}}' != '<no value>' ]"
+        msg: "Variable .volume2 is not set"
+    dir: '{{.PROJECT_DIR}}'
+    cmds:
+      - export namespace={{.namespace}} volume1={{.volume1}} volume2={{.volume2}}; envsubst '${volume1},${volume2},${namespace}' < .taskfiles/kubernetes/job-rsync-volume.yaml | kubectl apply -f -

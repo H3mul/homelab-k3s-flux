@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.2.x
+      version: 4.0.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -59,18 +59,6 @@ spec:
               runAsGroup: 568
               fsGroup: 568
               fsGroupChangePolicy: OnRootMismatch
-
-        # initContainers:
-        #   chown:
-        #     image:
-        #       repository: alpine
-        #       tag: 3.20
-        #     command:
-        #       - chown
-        #     args:
-        #       - 568:568
-        #       - -R
-        #       - /config
 
     service:
       main:
@@ -134,12 +122,57 @@ spec:
           hosts:
           - *code-host
 
+    configMaps:
+      config:
+        data:
+          configuration.yaml: |
+            # Generated from ConfigMap
+
+            # Loads default set of integrations. Do not remove.
+            default_config:
+
+            # Load frontend themes from the themes folder
+            frontend:
+              themes: !include_dir_merge_named themes
+
+            prometheus:
+              namespace: hass
+
+            # Text to speech
+            tts:
+              - platform: google_translate
+
+            http:
+              use_x_forwarded_for: true
+              trusted_proxies:
+                - 0.0.0.0/0
+                - 10.244.0.0/24
+
+            homeassistant:
+              allowlist_external_dirs:
+                - /config/media
+              media_dirs:
+                media: /config/media
+
+            automation: !include automations.yaml
+            script: !include scripts.yaml
+            scene: !include scenes.yaml   
+
+
     persistence:
       config:
         enabled: true
         type: persistentVolumeClaim
         size: 6Gi
-        storageClass: truenas-ssd-iscsi
-        accessMode: ReadWriteOnce
+        storageClass: truenas-ssd-nfs
+        accessMode: ReadWriteMany
         globalMounts:
           - path: /config
+
+      config-yaml:
+        enabled: true
+        type: configMap
+        name: homeassistant
+        globalMounts:
+          - path: /config/configuration.yaml
+            subPath: configuration.yaml

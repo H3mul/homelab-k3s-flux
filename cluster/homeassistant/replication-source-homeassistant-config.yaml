@@ -4,15 +4,15 @@ metadata:
   name: b2-homeassistant-config
   namespace: homeassistant
 spec:
-  sourcePVC: homeassistant-config
+  sourcePVC: homeassistant
   trigger:
     schedule: ${VOLSYNC_BACKUP_SCHEDULE}
   restic:
     repository: b2-homeassistant-config-restic
 
     copyMethod: Snapshot
-    volumeSnapshotClassName: truenas-ssd-iscsi
-    storageClassName: truenas-ssd-iscsi
+    volumeSnapshotClassName: truenas-ssd-nfs
+    storageClassName: truenas-ssd-nfs
 
     pruneIntervalDays: 10
     cacheCapacity: 6G
