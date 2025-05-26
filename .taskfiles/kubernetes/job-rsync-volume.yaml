@@ -10,7 +10,7 @@ spec:
       restartPolicy: OnFailure
       containers:
       - name: volume-copy
-        image: alpinelinux/rsyncd
+        image: alpinelinux/rsyncd@sha256:1f6d1953386bb0149a999c9b14fa171e6d340bb68fc61c82a955fabbfe102f77
         imagePullPolicy: IfNotPresent
 
         command: [ "/bin/sh" ]
