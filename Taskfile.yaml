@@ -98,3 +98,21 @@ tasks:
     dir: '{{.PROJECT_DIR}}'
     cmds:
       - export namespace={{.namespace}} volume1={{.volume1}} volume2={{.volume2}}; envsubst '${volume1},${volume2},${namespace}' < .taskfiles/kubernetes/job-rsync-volume.yaml | kubectl apply -f -
+
+  k-cmd-volume:
+    desc: Rsync one volume claim into another
+    vars:
+      namespace: "{{.ns}}"
+      volume: "{{.volume}}"
+      command: "{{.cmd}}"
+    preconditions:
+      - sh: "[ '{{.namespace}}' != '<no value>' ]"
+        msg: "Variable .namespace is not set"
+      - sh: "[ '{{.volume}}' != '<no value>' ]"
+        msg: "Variable .volume is not set"
+      - sh: "[ '{{.command}}' != '<no value>' ]"
+        msg: "Variable .command is not set"
+    dir: '{{.PROJECT_DIR}}'
+    cmds:
+      - export namespace={{.namespace}} volume={{.volume}} command="{{.command}}"; envsubst '${volume},${namespace},command="{{.command}}"' < .taskfiles/kubernetes/job-cmd-volume.yaml | kubectl apply -f -
+
