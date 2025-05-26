@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cmd-volume
+  namespace: ${namespace}
+
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: volume-cmd
+        image: alpine
+        imagePullPolicy: IfNotPresent
+
+        command: [ "/bin/sh" ]
+        args:
+          - -c
+          - ${command}
+
+        volumeMounts:
+          - name: volume
+            mountPath: /volume
+
+      volumes:
+        - name: volume
+          persistentVolumeClaim:
+            claimName: ${volume}
