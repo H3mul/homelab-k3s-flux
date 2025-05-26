@@ -31,38 +31,38 @@ spec:
   superuserSecret:
     name: postgres-cluster-superuser
 
-  # backup:
-  #   retentionPolicy: 4w
-  #   barmanObjectStore: &backupObjStore
-  #     wal:
-  #       compression: gzip
-  #     destinationPath: s3://cloudnative-pg-backup/
-  #     endpointURL: https://s3.us-east-005.backblazeb2.com
-  #     serverName: postgres-cluster-backup-v2
-  #     s3Credentials:
-  #       accessKeyId:
-  #         name: b2-cloudnative-pg-bucket-credentials
-  #         key: B2_ACCOUNT_ID
-  #       secretAccessKey:
-  #         name: b2-cloudnative-pg-bucket-credentials
-  #         key: B2_ACCOUNT_KEY
+  backup:
+    retentionPolicy: 4w
+    barmanObjectStore:
+      wal:
+        compression: gzip
+      destinationPath: s3://cloudnative-pg-backup/
+      endpointURL: https://s3.us-east-005.backblazeb2.com
+      serverName: postgres-cluster-backup-v2
+      s3Credentials:
+        accessKeyId:
+          name: b2-cloudnative-pg-bucket-credentials
+          key: B2_ACCOUNT_ID
+        secretAccessKey:
+          name: b2-cloudnative-pg-bucket-credentials
+          key: B2_ACCOUNT_KEY
 
-  bootstrap:
-    recovery:
-      source: clusterBackup
+  # bootstrap:
+  #   recovery:
+  #     source: clusterBackup
 
-  externalClusters:
-    - name: clusterBackup
-      barmanObjectStore:
-        wal:
-          compression: gzip
-        destinationPath: s3://cloudnative-pg-backup/
-        endpointURL: https://s3.us-east-005.backblazeb2.com
-        serverName: postgres-cluster-backup-v2
-        s3Credentials:
-          accessKeyId:
-            name: b2-cloudnative-pg-bucket-credentials
-            key: B2_ACCOUNT_ID
-          secretAccessKey:
-            name: b2-cloudnative-pg-bucket-credentials
-            key: B2_ACCOUNT_KEY
+  # externalClusters:
+  #   - name: clusterBackup
+  #     barmanObjectStore:
+  #       wal:
+  #         compression: gzip
+  #       destinationPath: s3://cloudnative-pg-backup/
+  #       endpointURL: https://s3.us-east-005.backblazeb2.com
+  #       serverName: postgres-cluster-backup-v2
+  #       s3Credentials:
+  #         accessKeyId:
+  #           name: b2-cloudnative-pg-bucket-credentials
+  #           key: B2_ACCOUNT_ID
+  #         secretAccessKey:
+  #           name: b2-cloudnative-pg-bucket-credentials
+  #           key: B2_ACCOUNT_KEY
