@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/0xerr0r/blocky
-      tag: v0.24@sha256:9a82e0235c52ef3048586f8006add06e52132adaae70d02f980569dae16421a2
+      tag: v0.26@sha256:b259ada3f943e73283f1fc5e84ac39a791afec7de86515d1aeccc03d2c39e595
     service:
       main:
         enabled: true
