@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vintagestory-server-configs
+  namespace: vintagestory
+data:
+  mods.yaml: |
+    mods:
+      - id: bettersticks
+        version: 1.2.0
+      - id: betterprospecting
+        version: 1.7.0

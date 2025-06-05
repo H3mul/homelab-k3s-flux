@@ -1,13 +1,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: ${name}
+  name: &app ${name}
   namespace: ${namespace}
 spec:
   chart:
     spec:
       chart: app-template
-      version: 3.6.x
+      version: 4.0.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -17,7 +17,7 @@ spec:
   releaseName: ${name}
   values:
     controllers:
-      ${name}:
+      *app :
 
         # pod:
         #   securityContext:
@@ -36,7 +36,7 @@ spec:
 
     service:
       main:
-        controller: ${name}
+        controller: *app
         ports:
           http:
             port: 
