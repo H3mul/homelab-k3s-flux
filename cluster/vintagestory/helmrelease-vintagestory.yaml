@@ -74,7 +74,14 @@ spec:
       config:
         type: configMap
         name: vintagestory-server-configs
+        defaultMode: 0755
         globalMounts:
-          - path: /init/mods.yaml
-            subPath: mods.yaml
+          - subPath: mods.yaml
+            path: /init/mods.yaml
+            readOnly: true
+          - subPath: serverconfig.json
+            path: /data/serverconfig.json
+            readOnly: true
+          - subPath: servermagicnumbers.json
+            path: /data/servermagicnumbers.json
             readOnly: true
