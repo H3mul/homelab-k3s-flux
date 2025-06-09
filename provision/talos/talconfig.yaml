@@ -29,7 +29,7 @@ nodes:
     ipAddress: 10.1.1.9
     controlPlane: true
     installDiskSelector:
-      wwid: naa.5002538d42b34ad9
+      wwid: naa.50026b7785299bb0
   - hostname: gemino
     disableSearchDomain: true
     ipAddress: 10.1.1.3
