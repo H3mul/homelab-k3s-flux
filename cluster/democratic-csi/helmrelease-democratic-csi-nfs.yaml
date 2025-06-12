@@ -28,6 +28,13 @@ spec:
       # should be globally unique for a given cluster
       name: org.democratic-csi.ssd.nfs
 
+    controller:
+      driver:
+        enabled: true
+        image:
+          registry: docker.io/democraticcsi/democratic-csi
+          tag: next
+
     driver:
       # see the driver-config-secret.yaml for syntax
       # NOTE: if setting an existing secret you must still set `driver.config.driver`
