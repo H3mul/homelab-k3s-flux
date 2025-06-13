@@ -14,8 +14,8 @@ spec:
 
   healthChecks:
     - apiVersion: apps/v1
-      kind: Deployment
-      name: redis
+      kind: StatefulSet
+      name: redis-master
       namespace: redis
   postBuild:
     substituteFrom:
