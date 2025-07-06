@@ -6,7 +6,7 @@ metadata:
 spec:
   sourcePVC: syncthing-config
   trigger:
-    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+    schedule: 14 0 * * 0
   restic:
     repository: b2-syncthing-config-restic
 

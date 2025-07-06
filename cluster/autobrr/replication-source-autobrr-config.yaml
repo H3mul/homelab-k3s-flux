@@ -6,7 +6,7 @@ metadata:
 spec:
   sourcePVC: autobrr
   trigger:
-    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+    schedule: 0 0 * * 0
   restic:
     repository: b2-autobrr-config-restic
 

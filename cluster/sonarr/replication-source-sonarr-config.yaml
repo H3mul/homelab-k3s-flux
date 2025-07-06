@@ -6,7 +6,7 @@ metadata:
 spec:
   sourcePVC: sonarr-config
   trigger:
-    schedule: ${VOLSYNC_BACKUP_SCHEDULE}
+    schedule: 13 0 * * 0
   restic:
     repository: b2-sonarr-config-restic
 
