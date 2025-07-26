@@ -196,7 +196,7 @@ spec:
     ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
     ## Includes: scale to zero
     autoscaler:
-      image: ghcr.io/openfaasltd/autoscaler:0.3.18@sha256:3870bdce192b9af7923e79a75e83844b8c43e38b45ff27bfa5823761527abd0a
+      image: ghcr.io/openfaasltd/autoscaler:0.3.20@sha256:4396be0b11bd2a3403e8f37295792c67264805ce1414ab9d87fc471548266e4f
       replicas: 1
       enabled: true
       resources:
