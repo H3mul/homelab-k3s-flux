@@ -162,7 +162,7 @@ spec:
     #
     # Enabled automatically when openfaasPro is set to true
     queueWorkerPro:
-      image: ghcr.io/openfaasltd/queue-worker:0.4.0@sha256:69871687fe8c3c49c5f95320a1d5f12e692de6b37578f449ad3ae698f94a47cf
+      image: ghcr.io/openfaasltd/queue-worker:0.4.1@sha256:165cc900a26c49007ff3720d4ceaf727dd6b41ddc26bd77e640ebc9fdc1583f3
       maxRetryAttempts: "10"
       maxRetryWait: "120s"
       initialRetryWait: "10s"
