@@ -123,3 +123,19 @@ tasks:
         EOL
 
       - git ls-files -cmo --exclude-standard --deduplicate '{{.dir}}' | grep -v "{{.dir}}/[^/]*/" | grep -v /$ | grep -v "kustomization.yaml" | sed 's#{{.dir}}/##'  | sed 's/^/ - /' >> '{{.kustomization_file}}'
+
+  k-disable:
+    desc: disable a kustomization from the bootstrap dir
+    preconditions:
+      - sh: "[ '{{.name}}' != '<no value>' ]"
+        msg: "Variable .name is not set"
+    cmds:
+      - mv bootstrap/kustomizations/*{{.name}}* disabled/kustomizations/
+
+  k-enable:
+    desc: enable a kustomization from the disabled dir
+    preconditions:
+      - sh: "[ '{{.name}}' != '<no value>' ]"
+        msg: "Variable .name is not set"
+    cmds:
+      - mv disabled/kustomizations/*{{.name}}* bootstrap/kustomizations/
