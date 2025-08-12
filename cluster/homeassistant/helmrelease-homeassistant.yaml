@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 4.0.x
+      version: 4.2.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -39,7 +39,7 @@ spec:
           code-server:
             image:
               repository: ghcr.io/coder/code-server
-              tag: "4.101.2@sha256:5f654c1137f8d87c8cf44253318bf94b85f6f9129e426a9956da46eb602dcc5a"
+              tag: 4.102.2@sha256:8c2aaafb74a2978f48d193135eb3ea6fc0e24563dd59c028b9f1808cefd0fa33
             envFrom:
               - secretRef:
                   name: code-server-password
@@ -47,9 +47,9 @@ spec:
               - --auth
               - password
               - --user-data-dir
-              - /config/.vscode
+              - /tmp/vscode
               - --extensions-dir
-              - /config/.vscode
+              - /tmp/vscode
               - --port
               - &codeServerPort "8081"
               - /config
@@ -183,3 +183,10 @@ spec:
         globalMounts:
           - path: /config/configuration.yaml
             subPath: configuration.yaml
+
+      config-venv-emptydir:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /config/.venv
+
