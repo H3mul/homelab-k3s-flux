@@ -178,7 +178,7 @@
                 # - --api.insecure=true
 
             wireguard:
-              image: linuxserver/wireguard:1.0.20250521@sha256:e4a21173bf693470b2d1d5dbb5f3ac25ad95c86fa3e81b9809297be9bef2831f
+              image: linuxserver/wireguard:1.0.20250521@sha256:ae0a555aa5cebfc9d510c8a7b439e210db2556e36757d10f2989b850a5e63b81
               container_name: wireguard
               environment:
                 LOG_CONFS: "true"
