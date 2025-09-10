@@ -28,6 +28,21 @@ spec:
               QBITTORRENT__PORT: &appport 8080
               QBITTORRENT__BT_PORT: "${BITTORRENT_PORT}"
 
+            # VPN killswitch, see vpn-gateway
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - if [ $(wget -q -O- https://ipinfo.io/city) == 'Seattle' ]; then exit 0; else exit $?; fi
+                  initialDelaySeconds: 30
+                  periodSeconds: 60
+                  failureThreshold: 3
+
           exporter:
             image:
               repository: ghcr.io/esanchezm/prometheus-qbittorrent-exporter
