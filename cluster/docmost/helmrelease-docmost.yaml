@@ -42,7 +42,7 @@ spec:
           app:
             image:
               repository: docmost/docmost
-              tag: 0.23.1@sha256:ef298fa3c38611890fac5a0f8de4fe70ca20bf2317536b1ebd9cc617c6dfa4c3
+              tag: 0.23.2@sha256:59b3baad9114de990c02a7038dd2a319e815f878906a189ea9d9f26d74fc0985
             env:
               TZ: "${TIMEZONE}"
               APP_URL: "https://docmost.${CLUSTER_DOMAIN}"
