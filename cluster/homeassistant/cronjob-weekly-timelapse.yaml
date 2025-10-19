@@ -17,8 +17,9 @@ spec:
           restartPolicy: Never
           containers:
 
-          - name: timelapse-creator
-            image: jrottenberg/ffmpeg:4.4-alpine
+          - name: timelapser
+            image: ghcr.io/h3mul/timelapser:v0.1.0
+            imagePullPolicy: Always
 
             securityContext:
               runAsUser: ${FILESHARE_USER_ID}
@@ -40,107 +41,6 @@ spec:
             - name: tmp-volume
               mountPath: /tmp
 
-            command: ["/bin/sh"]
-            args: 
-            - -c
-            - |
-              set -euo pipefail
-
-              # Configuration - require all environment variables
-              if [ -z "$PERIOD_DAYS" ]; then
-                PERIOD_DAYS=7
-              fi
-              
-              # Check required environment variables
-              if [ -z "$INPUT_DIR" ]; then
-                echo "ERROR: INPUT_DIR environment variable is required"
-                exit 1
-              fi
-              
-              if [ -z "$OUTPUT_DIR" ]; then
-                echo "ERROR: OUTPUT_DIR environment variable is required"
-                exit 1
-              fi
-              
-              echo "Creating timelapse for last $PERIOD_DAYS days"
-              echo "Input directory: $INPUT_DIR"
-              echo "Output directory: $OUTPUT_DIR"
-              
-              # Create output directory if it doesn't exist
-              mkdir -p "$OUTPUT_DIR"
-              
-              # Calculate date range
-              END_DATE=$(date +%Y%m%d)
-              START_DATE=$(date -d "@$(($(date +%s) - PERIOD_DAYS * 86400))" +%Y%m%d 2>/dev/null || date -D %s -d "$(($(date +%s) - PERIOD_DAYS * 86400))" +%Y%m%d 2>/dev/null || date +%Y%m%d -d "@$(($(date +%s) - PERIOD_DAYS * 86400))")
-              
-              echo "Processing images from $START_DATE to $END_DATE"
-              
-              # Create temporary directory for filtered images
-              TEMP_DIR="/tmp/timelapse_$END_DATE"
-              mkdir -p "$TEMP_DIR"
-              
-              # Find and copy images from the specified period
-              COPIED_COUNT=0
-              for img in "$INPUT_DIR"/*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9].jpg; do
-                if [ -f "$img" ]; then
-                  # Extract date from filename (format: *_YYYYMMDD-HHMMSS.jpg)
-                  FILENAME=$(basename "$img")
-                  DATE_PART=$(echo "$FILENAME" | sed -n 's/.*_\([0-9]\{8\}\)-[0-9]\{6\}\.jpg$/\1/p')
-                  
-                  if [ ! -z "$DATE_PART" ] && [ "$DATE_PART" -ge "$START_DATE" ] && [ "$DATE_PART" -le "$END_DATE" ]; then
-                    cp "$img" "$TEMP_DIR/"
-                    COPIED_COUNT=$((COPIED_COUNT + 1))
-                  fi
-                fi
-              done
-              
-              echo "Found $COPIED_COUNT images in date range"
-              
-              if [ $COPIED_COUNT -gt 0 ]; then
-                # Sort images by filename (which includes timestamp)
-                cd "$TEMP_DIR"
-                ls -1 *.jpg | sort > filelist.txt
-                
-                # Create output filename with date range
-                OUTPUT_FILE="$${OUTPUT_DIR}/timelapse_$${START_DATE}_to_$${END_DATE}.mp4"
-                
-                echo "Creating timelapse video: $OUTPUT_FILE"
-                
-                # Create timelapse video
-                # -r 24: input framerate (24 fps)
-                # -pattern_type glob: use glob pattern for input
-                # -f concat: concatenate input files
-                # -safe 0: allow unsafe file paths
-                # -r 30: output framerate (30 fps)
-                # -vf scale=1920:1080: scale to 1080p
-                # -c:v libx264: use H.264 codec
-                # -pix_fmt yuv420p: pixel format for compatibility
-                # -crf 23: quality (lower = better quality)
-                
-                # Create concat file for ffmpeg
-                while read filename; do
-                  echo "file '$filename'" >> concat_list.txt
-                done < filelist.txt
-                
-                ffmpeg -f concat -safe 0 -i concat_list.txt \
-                  -vf "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,fps=30" \
-                  -c:v libx264 -pix_fmt yuv420p -crf 23 \
-                  -movflags +faststart \
-                  "$OUTPUT_FILE"
-                
-                echo "Timelapse created successfully: $OUTPUT_FILE"
-                
-                # Cleanup
-                rm -rf "$TEMP_DIR"
-                
-                # Optional: cleanup old timelapse videos (keep last 10)
-                cd "$OUTPUT_DIR"
-                ls -t timelapse_*.mp4 2>/dev/null | tail -n +11 | xargs -r rm
-                
-                echo "Cleanup completed"
-              else
-                echo "No images found in the specified date range"
-              fi
           volumes:
           - name: media-volume
             persistentVolumeClaim:
