@@ -18,7 +18,7 @@ spec:
           containers:
 
           - name: timelapser
-            image: ghcr.io/h3mul/timelapser:v0.1.0
+            image: ghcr.io/h3mul/timelapser:v0.1.0@sha256:68f2395a68b719139b0175d511533abbb20a8102f454972489bfbb3d35a0e0e9
             imagePullPolicy: Always
 
             securityContext:
