@@ -2,6 +2,8 @@
 /.test
 /.task
 secret-*.yaml
+*.key
+!*.sops.key
 !*secret-*-restic.yaml
 !*secret-unsealed*.yaml
 !*.sops.yaml
