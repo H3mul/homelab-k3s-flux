@@ -53,7 +53,7 @@ tasks:
       - sh: "test -f {{.file}}"
         msg: "File {{.file}} does not exist"
     cmds:
-      - kubeseal --recovery-unseal --recovery-private-key <(sops -d sealed-secret-keys.sops.yaml | yq -r '.data["tls.key"] | @base64d') < {{.file}}
+      - kubeseal --recovery-unseal --recovery-private-key <(sops -d sealed-secrets.sops.yaml | yq -r '.data["tls.key"] | @base64d') < {{.file}}
 
   k-events:
     desc: Watch kubernetes events in namespace
