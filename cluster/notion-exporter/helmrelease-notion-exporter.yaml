@@ -1,0 +1,48 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app notion-exporter
+  namespace: notion-exporter
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 4.4.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: notion-exporter
+  values:
+    controllers:
+      *app :
+        type: cronjob
+        cronjob:
+          schedule: "0 0 * * 0" # Every 5 minutes
+        containers:
+          *app :
+            initContainers:
+              clearData:
+                image: busybox
+                command: ['sh', '-c', 'rm -rf /data/*']
+            image:
+              repository: ghcr.io/h3mul/notion-exporter
+              tag: v0.8.0
+            env:
+              TZ: ${TIMEZONE}
+              OUTPUT_DIR: /data
+            envFrom:
+              - secretRef:
+                  name: notion-credentials
+
+    persistence:
+      config:
+        enabled: true
+        type: persistentVolumeClaim
+        size: 5Gi
+        globalMounts:
+          - path: /data
+        accessMode: ReadWriteOnce
+        storageClass: truenas-ssd-iscsi
