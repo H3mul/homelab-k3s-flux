@@ -27,8 +27,33 @@ tasks:
       dir:
         sh: dirname {{.file}}
     cmds:
-      - kubeseal --cert sealed-secrets.pem < {{.file}} > {{.dir}}/sealed-{{.filename}} -o yaml
+      - kubeseal --controller-name=sealed-secrets --controller-namespace=sealed-secrets < {{.file}} > {{.dir}}/sealed-{{.filename}} -o yaml
 
+  k-reencrypt:
+    desc: run kubeseal --re-encrypt on a file
+    preconditions:
+      - sh: "test '{{.file}}' != '<no value>'"
+        msg: "Variable .file is not set"
+      - sh: "test -f {{.file}}"
+        msg: "File {{.file}} does not exist"
+    cmds:
+      - kubeseal --re-encrypt --controller-name=sealed-secrets --controller-namespace=sealed-secrets -o yaml < {{.file}} | sponge {{.file}}
+
+  k-reencrypt-all:
+    desc: run kubeseal --re-encrypt on all sealed-secret*.yaml files
+    cmds:
+      - |
+        find . -name 'sealed-secret-*.yaml' -type f | xargs -I {} -P 0 sh -c 'echo "Re-encrypting: $1" && kubeseal --re-encrypt --controller-name=sealed-secrets --controller-namespace=sealed-secrets -o yaml < "$1" | sponge "$1"' _ {}
+
+  k-unseal:
+    desc: kubeseal decrypt a sealed secret yaml file
+    preconditions:
+      - sh: "test '{{.file}}' != '<no value>'"
+        msg: "Variable .file is not set"
+      - sh: "test -f {{.file}}"
+        msg: "File {{.file}} does not exist"
+    cmds:
+      - kubeseal --recovery-unseal --recovery-private-key <(sops -d sealed-secret-keys.sops.yaml | yq -r '.data["tls.key"] | @base64d') < {{.file}}
 
   k-events:
     desc: Watch kubernetes events in namespace

@@ -85,7 +85,7 @@ kubeseal --fetch-cert --controller-name=sealed-secrets --controller-namespace=se
 It is also possible to manually decrypt sealed secret files using the private key locally:
 
 ```
-kubeseal --recovery-unseal --recovery-private-key <(sops -d provision/secret-sealed-secret-keys.sops.yaml | yq -r '.data["tls.key"] | @base64d') < sealed-secret-file.yaml
+kubeseal --recovery-unseal --recovery-private-key <(sops -d sealed-secret-keys.sops.yaml | yq -r '.data["tls.key"] | @base64d') < sealed-secret-file.yaml
 ```
 
 ## Troubleshoot
