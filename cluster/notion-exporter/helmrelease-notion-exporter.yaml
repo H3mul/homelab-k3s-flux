@@ -21,12 +21,14 @@ spec:
         type: cronjob
         cronjob:
           schedule: "0 0 * * 0" # Every 5 minutes
+        initContainers:
+          clear-data:
+            image: 
+              repository: busybox
+              tag: 1.37.0
+            command: ['sh', '-c', 'rm -rf /data/*']
         containers:
           *app :
-            initContainers:
-              clearData:
-                image: busybox
-                command: ['sh', '-c', 'rm -rf /data/*']
             image:
               repository: ghcr.io/h3mul/notion-exporter
               tag: v0.8.0
