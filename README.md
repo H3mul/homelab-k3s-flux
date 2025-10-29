@@ -47,15 +47,28 @@ Additionally, each node needs to be
 
 ### Upgrading Talos and Kubernetes
 
-Upgrade desired talos and kubernetes versions in `provision/talos/talconfig.yaml`
+> [!IMPORTANT]
+> Talos usually cannot jump over major versions 
+> 
+> look for logs like:
+> ```
+> Error: pre-flight checks failed: host version 1.7.6 is too old to upgrade to Talos 1.9.4
+>```
+> [#10447](https://github.com/siderolabs/talos/discussions/10447)
+
+If your version is too old for a direct upgrade, progressively jump major talos versions with corresponding kubernetes versions until latest. Wait for all services to be healthy before proceeding.
+
+Update desired talos and kubernetes versions in `provision/talos/talconfig.yaml`
+
+Upgrade Talos:
 
 ```
 cd provision/talos
 talhelper genconfig
 
-# Run commands printed by talhelper, probably 1 host at a time:
-talhelper gencommand apply
-talhelper gencommand upgrade
+# Run commands printed by talhelper, probably 1 host at a time, eg:
+talhelper gencommand apply -n 10.1.1.8 | sh
+talhelper gencommand upgrade -n 10.1.1.8 | sh
 ```
 
 ## 2. Bootstrap flux:

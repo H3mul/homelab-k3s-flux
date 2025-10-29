@@ -81,6 +81,7 @@ controlPlane:
               format: json_lines
         install:
           extraKernelArgs:
+            - intel_iommu=igfx_off
             - talos.logging.kernel=tcp://vector.hemul.net:5170
 
     - |-
