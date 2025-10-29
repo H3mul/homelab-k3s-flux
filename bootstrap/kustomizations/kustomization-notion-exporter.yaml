@@ -12,11 +12,11 @@ spec:
     kind: GitRepository
     name: flux-system
 
-  healthChecks:
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: notion-exporter
-      namespace: notion-exporter
+  # healthChecks:
+  #   - apiVersion: apps/v1
+  #     kind: Deployment
+  #     name: notion-exporter
+  #     namespace: notion-exporter
   postBuild:
     substituteFrom:
       - kind: ConfigMap

@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: notion-exporter
+resources:
+ - kustomization-notion-exporter-restic.yaml
+ - replication-source-notion-exporter.yaml
+ - helmrelease-notion-exporter.yaml
+ - sealed-secret-notion-credentials.yaml

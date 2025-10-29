@@ -1,0 +1,28 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: b2-notion-exporter
+  namespace: notion-exporter
+spec:
+  sourcePVC: notion-exporter
+  trigger:
+    schedule: 16 0 * * 0
+  restic:
+    repository: b2-notion-exporter-restic
+
+    copyMethod: Snapshot
+    volumeSnapshotClassName: truenas-ssd-iscsi
+    storageClassName: truenas-ssd-iscsi
+
+    pruneIntervalDays: 10
+    cacheCapacity: 5Gi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 6
+      within: 3d
+
+    moverSecurityContext:
+      runAsUser: ${FILESHARE_USER_ID}
+      runAsGroup: ${FILESHARE_GROUP_ID}
+      fsGroup: ${FILESHARE_GROUP_ID}
