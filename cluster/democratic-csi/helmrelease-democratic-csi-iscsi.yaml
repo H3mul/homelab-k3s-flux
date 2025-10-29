@@ -27,6 +27,9 @@ spec:
     # Important: Talos uses iscsi-tools system extension, which has different paths than default iscsi install
     # From: https://github.com/ishioni/homelab-ops/blob/7a3c3c7f7125c69e8ecac16027e24b438eeeaa42/kubernetes/talos/apps/storage/democratic-csi/iscsi/helmrelease.yaml
     # https://github.com/siderolabs/extensions/issues/38
+
+    # Host dir path changed in the iscsi extension:
+    # https://github.com/siderolabs/extensions/issues/688#issuecomment-2850824503
     node:
       hostPID: true
       driver:
