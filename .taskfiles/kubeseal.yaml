@@ -1,0 +1,58 @@
+version: "3"
+tasks:
+  seal:
+    desc: kubeseal a secret yaml file
+    preconditions:
+      - sh: "test '{{.file}}' != '<no value>'"
+        msg: "Variable .file is not set"
+      - sh: "test -f {{.file}}"
+        msg: "File {{.file}} does not exist"
+    vars:
+      filename:
+        sh: basename {{.file}}
+      dir:
+        sh: dirname {{.file}}
+    cmds:
+      - kubeseal --controller-name=sealed-secrets --controller-namespace=sealed-secrets < {{.file}} > {{.dir}}/sealed-{{.filename}} -o yaml
+
+  validate:
+    desc: Check if the file can be unsealed by the current controller (any of the keys stored in kube namespace)
+    preconditions:
+      - sh: "test '{{.file}}' != '<no value>'"
+        msg: "Variable .file is not set"
+      - sh: "test -f {{.file}}"
+        msg: "File {{.file}} does not exist"
+    cmds:
+      - kubeseal --validate --controller-name=sealed-secrets --controller-namespace=sealed-secrets < {{.file}}
+
+  reencrypt:
+    desc: run kubeseal --re-encrypt on a file
+    preconditions:
+      - sh: "test '{{.file}}' != '<no value>'"
+        msg: "Variable .file is not set"
+      - sh: "test -f {{.file}}"
+        msg: "File {{.file}} does not exist"
+    cmds:
+      - kubeseal --re-encrypt --controller-name=sealed-secrets --controller-namespace=sealed-secrets -o yaml < {{.file}} | sponge {{.file}}
+
+  reencrypt-all:
+    desc: run kubeseal --re-encrypt on all sealed-secret*.yaml files
+    cmds:
+      - |
+        find . -name 'sealed-secret-*.yaml' -type f | xargs -I {} -P 0 sh -c 'echo "Re-encrypting: $1" && kubeseal --re-encrypt --controller-name=sealed-secrets --controller-namespace=sealed-secrets -o yaml < "$1" | sponge "$1"' _ {}
+
+  unseal:
+    desc: kubeseal decrypt a sealed secret yaml file using the latest stored private key
+    preconditions:
+      - sh: "test '{{.file}}' != '<no value>'"
+        msg: "Variable .file is not set"
+      - sh: "test -f {{.file}}"
+        msg: "File {{.file}} does not exist"
+    cmds:
+      - kubeseal --recovery-unseal --recovery-private-key <(sops -d sealed-secrets.sops.yaml | yq -r '.items[-1].data["tls.key"] | @base64d') < {{.file}}
+
+  fetch-keys:
+    desc: Fetch all sealed-secret keys from kubernetes namespace and store them safely in this repo
+    cmds:
+      - kubeseal --fetch-cert --controller-name=sealed-secrets --controller-namespace=sealed-secrets > sealed-secrets.pem
+      - kubectl -n sealed-secrets get secret -l sealedsecrets.bitnami.com/sealed-secrets-key -o yaml --sort-by=.metadata.creationTimestamp | sops -e --input-type yaml --output-type yaml --encrypted-regex '^(data|stringData)$' /dev/stdin > sealed-secrets.sops.yaml

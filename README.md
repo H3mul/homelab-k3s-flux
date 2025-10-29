@@ -87,32 +87,75 @@ flux bootstrap github \
   --path bootstrap
 ```
 
+## Upgrading Flux
+
+https://github.com/fluxcd/flux2/discussions/5572
+
+```
+flux migrate -v 2.7 -f .
+git commit -am "Migrate to Flux v2.7 APIs"
+git push
+flux reconcile source git flux-system 
+
+# Wait for reconciliation
+
+flux migrate
+```
+
 ## 3. Deploy Sealed-Secret keys
 
 https://github.com/bitnami-labs/sealed-secrets
+
 https://geek-cookbook.funkypenguin.co.nz/kubernetes/sealed-secrets/
 
 The sealed secrets in this repo will fail to decrypt until the keys are delivered to the controller
 
 ```bash
-# create sealed-secret from SOPS:
-sops -d provision/sops-sealed-secret-keys.yaml | kubectl apply -f -
+# Deploy all sealed-secrets keys from SOPS:
+sops -d sealed-secrets.sops.yaml | kubectl apply -f -
 
-# restart the controller to pick up the new secret
+# Restart the controller to pick up the new secrets
 kubectl rollout restart -n sealed-secrets deployment sealed-secrets
 ```
 
-Note: sealed-secrets automatically refreshes the cert - to fetch the latest one, use this command and commit the updated `sealed-secrets.pem`:
+> [!IMPORTANT]
+> Sealed-secrets automatically rolls the encryption keys. The old keys are kept in the kube namespace, and are required to decrypt old secrets.
 
+The latest keys should be used to make new sealed secrets. Kubeseal can fetch it automatically, provided it is pointed at the correct namespace:
+
+```bash
+# Seal a new secret with the latest key
+kubeseal --controller-name=sealed-secrets --controller-namespace=sealed-secrets -o yaml < input.yaml > sealed-output.yaml
+
+# Reencrypt an old secret with the latest key
+kubeseal --re-encrypt --controller-name=sealed-secrets --controller-namespace=sealed-secrets -o yaml < old-sealed-secret.yaml > sealed-secret.yaml
+
+# Verify that a secret can be decrypted by one of the keys stored in the kube namespace
+kubeseal --validate --controller-name=sealed-secrets --controller-namespace=sealed-secrets < sealed-secret.yaml
 ```
+
+It is also possible to do most operations locally, provided the keys are fetched and up to date:
+
+```bash
+# Fetch the latest public key for new secret sealing:
 kubeseal --fetch-cert --controller-name=sealed-secrets --controller-namespace=sealed-secrets > sealed-secrets.pem
+
+# Fetch all stored secrets and store them using SOPS
+kubectl -n sealed-secrets get secret -l sealedsecrets.bitnami.com/sealed-secrets-key -o yaml --sort-by=.metadata.creationTimestamp | \
+  sops -e --input-type yaml --output-type yaml --encrypted-regex '^(data|stringData)$' /dev/stdin > sealed-secrets.sops.yaml
+
+git commit -am "Update sealed secret backups"
 ```
 
-It is also possible to manually decrypt sealed secret files using the private key locally:
+```bash
+# Seal a new secret using the stored public key
+kubeseal --cert sealed-secrets.pem < input.yaml > sealed-output.yaml
 
+# Decrypt a secret locally with the latest private key
+kubeseal --recovery-unseal --recovery-private-key <(sops -d sealed-secrets.sops.yaml | yq -r '.items[-1].data["tls.key"] | @base64d') < sealed-secret-file.yaml
 ```
-kubeseal --recovery-unseal --recovery-private-key <(sops -d sealed-secret-keys.sops.yaml | yq -r '.data["tls.key"] | @base64d') < sealed-secret-file.yaml
-```
+
+All these commands and more are in [`.taskfiles/kubeseal.yaml`](.taskfiles/kubeseal.yaml) for convenience with Taskfile
 
 ## Troubleshoot
 
