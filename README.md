@@ -45,6 +45,19 @@ Additionally, each node needs to be
 - Added to the endpoint dns (see Kubernetes endpoint in talconfig.yaml)
 - Added to the router as a BGP neighbor peer group: https://cloud.redhat.com/blog/metallb-in-bgp-mode
 
+### Upgrading Talos and Kubernetes
+
+Upgrade desired talos and kubernetes versions in `provision/talos/talconfig.yaml`
+
+```
+cd provision/talos
+talhelper genconfig
+
+# Run commands printed by talhelper, probably 1 host at a time:
+talhelper gencommand apply
+talhelper gencommand upgrade
+```
+
 ## 2. Bootstrap flux:
 https://fluxcd.io/flux/installation/#github-and-github-enterprise
 

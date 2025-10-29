@@ -1,7 +1,7 @@
 clusterName: homelab
 
-talosVersion: v1.8.0
-kubernetesVersion: 1.31.1
+talosVersion: v1.11.3
+kubernetesVersion: 1.34.1
 endpoint: "https://homelab.hemul.net:6443"
 
 allowSchedulingOnMasters: true
@@ -12,6 +12,12 @@ additionalMachineCertSans:
   - homelab.hemul.net
 
 nodes:
+  - hostname: gemino
+    disableSearchDomain: true
+    ipAddress: 10.1.1.3
+    controlPlane: true
+    installDiskSelector:
+      wwid: naa.50026b738003833e
   - hostname: ofnir
     disableSearchDomain: true
     ipAddress: 10.1.1.7
@@ -30,12 +36,6 @@ nodes:
     controlPlane: true
     installDiskSelector:
       wwid: naa.50026b7785299bb0
-  - hostname: gemino
-    disableSearchDomain: true
-    ipAddress: 10.1.1.3
-    controlPlane: true
-    installDiskSelector:
-      wwid: naa.50026b738003833e
 
 controlPlane:
   schematic:
