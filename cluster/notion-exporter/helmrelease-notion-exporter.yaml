@@ -31,7 +31,7 @@ spec:
           *app :
             image:
               repository: ghcr.io/h3mul/notion-exporter
-              tag: v0.8.0@sha256:353a1c154c86c421fd4e3a370c03e571ca440935fa998c9522387ab25006005e
+              tag: v0.8.0@sha256:a52c256dd4824da88d4338a2b449a7f516b5ec20e421fc9121ae50f430abc3cf
             env:
               TZ: ${TIMEZONE}
               OUTPUT_DIR: /data
