@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: emqx/nanomq
-      tag: 0.24.5@sha256:835cb54a73401141ac1a60df72fbeb35f232ab74645c4f9a281792f02a0407b5
+      tag: 0.24.6@sha256:99aabb4165894f80820c65204c1670cf5ff0a05437eb6f796299be6bcd0e3d9c
 
     env:
       NANOMQ_BROKER_URL: "nmq-tcp://0.0.0.0:1883"
