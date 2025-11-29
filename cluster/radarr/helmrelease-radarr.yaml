@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/home-operations/radarr
-      tag: 5.23.3.9987@sha256:a415c932fc51b43477d38f125d4c82848b27984bb5a574e03907eaefd7aa7490
+      tag: 5.28.0.10205@sha256:80dec94f1eea0715471853011efdf2c49cf92f8fe3b17b722ad8f8a637e3fead
 
     env:
       RADARR__INSTANCE_NAME: Radarr
