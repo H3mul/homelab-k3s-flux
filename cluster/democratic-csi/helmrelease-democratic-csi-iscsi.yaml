@@ -40,6 +40,14 @@ spec:
             value: /usr/local/sbin/iscsiadm
         iscsiDirHostPath: /var/iscsi
         iscsiDirHostPathType: ""
+      mount:
+        checkFilesystem:
+          xfs:
+            enabled: true
+          ext4:
+            enabled: true
+          btrfs:
+            enabled: true
       priorityClassName: system-node-critical
 
     # https://kubernetes-csi.github.io/docs/csi-driver-object.html
