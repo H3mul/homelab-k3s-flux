@@ -68,7 +68,7 @@ spec:
       config:
         enabled: true
         type: persistentVolumeClaim
-        size: 5Gi
+        size: 10Gi
         globalMounts:
           - path: /config
         accessMode: ReadWriteOnce
