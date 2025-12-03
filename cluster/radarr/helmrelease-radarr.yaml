@@ -69,7 +69,7 @@ spec:
       config:
         enabled: true
         type: pvc
-        size: 1Gi
+        size: 5Gi
         mountPath: /config
         storageClass: truenas-ssd-iscsi
 
