@@ -1,0 +1,201 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app piped
+  namespace: piped
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: piped
+  values:
+    controllers:
+      backend:
+        strategy: RollingUpdate
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: 17.6.0
+              pullPolicy: IfNotPresent
+            env:
+              - name: INIT_POSTGRES_HOST
+                value: postgres-cluster-rw.cloudnative-pg.svc.cluster.local
+              - name: INIT_POSTGRES_SUPER_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres-cluster-superuser
+                    key: username
+              - name: INIT_POSTGRES_SUPER_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres-cluster-superuser
+                    key: password
+              - name: INIT_POSTGRES_DBNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: piped-config
+                    key: POSTGRES_DB
+              - name: INIT_POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: piped-config
+                    key: POSTGRES_USER
+              - name: INIT_POSTGRES_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: piped-config
+                    key: POSTGRES_PASS
+
+        containers:
+          app:
+            image:
+              repository: 1337kavin/piped
+              tag: latest@sha256:1f38b992ce02a50afddbbf68be1ac11cff6953d36fd8fa2b98c08a19f8ef06e7
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              seccompProfile:
+                type: RuntimeDefault
+      
+      frontend:
+        strategy: RollingUpdate
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/bjw-s-labs/piped-frontend
+              tag: 2025.3.17@sha256:8ed05c7df0bc8899e54a3952a99b63d55cdc7669d759beeb9370fbb32330468b
+            env:
+              BACKEND_HOSTNAME: piped-api.${CLUSTER_DOMAIN}
+              
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+                
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+              
+      ytproxy:
+        strategy: RollingUpdate
+        containers:
+          app:
+            image:
+              repository: 1337kavin/piped-proxy
+              tag: latest@sha256:da98ee6fefdc281e76851eea926369ac149c1900bf007fff98ec886a3a573887
+            command:
+              - /app/piped-proxy
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+                  
+    service:
+      backend:
+        controller: backend
+        ports:
+          http:
+            port: &port 8080
+      frontend:
+        controller: frontend
+        ports:
+          http:
+            port: 8080
+      ytproxy:
+        controller: ytproxy
+        ports:
+          http:
+            port: 8080
+
+    ingress:
+      backend:
+        annotations:
+          nginx.ingress.kubernetes.io/enable-cors: "true"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.${CLUSTER_DOMAIN}, https://piped-api.${CLUSTER_DOMAIN}, https://piped-proxy.${CLUSTER_DOMAIN}"
+        className: nginx
+        hosts:
+          - host: &host piped-api.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: backend
+                  port: http
+        tls:
+          - secretName: letsencrypt-wildcard-cert-prod
+            hosts:
+              - *host
+              
+      frontend:
+        annotations:
+          nginx.ingress.kubernetes.io/enable-cors: "true"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.${CLUSTER_DOMAIN}, https://piped-api.${CLUSTER_DOMAIN}, https://piped-proxy.${CLUSTER_DOMAIN}"
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/description: YT Proxy
+          gethomepage.dev/group: Media
+          gethomepage.dev/icon: youtube.png
+          gethomepage.dev/name: Piped
+        className: nginx
+        hosts:
+          - host: &host piped.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: frontend
+                  port: http
+        tls:
+          - secretName: letsencrypt-wildcard-cert-prod
+            hosts:
+              - *host
+      ytproxy:
+        annotations:
+          nginx.ingress.kubernetes.io/enable-cors: "true"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.${CLUSTER_DOMAIN}, https://piped-api.${CLUSTER_DOMAIN}, https://piped-proxy.${CLUSTER_DOMAIN}"
+        className: nginx
+        hosts:
+          - host: &host piped-proxy.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: ytproxy
+                  port: http
+        tls:
+          - secretName: letsencrypt-wildcard-cert-prod
+            hosts:
+              - *host
+
+    persistence:
+      config:
+        type: secret
+        name: piped-config
+        advancedMounts:
+          backend:
+            app:
+              - path: /app/config.properties
+                subPath: config.properties
+                readOnly: true
