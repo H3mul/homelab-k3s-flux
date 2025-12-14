@@ -12,11 +12,11 @@ spec:
     kind: GitRepository
     name: flux-system
 
-  healthChecks:
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: piped
-      namespace: piped
+  # healthChecks:
+  #   - apiVersion: apps/v1
+  #     kind: Deployment
+  #     name: piped
+  #     namespace: piped
   postBuild:
     substituteFrom:
       - kind: ConfigMap

@@ -41,17 +41,17 @@ spec:
               - name: INIT_POSTGRES_DBNAME
                 valueFrom:
                   secretKeyRef:
-                    name: piped-config
+                    name: piped-postgres-credentials
                     key: POSTGRES_DB
               - name: INIT_POSTGRES_USER
                 valueFrom:
                   secretKeyRef:
-                    name: piped-config
+                    name: piped-postgres-credentials
                     key: POSTGRES_USER
               - name: INIT_POSTGRES_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: piped-config
+                    name: piped-postgres-credentials
                     key: POSTGRES_PASS
 
         containers:
@@ -155,11 +155,6 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/enable-cors: "true"
           nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.${CLUSTER_DOMAIN}, https://piped-api.${CLUSTER_DOMAIN}, https://piped-proxy.${CLUSTER_DOMAIN}"
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/description: YT Proxy
-          gethomepage.dev/group: Media
-          gethomepage.dev/icon: youtube.png
-          gethomepage.dev/name: Piped
         className: nginx
         hosts:
           - host: &host piped.${CLUSTER_DOMAIN}
