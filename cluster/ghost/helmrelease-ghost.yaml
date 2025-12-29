@@ -48,7 +48,7 @@ spec:
 
     image:
       repository: ghost
-      tag: 5.99.0@sha256:b17cef3bd09d3ebc8649373b533f2b2c8a8195938ccb5f96de478900fb00ae46
+      tag: 5.130.5@sha256:425abf3d8bb8e647ff0eaa5aaa463637cafdab75bcc95e3f63a3cd90fdc7a6c5
     env:
       - name: TZ
         value: ${TIMEZONE}
