@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: external-dns
-      version: 1.16.x
+      version: 1.20.x
       sourceRef:
         kind: HelmRepository
         name: external-dns-chart
