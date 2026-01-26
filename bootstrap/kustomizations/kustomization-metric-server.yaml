@@ -15,7 +15,7 @@ spec:
   healthChecks:
     - apiVersion: apps/v1
       kind: Deployment
-      name: metric-server
+      name: metrics-server
       namespace: kube-system
 
   postBuild:
