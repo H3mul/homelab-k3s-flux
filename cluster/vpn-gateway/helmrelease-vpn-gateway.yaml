@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: pod-gateway
-      version: 6.6.1
+      version: 7.1.0
       sourceRef:
         kind: HelmRepository
         name: angelnu-helm-charts
@@ -17,7 +17,7 @@ spec:
   releaseName: vpn-gateway
   values:
     # Pasted from:
-    # https://github.com/angelnu/helm-charts/blob/da9b3caf3c236af08ebd9730c257601ff7a56420/charts/apps/pod-gateway/values.yaml
+    # https://github.com/angelnu/helm-charts/blob/bceb8cc91d54895f1a4975c79ec520e88fbafe4b/charts/apps/pod-gateway/values.yaml
 
     #
     # IMPORTANT NOTE
@@ -25,15 +25,60 @@ spec:
     # This chart inherits from our common library chart. You can check the default values/options here:
     # https://github.com/k8s-at-home/library-charts/tree/main/charts/stable/common/values.yaml
     #
+    
+    controllers:
+      main:
+        # Configure the main controller - this runs the VPN server
+        containers:
+          gluetun:
+            enabled: true
+            dependsOn: main
+            image:
+              # -- image repository
+              repository: ghcr.io/qdm12/gluetun
+              # -- image tag
+              tag: v3.41.0@sha256:6b54856716d0de56e5bb00a77029b0adea57284cf5a466f23aad5979257d3045
+            env:
+              - name:  VPN_SERVICE_PROVIDER
+                value: "private internet access"
+              - name:  VPN_INTERFACE
+                value: tun0
+              - name:  OPENVPN_ENDPOINT_PORT
+                value: 1197
+              - name:  OPENVPN_PROTOCOL
+                value: udp
+                # Make sure firewall is off, otherwise child pods cannot reach gateway pod.
+              - name:  FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT
+                value: "off"
+              - name:  DOT
+                value: "off"
+              - name:  SERVER_REGIONS
+                value: "US Seattle"
+    
+            envFrom:
+              - secretRef:
+                  name: private-internet-access-openvpn
 
-    image:
-      # -- image repository of the gateway and inserted helper containers
-      repository: ghcr.io/angelnu/pod-gateway
-      # -- image pull policy of the gateway and inserted helper cotainers
-      pullPolicy: IfNotPresent
-      # -- image tag of the gateway and inserted helper containers
-      # @default -- chart.appVersion
-      tag: v1.13.0@sha256:a5b032e15f7570493977b330a5a86dcffebb807d35685ad803e47afb62d105f2
+            securityContext:
+              privileged: true
+              # capabilities:
+              #   add:
+              #     - NET_ADMIN
+            
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - if [ $(wget -q -O- https://ipinfo.io/city) == 'Seattle' ]; then exit 0; else exit $?; fi
+                  initialDelaySeconds: 30
+                  periodSeconds: 60
+                  failureThreshold: 3
+
 
     # -- IP address of the DNS server within the vxlan tunnel.
     # All mutated PODs will get this as their DNS server.
@@ -51,7 +96,7 @@ spec:
     # -- Namespaces that might contain routed PODs and therefore
     # require a copy of the gneerated settings configmap.
     routed_namespaces:
-    - media
+      - media
 
     settings:
       # -- IPs not sent to the POD gateway but to the default K8S.
@@ -94,91 +139,19 @@ spec:
       - type: tcp
         port: "${BITTORRENT_PORT}"
 
-    addons:
-      vpn:
-        # -- Enable the VPN if you want to route through a VPN.
-        # You might also want to set VPN_BLOCK_OTHER_TRAFFIC to true
-        # for extra safeness in case the VPN does connect
-        # openvpn:
-        # wireguard:
-        # env:
-        # configFileSecret: openvpn
-
-        enabled: true
-        type: gluetun
-        gluetun:
-          image:
-            repository: docker.io/qmcgaw/gluetun
-            tag: v3.41.0@sha256:6b54856716d0de56e5bb00a77029b0adea57284cf5a466f23aad5979257d3045
-        env:
-        - name:  VPN_SERVICE_PROVIDER
-          value: "private internet access"
-        - name:  VPN_INTERFACE
-          value: tun0
-        - name:  OPENVPN_ENDPOINT_PORT
-          value: 1197
-        - name:  OPENVPN_PROTOCOL
-          value: udp
-          # Make sure firewall is off, otherwise child pods cannot reach gateway pod.
-        - name:  FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT
-          value: "off"
-        - name:  DOT
-          value: "off"
-        - name:  SERVER_REGIONS
-          value: "US Seattle"
-
-        envFrom:
-          - secretRef:
-              name: private-internet-access-openvpn
-
-        securityContext:
-          privileged: true
-          # capabilities:
-          #   add:
-          #     - NET_ADMIN
-
-        livenessProbe:
-          exec:
-            command:
-              - sh
-              - -c
-              - if [ $(wget -q -O- https://ipinfo.io/city) == 'Seattle' ]; then exit 0; else exit $?; fi
-          initialDelaySeconds: 30
-          periodSeconds: 60
-          failureThreshold: 3
-
     # -- The webhook is used to mutate the PODs matching the given
     # namespace labels. It inserts an init and sidecard helper containers
     # that connect to the gateway pod created by this chart.
     # @default -- See below
     webhook:
-      image:
-        # -- image repository of the webhook
-        repository: ghcr.io/angelnu/gateway-admision-controller
-        # -- image pullPolicy of the webhook
-        pullPolicy: IfNotPresent
-        # -- image tag of the webhook
-        tag: v3.12.0@sha256:6f6ab596afd5fef0ca4648eadfb21cd37ba86fa5afa8b85edcc072976a61fbed
-
-      # -- number of webhook instances to deploy
-      replicas: 1
-
-      # -- strategy for updates
-      strategy:
-        type: RollingUpdate
-
-      # -- Selector for namespace.
-      # All pods in this namespace will get evaluated by the webhook.
-      # **IMPORTANT**: Do not select the namespace where the webhook
-      # is deployed to or you will get locking issues.
       namespaceSelector:
         type: label
         label: "routed-gateway"
         custom: {}
-          # matchExpressions:
-          # - key: notTouch
-          #   operator: NotIn
-          #   values: ["1"]
+        #   matchExpressions:
+        #     - key: notTouch
+        #       operator: NotIn
+        #       values: ["1"]
 
       # -- default behviour for new PODs in the evaluated namespace
       gatewayDefault: false
@@ -200,3 +173,6 @@ spec:
       # with gatewayAnnotation'value that matches, will get the gateway.
       # If not set gatewayAnnotation boolean value will apply.
       gatewayAnnotationValue:
+        
+      # -- determines how sidecar container is created
+      sidecarAsInit: false
