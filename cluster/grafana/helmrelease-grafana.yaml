@@ -139,7 +139,7 @@ spec:
         # -- The Docker registry
         registry: docker.io
         repository: bats/bats
-        tag: "1.13.0@sha256:ba5704b9c118b7e9f358700b8973800aaaa5bce36800ee8db375fe59fb5f4e09"
+        tag: "1.13.0@sha256:6e4b9369468b7f3fd8f402ac6cc8ea7b2e4903eae28d08785f31a0245eb51a44"
       imagePullPolicy: IfNotPresent
       securityContext: {}
       resources: {}
