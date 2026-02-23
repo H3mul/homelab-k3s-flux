@@ -1,3 +1,5 @@
+# This CronJob pulls the notion export into a PVC so that volsync can then back it up via restic
+
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -31,8 +33,7 @@ spec:
           *app :
             image:
               repository: ghcr.io/h3mul/notion-exporter
-              # tag: 0.8.1@sha256:bfc6ddb68a71b19389ae8545e38b737d18384a61d6bb9fface1b4fab271b9b2d
-              tag: 0.8.1
+              tag: 0.8.1@sha256:c2fb0bad19e177343f6752cfb1e5d09e0e2ad33b9b8725f996328807807c8ed7
               pullPolicy: Always
             env:
               TZ: ${TIMEZONE}
