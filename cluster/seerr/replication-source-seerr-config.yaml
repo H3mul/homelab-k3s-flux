@@ -1,14 +1,14 @@
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: b2-jellyseerr-config
+  name: b2-seerr-config
   namespace: media
 spec:
-  sourcePVC: jellyseerr-config
+  sourcePVC: seerr
   trigger:
-    schedule: 8 0 * * 0
+    schedule: 12 0 * * 0
   restic:
-    repository: b2-jellyseerr-config-restic
+    repository: b2-seerr-config-restic
 
     copyMethod: Snapshot
     volumeSnapshotClassName: truenas-ssd-iscsi

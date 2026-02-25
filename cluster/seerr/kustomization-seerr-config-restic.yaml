@@ -1,14 +1,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: jellyseerr-config-restic
+  name: seerr-config-restic
   namespace: media
 
 spec:
   interval: 5m
   wait: true
   prune: true
-  path: ./cluster/jellyseerr/volsync
+  path: ./cluster/seerr/volsync
   sourceRef:
     kind: GitRepository
     name: flux-system
