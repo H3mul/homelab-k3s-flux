@@ -1,0 +1,90 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: seerr
+  namespace: media
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: seerr
+  values:
+    controllers:
+      seerr:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/seerr-team/seerr
+              tag: v3.0.1@sha256:1b5fc1ea825631d9d165364472663b817a4c58ef6aa1013f58d82c1570d7c866
+            env:
+              TZ: ${TIMEZONE}
+              LOG_LEVEL: "info"
+              PORT: &port 80
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/status
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: ${FILESHARE_USER_ID}
+        runAsGroup: ${FILESHARE_GROUP_ID}
+        fsGroup: ${FILESHARE_GROUP_ID}
+        fsGroupChangePolicy: OnRootMismatch
+        
+    service:
+      seerr:
+        ports:
+          http:
+            port: *port
+            
+    ingress:
+      seerr:
+        enabled: true
+        className: nginx
+        hosts:
+          - host: &main-host seerr.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: seerr
+                  port: http
+        tls:
+        - secretName: letsencrypt-wildcard-cert-prod
+          hosts:
+          - *main-host
+          
+    persistence:
+      config:
+        enabled: true
+        type: persistentVolumeClaim
+        size: 1Gi
+        storageClass: truenas-ssd-iscsi
+        accessMode: "ReadWriteOnce"
+        globalMounts:
+          - path: /app/config
+        
+      tmp:
+        enabled: true
+        type: emptyDir

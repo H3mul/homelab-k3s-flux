@@ -3,5 +3,6 @@ kind: Kustomization
 namespace: media
 resources:
   - helmrelease-jellyseerr.yaml
+  - helmrelease-seerr.yaml
   - replication-source-jellyseerr-config.yaml
   - kustomization-jellyseerr-config-restic.yaml
