@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.x
+      version: 4.6.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -16,96 +16,79 @@ spec:
   timeout: 5m
   releaseName: ghost
   values:
-    initContainers:
-      init-db:
-        image: ghcr.io/h3mul/mysql-init:11.4.2@sha256:9826276e6134c391059343acb2b0762581a8d756d7c089db39513a5fc753d4a9
-        imagePullPolicy: IfNotPresent
-        env:
-          - name: INIT_MYSQL_HOST
-            value: main-mysql.mysql-operator.svc.cluster.local
-          - name: INIT_MYSQL_SUPER_USER
-            value: root
-          - name: INIT_MYSQL_SUPER_PASS
-            valueFrom:
-              secretKeyRef:
-                name: mysql-main
-                key: ROOT_PASSWORD
-          - name: INIT_MYSQL_DBNAME
-            valueFrom:
-              secretKeyRef:
-                name: ghost-mysql-credentials
-                key: MYSQL_DBNAME
-          - name: INIT_MYSQL_USER
-            valueFrom:
-              secretKeyRef:
-                name: ghost-mysql-credentials
-                key: MYSQL_USER
-          - name: INIT_MYSQL_PASS
-            valueFrom:
-              secretKeyRef:
-                name: ghost-mysql-credentials
-                key: MYSQL_PASS
+    controllers:
+      ghost:
+        containers:
+          main:
+            image:
+              repository: ghost
+              tag: 
+                6.19.3@sha256:a35c41b1be9d6f7dc4e20d265d74a679c3a36d8182eb983f9925373307000b53
+            env:
+              TZ: ${TIMEZONE}
+              url: "https://ghost.${CLUSTER_DOMAIN}"
+              database__client: sqlite3
+              database__connection__filename: /var/lib/ghost/content/data/ghost.db
+              NODE_ENV: production
 
-    image:
-      repository: ghost
-      tag: 5.130.6@sha256:3ffcb8f2f1f808806e7a0f694a2b130cd78652a26b4337b33fe7e249ce58665a
-    env:
-      - name: TZ
-        value: ${TIMEZONE}
-
-      - name: url
-        value: "https://blog.${CLUSTER_DOMAIN}"
-
-      - name: database__client
-        value: mysql
-
-      - name: database__connection__host
-        value: main-mysql.mysql-operator.svc.cluster.local
-
-      - name: database__connection__database
-        valueFrom:
-          secretKeyRef:
-            name: ghost-mysql-credentials
-            key: MYSQL_DBNAME
-
-      - name: database__connection__user
-        valueFrom:
-          secretKeyRef:
-            name: ghost-mysql-credentials
-            key: MYSQL_USER
-
-      - name: database__connection__password
-        valueFrom:
-          secretKeyRef:
-            name: ghost-mysql-credentials
-            key: MYSQL_PASS
-
-      - name: NODE_ENV
-        value: production 
-
-    ingress:
-      main:
-        enabled: true
-        ingressClassName: nginx
-        hosts:
-          - host: &host blog.${CLUSTER_DOMAIN}
-            paths:
-              - path: /
-        tls:
-        - secretName: letsencrypt-wildcard-cert-prod
-          hosts:
-          - *host
+        # initContainers:
+        #   init-db:
+        #     image: ghcr.io/h3mul/mysql-init:11.4.2@sha256:9826276e6134c391059343acb2b0762581a8d756d7c089db39513a5fc753d4a9
+        #     imagePullPolicy: IfNotPresent
+        #     env:
+        #       - name: INIT_MYSQL_HOST
+        #         value: main-mysql.mysql-operator.svc.cluster.local
+        #       - name: INIT_MYSQL_SUPER_USER
+        #         value: root
+        #       - name: INIT_MYSQL_SUPER_PASS
+        #         valueFrom:
+        #           secretKeyRef:
+        #             name: mysql-main
+        #             key: ROOT_PASSWORD
+        #       - name: INIT_MYSQL_DBNAME
+        #         valueFrom:
+        #           secretKeyRef:
+        #             name: ghost-mysql-credentials
+        #             key: MYSQL_DBNAME
+        #       - name: INIT_MYSQL_USER
+        #         valueFrom:
+        #           secretKeyRef:
+        #             name: ghost-mysql-credentials
+        #             key: MYSQL_USER
+        #       - name: INIT_MYSQL_PASS
+        #         valueFrom:
+        #           secretKeyRef:
+        #             name: ghost-mysql-credentials
+        #             key: MYSQL_PASS
 
     service:
-      main:
+      app:
+        controller: ghost
         ports:
           http:
             port: 2368
 
-    # persistence:
-    #   content:
-    #     enabled: true
-    #     mountPath: /var/lib/ghost/content
-    #     type: pvc
-    #     storageClass: ceph-block
-    #     size: 2Gi
+    ingress:
+      app:
+        className: nginx
+        hosts:
+          - host: &host ghost.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - secretName: letsencrypt-wildcard-cert-prod
+            hosts:
+              - *host
+
+    persistence:
+      content:
+        enabled: true
+        type: persistentVolumeClaim
+        storageClass: truenas-ssd-iscsi
+        accessMode: ReadWriteOnce
+        size: 2Gi
+        globalMounts:
+          - path: /var/lib/ghost/content
