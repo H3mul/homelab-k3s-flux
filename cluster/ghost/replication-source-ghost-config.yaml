@@ -1,0 +1,28 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: b2-ghost-config
+  namespace: ghost
+spec:
+  sourcePVC: ghost
+  trigger:
+    schedule: 17 0 * * 0
+  restic:
+    repository: b2-ghost-config-restic
+
+    copyMethod: Snapshot
+    volumeSnapshotClassName: truenas-ssd-iscsi
+    storageClassName: truenas-ssd-iscsi
+
+    pruneIntervalDays: 10
+    cacheCapacity: 5Gi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 6
+      within: 3d
+
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
