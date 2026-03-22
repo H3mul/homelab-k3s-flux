@@ -98,7 +98,7 @@
         definition:
           services:
             mongo:
-              image: mongo:8.0.19@sha256:8283f525f029c21baacca6606287235abb1fe7be67aed13b066a261f99ded88f
+              image: mongo:8.0.20@sha256:22cab4837b4b9119395372e4a14ceb50d8abbf4b29a41ca7f3d504cbab95caeb
               container_name: mongo
               networks:
                 - pritunl
