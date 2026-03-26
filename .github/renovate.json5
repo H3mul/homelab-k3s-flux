@@ -28,6 +28,7 @@
         "fileMatch": ["\\.yaml$"]
     },
     "ignoreDeps": [
-        "cilium/cilium"
+        // Too critical for auto updates
+        "cilium"
     ]
 }
