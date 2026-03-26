@@ -304,7 +304,7 @@ spec:
       metrics:
         # Should stay off by default because the exporter is not multi-arch (yet)
         enabled: false
-        image: natsio/prometheus-nats-exporter:0.15.0@sha256:1f6787754b8b083f271adea4bb699b9c9e21279c89d903f1710f7647c604f145
+        image: natsio/prometheus-nats-exporter:0.19.2@sha256:5387a5923572d154c9d609b3588397ca6b09b6004464cc4a80fc9e16c7b059b3
       resources:
         requests:
           memory: "120Mi"
