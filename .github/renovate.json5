@@ -27,8 +27,14 @@
     "docker-compose": {
         "fileMatch": ["\\.yaml$"]
     },
+    
+    // Too critical for auto updates
     "ignoreDeps": [
-        // Too critical for auto updates
         "cilium"
+    ],
+    "ignorePaths": [
+        "provision/**",
+        "cluster/cilium/**",
+        "cluster/cilium-bgp-loadbalancer/**"
     ]
 }
