@@ -27,4 +27,7 @@
     "docker-compose": {
         "fileMatch": ["\\.yaml$"]
     },
+    "ignoreDeps": [
+        "cilium/cilium"
+    ]
 }
