@@ -203,7 +203,7 @@ spec:
       # -- The Docker registry
       registry: docker.io
       repository: curlimages/curl
-      tag: 7.88.1@sha256:48318407b8d98e8c7d5bd4741c88e8e1a5442de660b47f63ba656e5c910bc3da
+      tag: 8.18.0@sha256:d94d07ba9e7d6de898b6d96c1a072f6f8266c687af78a74f380087a0addf5d17
       sha: ""
       pullPolicy: IfNotPresent
 
