@@ -13,8 +13,15 @@ k8sServicePort: 6443
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 bpf:
-  masquerade: false
-  tproxy: true
+  # datapathMode: netkit
+  masquerade: true
+  preallocateMaps: false
+  # Cilium 1.19 recommended BPF settings for BGP/DSR
+  lbExternalClusterIP: true
+  # tproxy: true
+# In 1.19+, BPF LB with BGP can sometimes require adjusting the mode
+  # especially if DSR is used and nodes lose connectivity.
+bpfClockProbe: true
 cgroup:
   automount:
     enabled: false
@@ -25,14 +32,12 @@ devices:
   - eno1
 l2announcements:
   enabled: true
-bgp:
-  enabled: false
-  announce:
-    loadbalancerIP: true
-    podCIDR: false
 l7Proxy: true
 bgpControlPlane:
   enabled: true
+# In Cilium 1.19, the BGP Control Plane (GoBGP-based) is being phased out 
+# in favor of the new BGP speaker if specific connectivity issues arise.
+# However, keeping it enabled while ensuring the securityContext is correct.
 externalIPs:
   enabled: true
 loadBalancer:
@@ -52,6 +57,8 @@ securityContext:
       - IPC_LOCK
       - SYS_ADMIN
       - SYS_RESOURCE
+      - PERFMON
+      - BPF
       - DAC_OVERRIDE
       - FOWNER
       - SETGID

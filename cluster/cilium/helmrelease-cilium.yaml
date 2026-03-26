@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: cilium
-      version: 1.18.7
+      version: 1.19.2
       sourceRef:
         kind: HelmRepository
         name: cilium-charts
@@ -24,7 +24,7 @@ spec:
       enabled: true
       metrics:
         enabled:
-          - dns:query;ignoreAAAA
+          - dns:query
           - drop
           - tcp
           - flow
@@ -33,12 +33,14 @@ spec:
           - http
         serviceMonitor:
           enabled: true
-          interval: 30s
+        dashboards:
+          enabled: false
       relay:
         enabled: true
         rollOutPods: true
-      dashboards:
-        enabled: false
+        prometheus:
+          serviceMonitor:
+            enabled: true
       ui:
         enabled: true
         ingress:
@@ -51,3 +53,17 @@ spec:
               hosts:
               - *host
         rollOutPods: true
+    operator:
+      prometheus:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+      dashboards:
+        enabled: false
+    prometheus:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        trustCRDsExist: true
+    dashboards:
+      enabled: false

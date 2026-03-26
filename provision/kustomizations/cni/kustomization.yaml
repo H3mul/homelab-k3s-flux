@@ -3,12 +3,15 @@ kind: Kustomization
 helmCharts:
   - name: cilium
     repo: https://helm.cilium.io
-    version: 1.18.7
+    version: 1.19.2
     releaseName: cilium
     namespace: kube-system
     valuesFile: values.yaml
 commonAnnotations:
   meta.helm.sh/release-name: cilium
   meta.helm.sh/release-namespace: kube-system
-commonLabels:
-  app.kubernetes.io/managed-by: Helm
+labels:
+  - includeSelectors: true
+    includeTemplates: true
+    pairs:
+      app.kubernetes.io/managed-by: Helm
