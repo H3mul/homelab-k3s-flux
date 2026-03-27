@@ -7,7 +7,17 @@
     "platform": "github",
     "repositories": ["H3mul/homelab-k3s-flux"],
     "baseBranches": ["main"],
-    "ignorePaths": ["disabled/**"],
+    "ignorePaths": [
+        "disabled/**",
+        
+        // Too critical for auto updates
+        "provision/**",
+        "cluster/cilium/**",
+        "cluster/cilium-bgp-loadbalancer/**"
+    ],
+    "ignoreDeps": [
+        "cilium" // Too critical for auto updates
+    ],
     "extends": [
         "config:best-practices",
         ":dependencyDashboard",
@@ -27,14 +37,4 @@
     "docker-compose": {
         "fileMatch": ["\\.yaml$"]
     },
-    
-    // Too critical for auto updates
-    "ignoreDeps": [
-        "cilium"
-    ],
-    "ignorePaths": [
-        "provision/**",
-        "cluster/cilium/**",
-        "cluster/cilium-bgp-loadbalancer/**"
-    ]
 }
