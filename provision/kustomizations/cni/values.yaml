@@ -14,7 +14,7 @@ kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 bpf:
   # datapathMode: netkit
-  masquerade: true
+  masquerade: false
   preallocateMaps: false
   # Cilium 1.19 recommended BPF settings for BGP/DSR
   lbExternalClusterIP: true
@@ -32,7 +32,7 @@ devices:
   - eno1
 l2announcements:
   enabled: true
-l7Proxy: true
+# l7Proxy: true
 bgpControlPlane:
   enabled: true
 # In Cilium 1.19, the BGP Control Plane (GoBGP-based) is being phased out 
@@ -41,9 +41,11 @@ bgpControlPlane:
 externalIPs:
   enabled: true
 loadBalancer:
+  acceleration: best-effort
   algorithm: maglev
   mode: dsr
-localRedirectPolicy: true
+localRedirectPolicies:
+  enabled: true
 operator:
   rollOutPods: true
 rollOutCiliumPods: true

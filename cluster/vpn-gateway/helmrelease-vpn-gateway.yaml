@@ -42,9 +42,9 @@ spec:
               - name:  VPN_SERVICE_PROVIDER
                 value: "private internet access"
               - name:  VPN_INTERFACE
-                value: tun0
+                value: &pia_ovpn_dev tun0
               - name:  OPENVPN_ENDPOINT_PORT
-                value: 1197
+                value: &pia_ovpn_port 1197
               - name:  OPENVPN_PROTOCOL
                 value: udp
                 # Make sure firewall is off, otherwise child pods cannot reach gateway pod.
@@ -53,7 +53,7 @@ spec:
               - name:  DOT
                 value: "off"
               - name:  SERVER_REGIONS
-                value: "US Seattle"
+                value: "US Oregon" # Dont forget to update health probe
     
             envFrom:
               - secretRef:
@@ -74,7 +74,7 @@ spec:
                     command:
                       - sh
                       - -c
-                      - if [ $(wget -q -O- https://ipinfo.io/city) == 'Seattle' ]; then exit 0; else exit $?; fi
+                      - if [ $(wget -q -O- https://ipinfo.io/city) == 'Portland' ]; then exit 0; else exit $?; fi
                   initialDelaySeconds: 30
                   periodSeconds: 60
                   failureThreshold: 3
@@ -116,11 +116,11 @@ spec:
       # VXLAN_GATEWAY_FIRST_DYNAMIC_IP: 20
 
       # -- If using a VPN, interface name created by it
-      VPN_INTERFACE: tun0
+      VPN_INTERFACE: *pia_ovpn_dev
       # -- Prevent non VPN traffic to leave the gateway
       VPN_BLOCK_OTHER_TRAFFIC: false # Need liveness probe to go through
       # -- If VPN_BLOCK_OTHER_TRAFFIC is true, allow VPN traffic over this port
-      VPN_TRAFFIC_PORT: 1197
+      VPN_TRAFFIC_PORT: *pia_ovpn_port
       # -- Traffic to these IPs will be send through the K8S gateway
       VPN_LOCAL_CIDRS: "10.0.0.0/8 192.168.0.0/16"
 
