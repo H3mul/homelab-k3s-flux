@@ -26,7 +26,7 @@ spec:
 
     image:
       repository: ghcr.io/stefanprodan/podinfo
-      tag: 6.9.4@sha256:b1e974022d6603c8ceea4a05c6ff9d9f4e6bf6a6590fb740251811283458c4ea
+      tag: 6.11.2@sha256:187803cdf611a19d4fffbdf6a4260a01be4c09ffe9924b28902424fc0639ceb8
       pullPolicy: IfNotPresent
 
     ui:
