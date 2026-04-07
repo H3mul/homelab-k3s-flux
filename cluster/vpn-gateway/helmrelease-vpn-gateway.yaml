@@ -44,16 +44,21 @@ spec:
               - name:  VPN_INTERFACE
                 value: &pia_ovpn_dev tun0
               - name:  OPENVPN_ENDPOINT_PORT
-                value: &pia_ovpn_port 1197
+                value: ${PIA_VPN_PORT}
               - name:  OPENVPN_PROTOCOL
                 value: udp
-                # Make sure firewall is off, otherwise child pods cannot reach gateway pod.
-              - name:  FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT
-                value: "off"
               - name:  DOT
                 value: "off"
               - name:  SERVER_REGIONS
                 value: "US Oregon" # Dont forget to update health probe
+              
+              # This is Gluetun's internal killswitch
+              - name:  FIREWALL
+                value: "on"
+              # Ensure it doesn't leak during startup
+              - name:  FIREWALL_OUTBOUND_SUBNETS
+                value: &allowed_subnets "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+                
     
             envFrom:
               - secretRef:
@@ -106,7 +111,7 @@ spec:
       # This is needed, for example, in case your CNI does
       # not add a non-default rule for the K8S addresses (Flannel does).
       # NOT_ROUTED_TO_GATEWAY_CIDRS: ""
-      NOT_ROUTED_TO_GATEWAY_CIDRS: "10.0.0.0/8 192.168.0.0/16"
+      NOT_ROUTED_TO_GATEWAY_CIDRS: *allowed_subnets
 
       # -- Vxlan ID to use
       VXLAN_ID: 43
@@ -120,9 +125,9 @@ spec:
       # -- Prevent non VPN traffic to leave the gateway
       VPN_BLOCK_OTHER_TRAFFIC: false # Need liveness probe to go through
       # -- If VPN_BLOCK_OTHER_TRAFFIC is true, allow VPN traffic over this port
-      VPN_TRAFFIC_PORT: *pia_ovpn_port
+      VPN_TRAFFIC_PORT: ${PIA_VPN_PORT}
       # -- Traffic to these IPs will be send through the K8S gateway
-      VPN_LOCAL_CIDRS: "10.0.0.0/8 192.168.0.0/16"
+      VPN_LOCAL_CIDRS: *allowed_subnets
 
       # -- DNS queries to these domains will be resolved by K8S DNS instead of
       # the default (typcally the VPN client changes it)
