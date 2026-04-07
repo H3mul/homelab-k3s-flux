@@ -16,13 +16,10 @@ spec:
   egress:
     - toCIDR:
         - 0.0.0.0/0
-      # toPorts:
-      #   - ports:
-      #       - port: "1197"
-      #         protocol: UDP
-      #       # Allow VXLAN traffic used by pod-gateway
-      #       - port: "43"
-      #         protocol: UDP
+      toPorts:
+        - ports:
+            - port: "1197"
+              protocol: UDP
     - toEntities:
         - cluster
         - host
