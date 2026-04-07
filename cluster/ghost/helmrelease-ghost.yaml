@@ -23,7 +23,7 @@ spec:
             image:
               repository: ghost
               tag: 
-                6.19.4@sha256:ec5b917a16bf86c6dea812002e1580bc8dedc932b1a71c61ee8da7db62884cbb
+                6.26.0@sha256:5130e5a9ea4f91f4131d7ca95e254dd8fdc406ef6b5ac11d18a543d947f35cb3
             env:
               TZ: ${TIMEZONE}
               url: "https://ghost.${CLUSTER_DOMAIN}"
