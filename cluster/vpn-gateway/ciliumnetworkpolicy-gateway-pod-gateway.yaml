@@ -14,16 +14,24 @@ spec:
       app.kubernetes.io/name: pod-gateway
 
   egress:
+    # 1. Allow the VPN connection to the internet (Handshake)
     - toCIDR:
         - 0.0.0.0/0
-      # toPorts:
-      #   - ports:
-      #       - port: "1197"
-      #         protocol: UDP
-      #       # Allow VXLAN traffic used by pod-gateway
-      #       - port: "43"
-      #         protocol: UDP
+      toPorts:
+        - ports:
+            - port: "1197"
+              protocol: UDP
+    # 2. Allow internal cluster traffic
     - toEntities:
         - cluster
         - host
-        - remote-node
+        - kube-apiserver
+    # 3. Allow DNS (needed to resolve VPN endpoints)
+    - toEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": kube-system
+            "k8s:k8s-app": kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
