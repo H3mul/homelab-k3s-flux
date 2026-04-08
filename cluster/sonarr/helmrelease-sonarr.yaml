@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.x
+      version: 4.6.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -16,33 +16,43 @@ spec:
   timeout: 5m
   releaseName: sonarr
   values:
-    image:
-      repository: ghcr.io/home-operations/sonarr
-      tag: 4.0.17@sha256:83607d2b741ec9469db09489e88c473ae6fdf7d85f3b55d4fa809b43e25a2a6c
-
-    env:
-      - name: SONARR__INSTANCE_NAME
-        value: Sonarr
-      - name: SONARR__PORT
-        value: &port 8989
-      - name: SONARR__LOG_LEVEL
-        value: info
-      - name: SONARR__API_KEY
-        valueFrom:
-          secretKeyRef:
-            name: sonarr-api-key
-            key: api_key
+    controllers:
+      sonarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/sonarr
+              tag: 4.0.17@sha256:83607d2b741ec9469db09489e88c473ae6fdf7d85f3b55d4fa809b43e25a2a6c
+            env:
+              SONARR__INSTANCE_NAME: Sonarr
+              SONARR__PORT: &port 8989
+              SONARR__LOG_LEVEL: info
+              SONARR__API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: sonarr-api-key
+                    key: api_key
+        pod:
+          securityContext:
+            runAsUser: ${FILESHARE_USER_ID}
+            runAsGroup: ${FILESHARE_GROUP_ID}
+            fsGroup: ${FILESHARE_GROUP_ID}
+            fsGroupChangePolicy: "OnRootMismatch"
+            supplementalGroups:
+              - 65539
 
     service:
-      main:
+      app:
+        controller: sonarr
         ports:
           http:
             port: *port
 
     ingress:
-      main:
-        enabled: true
-        ingressClassName: nginx
+      app:
+        className: nginx
         annotations:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_hide_header "x-webkit-csp";
@@ -55,28 +65,25 @@ spec:
           - host: &host sonarr.${CLUSTER_DOMAIN}
             paths:
               - path: /
+                service:
+                  identifier: app
+                  port: http
         tls:
-        - secretName: letsencrypt-wildcard-cert-prod
-          hosts:
-          - *host
-
-    podSecurityContext:
-      runAsUser: ${FILESHARE_USER_ID}
-      runAsGroup: ${FILESHARE_GROUP_ID}
-      fsGroup: ${FILESHARE_GROUP_ID}
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 65539
+          - secretName: letsencrypt-wildcard-cert-prod
+            hosts:
+              - *host
 
     persistence:
       config:
         enabled: true
-        type: pvc
+        type: persistentVolumeClaim
         size: 1Gi
-        mountPath: /config
         storageClass: truenas-ssd-iscsi
+        accessMode: ReadWriteOnce
+        globalMounts:
+          - path: /config
 
       media:
-        enabled: true
         existingClaim: qbittorrent-download
-        mountPath: /downloads
+        globalMounts:
+          - path: /downloads
