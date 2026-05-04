@@ -159,6 +159,34 @@ All these commands and more are in [`.taskfiles/kubeseal.yaml`](.taskfiles/kubes
 
 ## Troubleshoot
 
+### Annual Cluster Certificate Expiration
+
+If a cluster remains up for over a year, the access cert may expire before auto renewal. Diagnose with `talosctl config info`, which will have a line like "Certificate expires: ..."
+
+To manually refresh the talos cert (and kube cert), run:
+
+```bash
+cd provision/talos
+
+# Regenerate the talosctl config with new certs from the existing secret committed in SOPS (this will require SOPS decryption access)
+talhelper genconfig
+
+# Apply config (likely without reboot)
+talhelper gencommand apply | sh
+
+# Merge new config with local host talosctl config
+talosctl config merge ./clusterconfig/talosconfig
+
+# Pull new kube config with the new certs to local for kubectl (only needs one master node to pull from)
+talosctl kubeconfig --nodes 10.1.1.3
+
+# Verify new expiration date
+talosctl config info
+
+# Test kube access
+kubectl get nodes -o wide
+```
+
 ### Generate new Sealed-Secret keys
 
 If the original keys are lost, they can be regenerated:
