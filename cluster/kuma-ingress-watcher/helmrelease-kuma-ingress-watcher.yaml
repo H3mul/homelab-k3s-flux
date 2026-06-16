@@ -52,4 +52,4 @@ spec:
     deployment:
       image:
         name: ghcr.io/h3mul/kuma-ingress-watcher
-        tag: v1.7.1.1
+        tag: 011250c
