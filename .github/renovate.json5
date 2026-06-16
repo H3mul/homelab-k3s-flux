@@ -28,6 +28,7 @@
         ":disableRateLimiting",
         ":docker"
     ],
+    "automergeType": "pr",
     "flux": {
         "fileMatch": ["\\.yaml$"]
     },
@@ -36,5 +37,5 @@
     },
     "docker-compose": {
         "fileMatch": ["\\.yaml$"]
-    },
+    }
 }
