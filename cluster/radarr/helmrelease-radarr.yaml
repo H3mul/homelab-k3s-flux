@@ -75,7 +75,7 @@ spec:
       config:
         enabled: true
         type: persistentVolumeClaim
-        size: 1Gi
+        size: 5Gi
         storageClass: truenas-ssd-iscsi
         accessMode: ReadWriteOnce
         globalMounts:
