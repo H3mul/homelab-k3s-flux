@@ -4,7 +4,7 @@ metadata:
   name: b2-radarr-config
   namespace: media
 spec:
-  sourcePVC: radarr-config
+  sourcePVC: radarr
   trigger:
     schedule: 11 0 * * 0
   restic:
