@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.x
+      version: 4.6.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -16,30 +16,41 @@ spec:
   timeout: 5m
   releaseName: radarr
   values:
-    image:
-      repository: ghcr.io/home-operations/radarr
-      tag: 5.28.0.10205@sha256:80dec94f1eea0715471853011efdf2c49cf92f8fe3b17b722ad8f8a637e3fead
-
-    env:
-      RADARR__INSTANCE_NAME: Radarr
-      RADARR__PORT: &port 7878
-      RADARR__LOG_LEVEL: info
-      RADARR__API_KEY:
-        valueFrom:
-          secretKeyRef:
-            name: radarr-api-key
-            key: api_key
-
+    controllers:
+      radarr:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/radarr
+              tag: 6.2.1
+            env:
+              RADARR__INSTANCE_NAME: Radarr
+              RADARR__PORT: &port 7878
+              RADARR__LOG_LEVEL: info
+              RADARR__API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-api-key
+                    key: api_key
+        pod:
+          securityContext:
+            runAsUser: ${FILESHARE_USER_ID}
+            runAsGroup: ${FILESHARE_GROUP_ID}
+            fsGroup: ${FILESHARE_GROUP_ID}
+            fsGroupChangePolicy: "OnRootMismatch"
+            supplementalGroups:
+              - 65539
+              
     service:
-      main:
+      app:
+        controller: radarr
         ports:
           http:
             port: *port
 
     ingress:
-      main:
-        enabled: true
-        ingressClassName: nginx
+      app:
+        className: nginx
         annotations:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_hide_header "x-webkit-csp";
@@ -52,28 +63,25 @@ spec:
           - host: &host radarr.${CLUSTER_DOMAIN}
             paths:
               - path: /
+                service:
+                  identifier: app
+                  port: http
         tls:
-        - secretName: letsencrypt-wildcard-cert-prod
-          hosts:
-          - *host
-
-    podSecurityContext:
-      runAsUser: ${FILESHARE_USER_ID}
-      runAsGroup: ${FILESHARE_GROUP_ID}
-      fsGroup: ${FILESHARE_GROUP_ID}
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 65539
+          - secretName: letsencrypt-wildcard-cert-prod
+            hosts:
+              - *host
 
     persistence:
       config:
         enabled: true
-        type: pvc
-        size: 5Gi
-        mountPath: /config
+        type: persistentVolumeClaim
+        size: 1Gi
         storageClass: truenas-ssd-iscsi
+        accessMode: ReadWriteOnce
+        globalMounts:
+          - path: /config
 
       media:
-        enabled: true
         existingClaim: qbittorrent-download
-        mountPath: /downloads
+        globalMounts:
+          - path: /downloads
