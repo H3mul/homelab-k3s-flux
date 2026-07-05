@@ -75,7 +75,7 @@ spec:
       image: ghcr.io/openfaasltd/gateway:0.5.22@sha256:7bae5d99426581181c182f3cad83e26ead91b87af21d38ec714bb66604ea3272
 
     gateway:
-      image: ghcr.io/openfaas/gateway:0.27.13@sha256:82b15393116e34a73de43c00cb305af1065076744a40b863bd4f18aa1510432f
+      image: ghcr.io/openfaas/gateway:0.27.14@sha256:ee0eaecc490cd70335813acd07eb4926e91099cc49f29c4235e5482680b2a6c1
       readTimeout: "1m05s"
       writeTimeout: "1m05s"
       upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
