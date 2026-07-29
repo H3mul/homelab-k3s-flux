@@ -4,7 +4,7 @@ metadata:
   name: b2-sonarr-config
   namespace: media
 spec:
-  sourcePVC: sonarr-config
+  sourcePVC: sonarr
   trigger:
     schedule: 13 0 * * 0
   restic:
