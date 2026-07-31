@@ -43,7 +43,7 @@ spec:
                 value: "private internet access"
               - name:  VPN_INTERFACE
                 value: &pia_ovpn_dev tun0
-              - name:  OPENVPN_ENDPOINT_PORT
+              - name:  VPN_ENDPOINT_PORT
                 value: ${PIA_VPN_PORT}
               - name:  OPENVPN_PROTOCOL
                 value: udp
@@ -52,8 +52,8 @@ spec:
                 value: "off"
               - name:  DOT
                 value: "off"
-              - name:  SERVER_REGIONS
-                value: "US Oregon" # Dont forget to update health probe
+              - name:  OPENVPN_ENDPOINT_IP
+                value: 173.239.198.18 # US Seattle
     
             envFrom:
               - secretRef:
@@ -74,7 +74,7 @@ spec:
                     command:
                       - sh
                       - -c
-                      - if [ $(wget -q -O- https://ipinfo.io/city) == 'Portland' ]; then exit 0; else exit $?; fi
+                      - if [ $(wget -q -O- https://ipinfo.io/city) == 'Seattle' ]; then exit 0; else exit $?; fi
                   initialDelaySeconds: 30
                   periodSeconds: 60
                   failureThreshold: 3
