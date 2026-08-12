@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.x
+      version: 5.0.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -16,41 +16,46 @@ spec:
   timeout: 5m
   releaseName: prowlarr
   values:
-    image:
-      repository: ghcr.io/home-operations/prowlarr
-      tag: 1.37.0.5076@sha256:aab0bfd4e96bdca19cca280a2bbf8ac60b9251dcae13459856b724a2dd3ae020
-
-
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-
-    env:
-      PROWLARR__INSTANCE_NAME: Prowlarr
-      PROWLARR__PORT: &port 9696
-      PROWLARR__LOG_LEVEL: info
-      PROWLARR__ANALYTICS_ENABLED: "False"
-      PROWLARR__AUTHENTICATION_METHOD: External
-      PROWLARR__API_KEY:
-        valueFrom:
-          secretKeyRef:
-            name: prowlarr-api-key
-            key: api_key
-
-    hostname: prowlarr
+    controllers:
+      prowlarr:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/prowlarr
+              tag: 2.6.1@sha256:ce5d6bdd5be6529f503df77aa9d2bad20239031d7c660406e8fb1c6d621dd020
+            env:
+              TZ: ${TIMEZONE}
+              PROWLARR__INSTANCE_NAME: Prowlarr
+              PROWLARR__THEME: dark
+              PROWLARR__SERVER__PORT: &port 9696
+              PROWLARR__LOG_LEVEL: info
+              PROWLARR__ANALYTICS_ENABLED: "False"
+              PROWLARR__AUTHENTICATION_METHOD: External
+              PROWLARR__API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: prowlarr-api-key
+                    key: api_key
+        pod:
+          hostname: prowlarr
+          securityContext:
+            runAsUser: ${FILESHARE_USER_ID}
+            runAsGroup: ${FILESHARE_GROUP_ID}
+            fsGroup: ${FILESHARE_GROUP_ID}
+            fsGroupChangePolicy: "OnRootMismatch"
+            supplementalGroups:
+              - 65539
 
     service:
-      main:
+      app:
+        controller: prowlarr
         ports:
           http:
             port: *port
 
     ingress:
-      main:
-        enabled: true
-        ingressClassName: "nginx"
+      app:
+        className: nginx
         annotations:
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_hide_header "x-webkit-csp";
@@ -63,15 +68,20 @@ spec:
           - host: &host prowlarr.${CLUSTER_DOMAIN}
             paths:
               - path: /
+                service:
+                  identifier: app
+                  port: http
         tls:
-        - secretName: letsencrypt-wildcard-cert-prod
-          hosts:
-          - *host
+          - secretName: letsencrypt-wildcard-cert-prod
+            hosts:
+              - *host
 
     persistence:
       config:
         enabled: true
-        type: pvc
+        type: persistentVolumeClaim
         size: 1Gi
-        mountPath: /config
         storageClass: truenas-ssd-iscsi
+        accessMode: ReadWriteOnce
+        globalMounts:
+          - path: /config
