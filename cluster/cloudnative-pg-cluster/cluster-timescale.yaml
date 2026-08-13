@@ -1,0 +1,40 @@
+---
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: timescale-cluster
+  namespace: cloudnative-pg
+spec:
+  instances: 1
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ImageCatalog
+    name: timescaledb
+    major: 18
+  imagePullPolicy: IfNotPresent
+  postgresUID: 70
+  postgresGID: 70
+  
+  storage:
+    size: 20Gi
+    storageClass: truenas-ssd-iscsi
+    
+  monitoring:
+    enablePodMonitor: true
+  
+  enableSuperuserAccess: true
+  superuserSecret:
+    name: postgres-cluster-superuser
+  
+---
+
+apiVersion: postgresql.cnpg.io/v1
+kind: ImageCatalog
+metadata:
+  name: timescaledb
+  namespace: cloudnative-pg
+spec:
+  images:
+    - major: 18
+      image: timescale/timescaledb:2.29.1-pg18
