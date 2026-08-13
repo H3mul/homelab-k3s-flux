@@ -37,7 +37,23 @@ spec:
       - pr0ps-trackmap-panel
       - vonage-status-panel
       - savantly-heatmap-panel
-
+      
+    envValueFrom:
+      BRAINLESS_DB_PASSWORD:
+        secretKeyRef:
+          name: brainless-timescale-db-credentials
+          key: password
+          
+      BRAINLESS_DB_USER:
+        secretKeyRef:
+          name: brainless-timescale-db-credentials
+          key: user
+          
+      BRAINLESS_DB_NAME:
+        secretKeyRef:
+          name: brainless-timescale-db-credentials
+          key: database
+          
     datasources:
       datasources.yaml:
         apiVersion: 1
@@ -52,6 +68,19 @@ spec:
             type: loki
             url: http://loki-gateway.monitoring.svc.cluster.local:80
             access: proxy
+            
+          - name: BrainLess Timescale
+            type: postgres
+            access: proxy
+            url: timescale-cluster-r.cloudnative-pg.svc.cluster.local:5432
+            user: "$__env{BRAINLESS_DB_USER}"
+            database: "$__env{BRAINLESS_DB_NAME}"
+            jsonData:
+              sslmode: disable
+              timescaledb: true
+              postgresVersion: 1500
+            secureJsonData:
+              password: "$__env{BRAINLESS_DB_PASSWORD}"
 
     dashboardProviders:
       dashboardproviders.yaml:
