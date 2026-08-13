@@ -15,6 +15,10 @@ spec:
   imagePullPolicy: IfNotPresent
   postgresUID: 70
   postgresGID: 70
+
+  postgresql:
+    shared_preload_libraries:
+      - timescaledb
   
   storage:
     size: 20Gi
