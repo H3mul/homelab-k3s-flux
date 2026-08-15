@@ -30,7 +30,20 @@ spec:
   enableSuperuserAccess: true
   superuserSecret:
     name: timescale-cluster-superuser
-  
+
+  managed:
+    services:
+      additional:
+        - selectorType: "rw"
+          serviceTemplate:
+            metadata:
+              name: timescale-cluster-rw-external
+              annotations:
+                external-dns.alpha.kubernetes.io/hostname: timescale.${CLUSTER_DOMAIN}
+            spec:
+              type: LoadBalancer
+              externalTrafficPolicy: Cluster
+              
 ---
 
 apiVersion: postgresql.cnpg.io/v1
