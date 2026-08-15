@@ -33,7 +33,7 @@ envoy:
 devices:
   - eno1
 l2announcements:
-  enabled: false
+  enabled: true
 # l7Proxy: true
 bgpControlPlane:
   enabled: true
@@ -43,9 +43,9 @@ bgpControlPlane:
 externalIPs:
   enabled: true
 loadBalancer:
-  acceleration: disabled
-  algorithm: random
-  mode: dsr
+  acceleration: best-effort
+  algorithm: maglev
+  mode: snat
 localRedirectPolicies:
   enabled: true
 operator:
