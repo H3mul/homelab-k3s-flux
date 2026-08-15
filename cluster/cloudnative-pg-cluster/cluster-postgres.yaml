@@ -31,6 +31,14 @@ spec:
   superuserSecret:
     name: postgres-cluster-superuser
 
+  serviceTemplate:
+    metadata:
+      annotations:
+        external-dns.alpha.kubernetes.io/hostname: timescale.${CLUSTER_DOMAIN}
+    spec:
+      type: LoadBalancer
+      externalTrafficPolicy: Cluster
+        
   backup:
     retentionPolicy: 60d 
     barmanObjectStore:
