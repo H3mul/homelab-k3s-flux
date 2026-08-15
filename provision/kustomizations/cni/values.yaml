@@ -43,7 +43,7 @@ externalIPs:
 loadBalancer:
   acceleration: best-effort
   algorithm: maglev
-  mode: dsr
+  mode: snat
 localRedirectPolicies:
   enabled: true
 operator:
