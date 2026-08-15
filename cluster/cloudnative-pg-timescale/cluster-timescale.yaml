@@ -40,9 +40,12 @@ spec:
               name: timescale-cluster-rw-external
               annotations:
                 external-dns.alpha.kubernetes.io/hostname: timescale.${CLUSTER_DOMAIN}
+                cilium.io/bgp-advertisement-mode: "local"
+                # Force SNAT mode specifically for this L4 service (overrides DSR/BGP state issues)
+                service.cilium.io/lb-l4-mode: "snat"
             spec:
               type: LoadBalancer
-              externalTrafficPolicy: Cluster
+              externalTrafficPolicy: Local
               
 ---
 
