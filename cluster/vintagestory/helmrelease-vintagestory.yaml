@@ -36,7 +36,7 @@ spec:
               # repository: devidian/vintagestory # FIXME: Docker Hub
               # tag: latest
               repository: ghcr.io/h3mul/vintagestory
-              tag: 1.22.3@sha256:8d6c1d4ecafc8695ea0777d19cc1612bf52c5aa1bdec0b5d557f394b0ada9575
+              tag: 1.22.6@sha256:53adb80ab9deaf3c8e28ea6b6f4d12a10655a8c84e9f815fae1f56d1ae2ed179
               pullPolicy: Always
             env:
               VS_DATA_PATH: &data /data
