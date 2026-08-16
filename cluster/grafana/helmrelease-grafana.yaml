@@ -74,11 +74,11 @@ spec:
             access: proxy
             url: timescale-cluster-r.cloudnative-pg.svc.cluster.local:5432
             user: "$__env{BRAINLESS_DB_USER}"
-            database: "$__env{BRAINLESS_DB_NAME}"
             jsonData:
               sslmode: disable
               timescaledb: true
               postgresVersion: 1500
+              database: "$__env{BRAINLESS_DB_NAME}"
             secureJsonData:
               password: "$__env{BRAINLESS_DB_PASSWORD}"
 
