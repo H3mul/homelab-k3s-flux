@@ -232,7 +232,7 @@ spec:
     # OpenFaaS Enterprise (OpenFaaS IAM)
     # OIDC plugin for authentication on the OpenFaaS REST API
     oidcAuthPlugin:
-      image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.13@sha256:3c56b492d5f2760dde66efc4a8ff3c2e4e7330b422cd7c70f0ec1a1d54e57abe
+      image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.14@sha256:3e54b0e2ac3b9095321de2a2c848b083676c72de7d9e23da71f17a78ef60ad2c
       insecureTLS: false
       verbose: true # debug setting
       replicas: 1
