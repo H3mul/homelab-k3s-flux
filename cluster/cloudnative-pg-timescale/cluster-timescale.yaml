@@ -57,4 +57,4 @@ metadata:
 spec:
   images:
     - major: 18
-      image: timescale/timescaledb:2.29.1-pg18
+      image: timescale/timescaledb:2.29.1-pg18@sha256:373eb0fee9c0f8e0b4b0d4e74c7d0dd463dce05de6b49982701c4b540e94cba0
