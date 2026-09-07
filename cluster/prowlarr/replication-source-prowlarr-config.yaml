@@ -4,7 +4,7 @@ metadata:
   name: b2-prowlarr-config
   namespace: media
 spec:
-  sourcePVC: prowlarr-config
+  sourcePVC: prowlarr
   trigger:
     schedule: 9 0 * * 0
   restic:
