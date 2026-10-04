@@ -60,7 +60,10 @@ spec:
         enabled: true
         image:
           registry: docker.io/democraticcsi/democratic-csi
-          tag: next
+          tag: next@sha256:34d1b1dac29ec3288f9f8d419bcb16a33b0c0170b52493dcf1aa2fd48c221b10
+        extraEnv:
+          - name: DEMOCRATIC_CSI_STRICT_OS_CHECK
+            value: "false"
 
     driver:
       # see the driver-config-secret.yaml for syntax
