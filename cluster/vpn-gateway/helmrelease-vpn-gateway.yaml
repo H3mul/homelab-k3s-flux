@@ -74,7 +74,7 @@ spec:
                     command:
                       - sh
                       - -c
-                      - if [ $(wget -q -O- https://ipinfo.io/city) == 'Seattle' ]; then exit 0; else exit $?; fi
+                      - if [ $(wget -q -O- http://ip-api.com/line/?fields=city) == 'Seattle' ]; then exit 0; else exit $?; fi
                   initialDelaySeconds: 30
                   periodSeconds: 60
                   failureThreshold: 3
