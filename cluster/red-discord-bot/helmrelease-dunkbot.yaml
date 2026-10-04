@@ -22,7 +22,7 @@ spec:
           main:
             image:
               repository: phasecorex/red-discordbot
-              tag: full@sha256:0f735c58cb0205c234133dd835e7f2bd070b24322b309c184d52e3e6bcbe74de
+              tag: full@sha256:534fe17e83ee35f396bbb2092a69e2983a2f3e67a22567d1d3483b6d7be76ec9
               pullPolicy: IfNotPresent
 
             env:
