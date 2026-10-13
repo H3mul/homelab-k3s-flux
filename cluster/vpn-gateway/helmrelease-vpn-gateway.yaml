@@ -54,6 +54,12 @@ spec:
                 value: "off"
               - name:  OPENVPN_ENDPOINT_IP
                 value: 173.239.198.18 # US Seattle
+              - name: DNS_SERVER
+                value: "off"
+              - name: DNS_UPSTREAM_RESOLVER_TYPE
+                value: "plain"
+              - name: DNS_UPSTREAM_PLAIN_ADDRESSES
+                value: "1.1.1.1:53"
     
             envFrom:
               - secretRef:
@@ -79,11 +85,10 @@ spec:
                   periodSeconds: 60
                   failureThreshold: 3
 
-
     # -- IP address of the DNS server within the vxlan tunnel.
     # All mutated PODs will get this as their DNS server.
     # It must match VXLAN_GATEWAY_IP in settings.sh
-    DNS: 172.16.1.1
+    DNS: 1.1.1.1
 
     # -- The DNSPolicy to apply to the POD. Only when set to "None" will the
     # DNS value above apply. To avoid altering POD DNS (i.e., to allow
