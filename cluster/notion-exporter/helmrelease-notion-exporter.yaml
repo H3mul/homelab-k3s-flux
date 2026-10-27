@@ -22,7 +22,7 @@ spec:
       *app :
         type: cronjob
         cronjob:
-          schedule: "0 0 * * 0" # Every 5 minutes
+          schedule: "0 0 * * 0" # Weekly
         initContainers:
           clear-data:
             image: 
@@ -33,11 +33,12 @@ spec:
           *app :
             image:
               repository: ghcr.io/h3mul/notion-exporter
-              tag: 0.8.1@sha256:0041126bf3a5481846d785b20730e4ebb2efc32154ab580aa2fc720417589a33
+              tag: 0.9.1@sha256:ed476e9fa34a552e3a44e2065a8c22f03b6421405dfb5f8ad9c6d591b12792f8              
               pullPolicy: IfNotPresent
             env:
               TZ: ${TIMEZONE}
               OUTPUT_DIR: /data
+              DEBUG: 'true' 
             envFrom:
               - secretRef:
                   name: notion-credentials
