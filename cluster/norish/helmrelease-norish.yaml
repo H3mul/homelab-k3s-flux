@@ -26,8 +26,8 @@ spec:
             env:
               TZ: ${TIMEZONE}
               AUTH_URL: https://norish.${CLUSTER_DOMAIN}
-              VALKEY_URL: valkey://valkey:6379
-              OBSCURA_ENDPOINT: ws://obscura:9222
+              VALKEY_URL: valkey://norish-valkey:6379
+              OBSCURA_ENDPOINT: ws://norish-obscura:9222
               UPLOADS_DIR: /app/uploads
               DATABASE_URL:
                 valueFrom:
