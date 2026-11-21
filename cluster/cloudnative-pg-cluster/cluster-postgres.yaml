@@ -15,6 +15,10 @@ spec:
         inRoles:
           - windmill_admin
           - windmill_user
+      - name: norish
+        login: true
+        passwordSecret:
+          name: norish-postgres-credentials
           
     services:
       additional:
