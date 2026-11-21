@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gyroidvault-library
+  namespace: gyroidvault
+spec:
+  resources:
+    requests:
+      storage: 1Mi
+  accessModes:
+  - ReadWriteMany
+  storageClassName: nfs-gyroidvault-library
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-gyroidvault-library-pv
+  namespace: gyroidvault
+spec:
+  storageClassName: nfs-gyroidvault-library
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: ${NAS_HOST}
+    path: /mnt/hdd-replicated/Storage/3D Models/GyroidVault/Library
