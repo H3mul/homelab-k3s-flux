@@ -29,6 +29,20 @@ spec:
               VALKEY_URL: valkey://norish-valkey:6379
               OBSCURA_ENDPOINT: ws://norish-obscura:9222
               UPLOADS_DIR: /app/uploads
+              AI_ENABLED: "true"
+              AI_PROVIDER: openai
+              AI_ENDPOINT: https://openrouter.ai/api/v1
+              AI_MODEL: google/gemini-2.5-flash-lite
+              VIDEO_PARSING_ENABLED: "true"
+              TRANSCRIPTION_PROVIDER: generic-openai
+              TRANSCRIPTION_MODEL: openai/whisper-large-v3-turbo
+              # transcription endpoint/key fall back to the AI_* ones
+              AI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: norish-openrouter
+                    key: AI_API_KEY
+                    optional: true # pod still starts before the secret exists
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
