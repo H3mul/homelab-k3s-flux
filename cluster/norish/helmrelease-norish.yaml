@@ -30,7 +30,7 @@ spec:
               OBSCURA_ENDPOINT: ws://norish-obscura:9222
               UPLOADS_DIR: /app/uploads
               AI_ENABLED: "true"
-              AI_PROVIDER: openai
+              AI_PROVIDER: generic-openai # plain "openai" ignores AI_ENDPOINT
               AI_ENDPOINT: https://openrouter.ai/api/v1
               AI_MODEL: google/gemini-2.5-flash-lite
               VIDEO_PARSING_ENABLED: "true"
