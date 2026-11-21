@@ -42,7 +42,6 @@ spec:
                   secretKeyRef:
                     name: norish-openrouter
                     key: AI_API_KEY
-                    optional: true # pod still starts before the secret exists
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
