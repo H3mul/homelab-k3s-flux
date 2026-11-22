@@ -6,3 +6,4 @@ resources:
   - kustomization-gyroidvault-data-restic.yaml
   - replication-source-gyroidvault-data.yaml
   - persistent-volume-claim-gyroidvault-library.yaml
+  - sealed-secret-gyroidvault-thingiverse.yaml
