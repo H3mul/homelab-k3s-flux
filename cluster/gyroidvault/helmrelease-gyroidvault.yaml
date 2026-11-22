@@ -28,8 +28,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/teecodedev/gyroidvault
-              tag: latest
+              repository: ghcr.io/h3mul/gyroidvault
+              tag: v2.5.0@sha256:4b727647e3c4fadd59b7e76e8e27e0f30624f80f41d4b0772036ef077e6f59eb
             env:
               NODE_ENV: production
               PORT: "3000"
