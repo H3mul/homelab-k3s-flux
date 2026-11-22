@@ -29,13 +29,15 @@ spec:
           app:
             image:
               repository: ghcr.io/h3mul/gyroidvault
-              tag: v2.5.0@sha256:bbf5c10f9b5401f79c9f3b7dc6890ad8614dc7d71bac3b60de8feb6fd360132f
+              tag: v2.5.0@sha256:af687ac8dcce45cfa6165818a70e981d31903858bd43437d78202f52b17b481d
             env:
               NODE_ENV: production
               PORT: "3000"
               LIBRARY_PATH: /library
-            # Thingiverse API token (tags + file downloads for Thingiverse imports); optional so the app still
-            # starts, with metadata-only Thingiverse imports, until the sealed secret exists
+              # Passes Cloudflare challenges (e.g. Thingiverse images) for the supported provider hosts only
+              FLARESOLVERR_URL: http://flaresolverr.media.svc.cluster.local:8191
+            # Thingiverse API token (required for Thingiverse imports, which are refused with a prompt without it);
+            # optional here so the app still starts, e.g. before the sealed secret exists
             envFrom:
               - secretRef:
                   name: gyroidvault-thingiverse
