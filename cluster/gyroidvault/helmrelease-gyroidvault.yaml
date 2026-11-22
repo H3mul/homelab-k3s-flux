@@ -34,6 +34,12 @@ spec:
               NODE_ENV: production
               PORT: "3000"
               LIBRARY_PATH: /library
+            # Thingiverse API token (tags + file downloads for Thingiverse imports); optional so the app still
+            # starts, with metadata-only Thingiverse imports, until the sealed secret exists
+            envFrom:
+              - secretRef:
+                  name: gyroidvault-thingiverse
+                  optional: true
             probes:
               liveness: &probe
                 enabled: true
