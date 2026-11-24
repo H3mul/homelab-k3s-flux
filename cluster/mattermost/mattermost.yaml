@@ -6,7 +6,7 @@ metadata:
 spec:
   size: 100users
   replicas: 1 # >1 needs an Enterprise license
-  image: mattermost/mattermost-team-edition
+  image: mattermost/mattermost-team-edition@sha256:35927b9c535a9eb74f0e45385d3fe5d8308b16e0464031f157a834da8af3ee73
   # the operator renders image:version, so the digest rides along with the tag
   version: 12.1.0@sha256:35927b9c535a9eb74f0e45385d3fe5d8308b16e0464031f157a834da8af3ee73
   mattermostEnv:
