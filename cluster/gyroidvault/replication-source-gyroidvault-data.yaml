@@ -4,7 +4,7 @@ metadata:
   name: b2-gyroidvault-data
   namespace: gyroidvault
 spec:
-  sourcePVC: gyroidvault-data
+  sourcePVC: gyroidvault
   trigger:
     schedule: 30 0 * * 0
   restic:
