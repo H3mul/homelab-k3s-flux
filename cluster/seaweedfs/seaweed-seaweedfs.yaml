@@ -1,0 +1,51 @@
+apiVersion: seaweed.seaweedfs.com/v1
+kind: Seaweed
+metadata:
+  name: seaweedfs
+  namespace: seaweedfs
+spec:
+  image: chrislusf/seaweedfs:latest@sha256:7ca46aeae2f223b37e5d91593c17ab37738eec6df6ab69b48a0487f7643342b9
+  volumeServerDiskCount: 1
+  serviceMonitor:
+    enabled: true
+  master:
+    replicas: 1
+    volumeSizeLimitMB: 1024
+    metricsPort: 9327
+    persistence:
+      enabled: true
+      storageClassName: truenas-ssd-iscsi
+      resources:
+        requests:
+          storage: 1Gi
+  volume:
+    replicas: 1
+    metricsPort: 9327
+    storageClassName: truenas-ssd-iscsi
+    requests:
+      storage: 50Gi
+  filer:
+    replicas: 1
+    metricsPort: 9327
+    persistence:
+      enabled: true
+      storageClassName: truenas-ssd-iscsi
+      resources:
+        requests:
+          storage: 5Gi
+    s3:
+      enabled: true
+    config: |
+      [leveldb2]
+      enabled = true
+      dir = "/data/filerldb2"
+    s3Ingress:
+      enabled: true
+      className: nginx
+      host: s3.${CLUSTER_DOMAIN}
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      tls:
+        - hosts:
+            - s3.${CLUSTER_DOMAIN}
+          secretName: letsencrypt-wildcard-cert-prod

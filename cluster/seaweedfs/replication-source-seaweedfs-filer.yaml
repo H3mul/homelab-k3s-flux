@@ -1,0 +1,23 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: b2-seaweedfs-filer
+  namespace: seaweedfs
+spec:
+  sourcePVC: seaweedfs-filer-seaweedfs-filer-0
+  trigger:
+    schedule: 30 1 * * 0
+  restic:
+    repository: b2-seaweedfs-filer-restic
+
+    copyMethod: Snapshot
+    volumeSnapshotClassName: truenas-ssd-iscsi
+    storageClassName: truenas-ssd-iscsi
+
+    pruneIntervalDays: 10
+    cacheCapacity: 5Gi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 6
+      within: 3d

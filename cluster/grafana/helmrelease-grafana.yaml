@@ -170,6 +170,10 @@ spec:
           url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/docs/src/samples/monitoring/grafana-dashboard.json
           datasource: Prometheus
 
+        seaweedfs:
+          url: https://raw.githubusercontent.com/seaweedfs/seaweedfs-operator/7b49f8597793226c3d9876b02c273823e8edfe93/deploy/helm/dashboard/seaweedfs-grafana-dashboard.json
+          datasource: Prometheus
+
     # grafana.ini:
     #   grafana_net:
     #     url: https://grafana.net

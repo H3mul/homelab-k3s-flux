@@ -1,0 +1,20 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: seaweedfs
+  namespace: flux-system
+spec:
+  interval: 15m
+  path: ./cluster/seaweedfs
+  prune: true
+  timeout: 2m
+  # the Seaweed CRD ships with the operator chart
+  dependsOn:
+    - name: seaweedfs-operator
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings

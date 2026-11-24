@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: seaweedfs
+resources:
+  - seaweed-seaweedfs.yaml
+  - kustomization-seaweedfs-restic.yaml
+  - replication-source-seaweedfs-master.yaml
+  - replication-source-seaweedfs-filer.yaml
+  - replication-source-seaweedfs-volume.yaml
