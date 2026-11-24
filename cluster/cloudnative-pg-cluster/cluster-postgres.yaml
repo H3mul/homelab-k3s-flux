@@ -31,7 +31,7 @@ spec:
             metadata:
               name: postgres-cluster-rw-external
               annotations:
-                external-dns.alpha.kubernetes.io/hostname: timescale.${CLUSTER_DOMAIN}
+                external-dns.alpha.kubernetes.io/hostname: postgres.${CLUSTER_DOMAIN}
             spec:
               type: LoadBalancer
               externalTrafficPolicy: Cluster
