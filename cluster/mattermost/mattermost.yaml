@@ -9,6 +9,11 @@ spec:
   image: mattermost/mattermost-team-edition
   # the operator renders image:version, so the digest rides along with the tag
   version: 12.1.0@sha256:35927b9c535a9eb74f0e45385d3fe5d8308b16e0464031f157a834da8af3ee73
+  mattermostEnv:
+    - name: MM_EMAILSETTINGS_SENDPUSHNOTIFICATIONS
+      value: "true"
+    - name: MM_EMAILSETTINGS_PUSHNOTIFICATIONSERVER
+      value: "https://push-test.mattermost.com"
   ingress:
     enabled: true
     host: mattermost.${CLUSTER_DOMAIN}
