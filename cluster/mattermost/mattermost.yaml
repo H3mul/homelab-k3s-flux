@@ -1,0 +1,27 @@
+apiVersion: installation.mattermost.com/v1beta1
+kind: Mattermost
+metadata:
+  name: mattermost
+  namespace: mattermost
+spec:
+  size: 100users
+  replicas: 1 # >1 needs an Enterprise license
+  version: 12.1.0
+  ingress:
+    enabled: true
+    host: mattermost.${CLUSTER_DOMAIN}
+    ingressClass: nginx
+    tlsSecret: letsencrypt-wildcard-cert-prod
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: 100m
+  database:
+    external:
+      secret: mattermost-postgres-credentials
+    # readinessCheck:
+    #   mode: builtin
+  fileStore:
+    external:
+      # S3 gateway through the s3 ingress
+      url: s3.${CLUSTER_DOMAIN}
+      bucket: mattermost
+      secret: mattermost-s3-credentials

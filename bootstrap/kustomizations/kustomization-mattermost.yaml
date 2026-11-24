@@ -1,0 +1,21 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: mattermost
+  namespace: flux-system
+spec:
+  interval: 15m
+  path: ./cluster/mattermost
+  prune: true
+  timeout: 2m
+  # Mattermost CRD (operator), and the Seaweed CRDs + cluster (S3 bucket/credentials)
+  dependsOn:
+    - name: mattermost-operator
+    - name: seaweedfs
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings

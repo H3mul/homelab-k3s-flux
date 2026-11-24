@@ -1,0 +1,42 @@
+# Lives in the mattermost namespace so the credentials secret lands next to the app;
+# the grant in cluster/seaweedfs lets these reference the Seaweed cluster.
+apiVersion: seaweed.seaweedfs.com/v1
+kind: S3Identity
+metadata:
+  name: mattermost
+  namespace: mattermost
+spec:
+  seaweedRef:
+    name: seaweedfs
+    namespace: seaweedfs
+---
+apiVersion: seaweed.seaweedfs.com/v1
+kind: S3Credentials
+metadata:
+  name: mattermost
+  namespace: mattermost
+spec:
+  seaweedRef:
+    name: seaweedfs
+    namespace: seaweedfs
+  identityRef:
+    name: mattermost
+  secretRef:
+    name: mattermost-s3-credentials
+    # the keys the Mattermost operator expects
+    accessKeyField: accesskey
+    secretKeyField: secretkey
+---
+apiVersion: seaweed.seaweedfs.com/v1
+kind: Bucket
+metadata:
+  name: mattermost
+  namespace: mattermost
+spec:
+  clusterRef:
+    name: seaweedfs
+    namespace: seaweedfs
+  reclaimPolicy: Retain
+  access:
+    - user: mattermost
+      actions: [Read, Write, List]

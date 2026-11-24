@@ -19,6 +19,10 @@ spec:
         login: true
         passwordSecret:
           name: norish-postgres-credentials
+      - name: mattermost
+        login: true
+        passwordSecret:
+          name: mattermost-postgres-credentials
           
     services:
       additional:

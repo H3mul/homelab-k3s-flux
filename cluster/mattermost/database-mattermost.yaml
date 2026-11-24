@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: mattermost
+  namespace: cloudnative-pg
+spec:
+  name: mattermost
+  owner: mattermost
+  cluster:
+    name: postgres-cluster

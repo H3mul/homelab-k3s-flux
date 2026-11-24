@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: seaweedfs
 resources:
   - seaweed-seaweedfs.yaml
+  - resource-reference-grant-mattermost.yaml
   - kustomization-seaweedfs-restic.yaml
   - replication-source-seaweedfs-master.yaml
   - replication-source-seaweedfs-filer.yaml

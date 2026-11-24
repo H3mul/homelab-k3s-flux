@@ -1,0 +1,12 @@
+apiVersion: seaweed.seaweedfs.com/v1
+kind: ResourceReferenceGrant
+metadata:
+  name: allow-mattermost
+  namespace: seaweedfs
+spec:
+  from:
+    - {group: seaweed.seaweedfs.com, kind: Bucket, namespace: mattermost}
+    - {group: seaweed.seaweedfs.com, kind: S3Identity, namespace: mattermost}
+    - {group: seaweed.seaweedfs.com, kind: S3Credentials, namespace: mattermost}
+  to:
+    - {group: seaweed.seaweedfs.com, kind: Seaweed}
