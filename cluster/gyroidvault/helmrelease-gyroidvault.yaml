@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: ghcr.io/h3mul/gyroidvault
-              tag: v2.5.0@sha256:2a3eb42c7dba051344f412eb8632e50fc7df193a77e3e4dcea0ed8c45e5b261b
+              tag: v2.5.0@sha256:e0a26371c9d7a0766dcd934ac32064367362295e3dba3186a503733ffe24f3aa
             env:
               NODE_ENV: production
               PORT: "3000"
