@@ -37,5 +37,29 @@
     },
     "docker-compose": {
         "fileMatch": ["\\.yaml$"]
-    }
+    },
+    // Mattermost operator splits the image: image name lives in `image`,
+    // while the tag and digest ride along in `version` (image:version).
+    "regexManagers": [
+        {
+            "fileMatch": ["\\.yaml$"],
+            "matchStrings": [
+                "image:\\s*(?<depName>[\\w./-]+)\\s*\\n(?:\\s*#.*\\n)?\\s*version:\\s*(?<currentValue>[\\d.]+)@(?<currentDigest>sha256:[a-f0-9]+)"
+            ],
+            "datasourceTemplate": "docker",
+            "versioningTemplate": "docker",
+            "depNameTemplate": "{{{depName}}}",
+            "currentValueTemplate": "{{{currentValue}}}",
+            "currentDigestTemplate": "{{{currentDigest}}}"
+        }
+    ],
+    "packageRules": [
+        {
+            // The regex manager above handles this image via `version`;
+            // stop the docker manager from pinning a digest onto `image`.
+            "matchManagers": ["docker"],
+            "matchPackageNames": ["mattermost/mattermost-team-edition"],
+            "enabled": false
+        }
+    ]
 }
