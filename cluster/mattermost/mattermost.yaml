@@ -31,3 +31,5 @@ spec:
       url: s3.${CLUSTER_DOMAIN}
       bucket: mattermost
       secret: mattermost-s3-credentials
+  updateJob:
+    disabled: true
