@@ -63,6 +63,10 @@ spec:
       app:
         enabled: true
         className: nginx
+        annotations:
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_hide_header Content-Security-Policy;
+            add_header Content-Security-Policy "default-src 'self'; connect-src 'self' https://github.com http: ws: blob: data:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';" always;
         hosts:
           - host: &host gyroidvault.${CLUSTER_DOMAIN}
             paths:
