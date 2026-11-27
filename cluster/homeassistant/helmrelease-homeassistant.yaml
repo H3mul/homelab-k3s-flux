@@ -93,7 +93,6 @@ spec:
         className: nginx
         annotations:
           nginx.ingress.kubernetes.io/configuration-snippet: |
-            proxy_set_header Host $http_host;
             proxy_set_header Upgrade $http_upgrade;
         hosts:
           - host: &main-host hass.${CLUSTER_DOMAIN}
