@@ -24,7 +24,7 @@ spec:
           main:
             image:
               repository: ghcr.io/home-operations/home-assistant
-              tag: 2025.12.5@sha256:6be0843b06ad82233639e56f261b2377f78df140e3d16d2d08b2c29c8889b697
+              tag: 2026.11.3@sha256:96c244d8aa3586026bb8d4fdc0dcf9b34f348874a1ea5060942356cf181177bc
             env:
               TZ: ${TIMEZONE}
               LD_LIBRARY_PATH: /usr/lib
@@ -189,4 +189,3 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /config/.venv
-
