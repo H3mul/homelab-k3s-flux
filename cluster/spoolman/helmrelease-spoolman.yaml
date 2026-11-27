@@ -1,0 +1,72 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: spoolman
+  namespace: spoolman
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 5.0.x
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: spoolman
+  values:
+    controllers:
+      spoolman:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/donkie/spoolman
+              tag: 0.27.1@sha256:1ebb4f6a62c2e72a07f18b07ebfdbd96322f5bc2eb72570af3088f68d7c393b1
+            env:
+              SPOOLMAN_DIR_DATA: /data
+              SPOOLMAN_PORT: "8000"
+              TZ: ${TIMEZONE:-UTC}
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/health
+                    port: 8000
+              readiness: *probe
+
+    service:
+      main:
+        controller: spoolman
+        ports:
+          http:
+            port: 8000
+
+    ingress:
+      app:
+        enabled: true
+        className: nginx
+        hosts:
+          - host: &host spoolman.${CLUSTER_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - secretName: letsencrypt-wildcard-cert-prod
+            hosts:
+              - *host
+
+    persistence:
+      data:
+        enabled: true
+        type: persistentVolumeClaim
+        size: 1Gi
+        accessMode: ReadWriteOnce
+        storageClass: truenas-ssd-iscsi
+        globalMounts:
+          - path: /data

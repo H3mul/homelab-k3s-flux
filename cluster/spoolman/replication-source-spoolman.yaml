@@ -1,0 +1,23 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: b2-spoolman
+  namespace: spoolman
+spec:
+  sourcePVC: spoolman
+  trigger:
+    schedule: 30 0 * * 0
+  restic:
+    repository: b2-spoolman-restic
+
+    copyMethod: Snapshot
+    volumeSnapshotClassName: truenas-ssd-iscsi
+    storageClassName: truenas-ssd-iscsi
+
+    pruneIntervalDays: 10
+    cacheCapacity: 1Gi
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 6
+      within: 3d
