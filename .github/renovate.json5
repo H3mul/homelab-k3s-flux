@@ -56,8 +56,8 @@
     "packageRules": [
         {
             // The regex manager above handles this image via `version`;
-            // stop the docker manager from pinning a digest onto `image`.
-            "matchManagers": ["docker"],
+            // stop the docker-compose/helm-values managers (whose fileMatch hits every .yaml) from pinning a digest onto `image`.
+            "matchManagers": ["docker-compose", "helm-values", "kubernetes", "dockerfile"],
             "matchPackageNames": ["mattermost/mattermost-team-edition"],
             "enabled": false
         }
