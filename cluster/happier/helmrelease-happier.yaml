@@ -30,7 +30,7 @@ spec:
           app:
             image:
               repository: happierdev/relay-server
-              tag: stable@sha256:3617122569179268e8015718ddc2fbb4642fa5461b87e68238e656613929fd63
+              tag: stable@sha256:6b2ec77225cf63f4417b22691fc6ea19199f72e9ec30cc0d6eb64f4180d26abe
             env:
               TZ: ${TIMEZONE}
               PORT: "3005"
